@@ -8,7 +8,11 @@ export default function robots(): MetadataRoute.Robots {
       {
         // All crawlers — allow public pages, block private/internal paths
         userAgent: '*',
-        allow: '/',
+        allow: [
+          '/',
+          '/docs',      // alias for /documentation — redirects to canonical
+          '/docs/',
+        ],
         disallow: [
           '/api/',
           '/_next/',

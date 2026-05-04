@@ -24,9 +24,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
     // ── Tier 1 — Core product (crawl daily) ───────────────────────────────
     url('/',              1.00, 'daily',   TODAY),
     url('/chat',          0.95, 'daily',   TODAY),
-    url('/ai-services',   0.92, 'daily',   TODAY),
-    url('/visual-math',   0.90, 'weekly',  WEEK),
-    url('/pdf-analyzer',  0.90, 'weekly',  WEEK),
+    url('/docs',          0.92, 'daily',   TODAY),
+    url('/about',         0.90, 'weekly',  WEEK),
+    url('/soham',         0.90, 'weekly',  WEEK),
 
     // ── Tier 2 — Marketing & discovery ────────────────────────────────────
     url('/features',      0.88, 'weekly',  WEEK),
