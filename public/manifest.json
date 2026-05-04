@@ -1,7 +1,7 @@
 {
-  "name": "SOHAM - Intelligent Assistant",
+  "name": "SOHAM — Free AI with 35+ Models",
   "short_name": "SOHAM",
-  "description": "Free AI assistant. Chat with Groq, Gemini, Cerebras, solve math from images, and analyze PDFs.",
+  "description": "Free AI platform with 35+ models. Chat, image generation, voice, web search, PDF analysis. Built in India by CODEEX-AI.",
   "icons": [
     {
       "src": "/icons/icon-192x192.png",
@@ -24,76 +24,69 @@
   ],
   "theme_color": "#020817",
   "background_color": "#020817",
-  "start_url": "/?source=pwa",
+  "start_url": "/chat?source=pwa",
   "scope": "/",
-  "id": "/?source=pwa",
+  "id": "soham-codeex-ai",
   "display": "standalone",
   "display_override": ["window-controls-overlay", "standalone", "minimal-ui", "browser"],
   "orientation": "any",
-  "categories": ["productivity", "utilities", "education", "developer tools"],
-  "lang": "en",
+  "categories": ["productivity", "utilities", "education"],
+  "lang": "en-IN",
   "dir": "ltr",
   "prefer_related_applications": false,
+  "iarc_rating_id": "",
   "screenshots": [
     {
       "src": "/Multi-Chat.png",
       "sizes": "1536x1024",
       "type": "image/png",
-      "form_factor": "narrow",
-      "label": "SOHAM chat workspace with multi-model conversations"
+      "form_factor": "wide",
+      "label": "SOHAM AI chat with 35+ models"
     },
     {
       "src": "/search.png",
       "sizes": "1536x1024",
       "type": "image/png",
-      "form_factor": "wide",
-      "label": "SOHAM desktop workspace with search and connected tools"
+      "form_factor": "narrow",
+      "label": "SOHAM web search and AI tools"
     }
   ],
   "shortcuts": [
     {
       "name": "New Chat",
       "short_name": "Chat",
-      "description": "Start a free AI chat conversation with 35+ models",
-      "url": "/chat",
-      "icons": [
-        {
-          "src": "/icons/icon-192x192.png",
-          "sizes": "192x192",
-          "type": "image/png"
-        }
-      ]
+      "description": "Start a new AI conversation",
+      "url": "/chat?source=pwa-shortcut",
+      "icons": [{ "src": "/icons/icon-192x192.png", "sizes": "192x192", "type": "image/png" }]
     },
     {
       "name": "Visual Math Solver",
       "short_name": "Math",
-      "description": "Solve equations from images with the AI math solver",
-      "url": "/visual-math",
-      "icons": [
-        {
-          "src": "/icons/icon-192x192.png",
-          "sizes": "192x192",
-          "type": "image/png"
-        }
-      ]
+      "description": "Solve equations from photos",
+      "url": "/visual-math?source=pwa-shortcut",
+      "icons": [{ "src": "/icons/icon-192x192.png", "sizes": "192x192", "type": "image/png" }]
     },
     {
       "name": "PDF Analyzer",
       "short_name": "PDF",
-      "description": "Analyze PDFs and ask document questions with AI",
-      "url": "/pdf-analyzer",
-      "icons": [
-        {
-          "src": "/icons/icon-192x192.png",
-          "sizes": "192x192",
-          "type": "image/png"
-        }
-      ]
+      "description": "Analyze PDFs with AI",
+      "url": "/pdf-analyzer?source=pwa-shortcut",
+      "icons": [{ "src": "/icons/icon-192x192.png", "sizes": "192x192", "type": "image/png" }]
+    },
+    {
+      "name": "AI Services",
+      "short_name": "Services",
+      "description": "All AI tools in one place",
+      "url": "/ai-services?source=pwa-shortcut",
+      "icons": [{ "src": "/icons/icon-192x192.png", "sizes": "192x192", "type": "image/png" }]
     }
   ],
   "related_applications": [],
   "handle_links": "preferred",
   "launch_handler": {
     "client_mode": "navigate-existing"
+  },
+  "edge_side_panel": {
+    "preferred_width": 400
   }
 }

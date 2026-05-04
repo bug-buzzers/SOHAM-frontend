@@ -569,3 +569,67 @@ export function LandingPageShell({ isMobile }: { isMobile: boolean }) {
             </div>
           </div>
         </motion.section>
+
+      </main>
+
+      {/* ── Footer ── */}
+      <footer className="border-t border-white/8 bg-[#040406]">
+        <div className="mx-auto w-full max-w-6xl px-4 py-10 sm:px-6">
+          <div className={`flex ${isMobile ? 'flex-col gap-8' : 'items-start justify-between gap-10'}`}>
+
+            {/* Brand */}
+            <div className="space-y-2.5">
+              <div className="flex items-center gap-2.5">
+                <Image src="/FINALSOHAM.png" alt="SOHAM" width={28} height={28} className="rounded-lg" />
+                <span className="font-bold text-white">SOHAM</span>
+              </div>
+              <p className="text-xs text-slate-500 max-w-[200px] leading-relaxed">
+                Free AI platform by CODEEX-AI.<br />
+                Built by Heoster, age 16, India.
+              </p>
+              {/* Made in Bharat */}
+              <div className="flex items-center gap-1.5">
+                <span className="text-xs text-slate-500 font-medium">Made in Bharat</span>
+                <span className="text-base" role="img" aria-label="India flag">🇮🇳</span>
+              </div>
+              <p className="text-xs text-slate-600">© {new Date().getFullYear()} CODEEX-AI. All rights reserved.</p>
+            </div>
+
+            {/* Links */}
+            <div className={`grid gap-x-12 gap-y-4 text-sm ${isMobile ? 'grid-cols-2' : 'grid-cols-4'}`}>
+              <div className="space-y-2.5">
+                <p className="text-[11px] font-semibold uppercase tracking-wider text-slate-500">Product</p>
+                {[['AI Chat', '/chat'], ['AI Services', '/ai-services'], ['PDF Analyzer', '/pdf-analyzer'], ['Image Math', '/visual-math']].map(([l, h]) => (
+                  <Link key={h} href={h} className="block text-slate-400 hover:text-white transition-colors">{l}</Link>
+                ))}
+              </div>
+              <div className="space-y-2.5">
+                <p className="text-[11px] font-semibold uppercase tracking-wider text-slate-500">Learn</p>
+                {[['Documentation', '/documentation'], ['FAQ', '/faq'], ['Community', '/community'], ['Contact', '/contact']].map(([l, h]) => (
+                  <Link key={h} href={h} className="block text-slate-400 hover:text-white transition-colors">{l}</Link>
+                ))}
+              </div>
+              <div className="space-y-2.5">
+                <p className="text-[11px] font-semibold uppercase tracking-wider text-slate-500">Company</p>
+                {[['About Heoster', '/about'], ['About SOHAM', '/soham'], ['Privacy', '/privacy'], ['Terms', '/terms']].map(([l, h]) => (
+                  <Link key={h} href={h} className="block text-slate-400 hover:text-white transition-colors">{l}</Link>
+                ))}
+              </div>
+              <div className="space-y-2.5">
+                <p className="text-[11px] font-semibold uppercase tracking-wider text-slate-500">Connect</p>
+                {[
+                  ['GitHub', DEVELOPER_INFO.contact.github],
+                  ['Twitter', DEVELOPER_INFO.contact.twitter],
+                  ['LinkedIn', DEVELOPER_INFO.contact.linkedin],
+                  ['Email', `mailto:${DEVELOPER_INFO.contact.email}`],
+                ].map(([l, h]) => (
+                  <Link key={l} href={h} target="_blank" rel="noopener noreferrer" className="block text-slate-400 hover:text-white transition-colors">{l}</Link>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </footer>
+    </div>
+  );
+}

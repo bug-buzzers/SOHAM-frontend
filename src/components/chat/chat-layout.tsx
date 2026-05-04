@@ -348,6 +348,11 @@ export function ChatLayout() {
               </Button>
             </div>
           )}
+          {/* Made in Bharat */}
+          <div className="flex items-center justify-center gap-1.5 pt-1 pb-0.5">
+            <span className="text-[10px] text-muted-foreground/60 font-medium tracking-wide">Made in Bharat</span>
+            <span className="text-sm" role="img" aria-label="India flag">🇮🇳</span>
+          </div>
         </SidebarFooter>
       </Sidebar>
       <SidebarInset className="flex flex-col overflow-hidden" style={{height: '100svh'}}>
