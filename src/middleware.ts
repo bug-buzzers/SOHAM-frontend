@@ -150,7 +150,10 @@ export function middleware(request: NextRequest) {
 
 export const config = {
   matcher: [
-    // Apply to all routes except Next.js internals and static files
-    '/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico|woff2?|ttf|otf)).*)',
+    // Apply to all routes except:
+    // - Next.js internals (_next/static, _next/image)
+    // - Static files (images, fonts, icons)
+    // - SEO files (sitemap.xml, robots.txt) — must be served as clean XML/text
+    '/((?!_next/static|_next/image|favicon.ico|sitemap\\.xml|sitemap-.*\\.xml|robots\\.txt|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico|woff2?|ttf|otf|xml|txt)).*)',
   ],
 };

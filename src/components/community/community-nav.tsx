@@ -60,7 +60,7 @@ export function CommunityTopNav() {
               href={href}
               className={cn(
                 'flex items-center gap-1.5 rounded-lg px-3 py-2 text-sm font-medium transition-colors',
-                pathname === href || (href !== '/community' && pathname.startsWith(href))
+                pathname === href || (href !== '/community' && pathname?.startsWith(href))
                   ? 'bg-primary/10 text-primary'
                   : 'text-muted-foreground hover:text-foreground hover:bg-muted'
               )}
@@ -90,7 +90,7 @@ export function CommunityBottomNav() {
     <nav className="fixed bottom-0 left-0 right-0 z-50 border-t border-border/60 bg-background/95 backdrop-blur-md md:hidden">
       <div className="flex items-center justify-around h-16 px-1">
         {NAV_ITEMS.map(({ href, icon: Icon, label }) => {
-          const active = pathname === href || (href !== '/community' && pathname.startsWith(href));
+          const active = pathname === href || (href !== '/community' && pathname?.startsWith(href));
           return (
             <Link
               key={href}

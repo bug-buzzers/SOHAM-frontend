@@ -149,7 +149,7 @@ const nextConfig = {
       { protocol: 'https', hostname: '*.supabase.co', pathname: '/**' },
     ],
   },
-  // Security headers
+  // Security + SEO headers
   async headers() {
     return [
       {
@@ -158,6 +158,31 @@ const nextConfig = {
           { key: 'X-DNS-Prefetch-Control', value: 'on' },
           { key: 'X-Content-Type-Options', value: 'nosniff' },
           { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
+        ],
+      },
+      // Sitemap — correct content-type + short cache so Google sees updates quickly
+      {
+        source: '/sitemap.xml',
+        headers: [
+          { key: 'Content-Type', value: 'application/xml; charset=utf-8' },
+          { key: 'Cache-Control', value: 'public, max-age=3600, stale-while-revalidate=86400' },
+          { key: 'X-Robots-Tag', value: 'noindex' },
+        ],
+      },
+      // Sitemap index / sub-sitemaps
+      {
+        source: '/sitemap-:slug.xml',
+        headers: [
+          { key: 'Content-Type', value: 'application/xml; charset=utf-8' },
+          { key: 'Cache-Control', value: 'public, max-age=3600, stale-while-revalidate=86400' },
+        ],
+      },
+      // Robots.txt — plain text, short cache
+      {
+        source: '/robots.txt',
+        headers: [
+          { key: 'Content-Type', value: 'text/plain; charset=utf-8' },
+          { key: 'Cache-Control', value: 'public, max-age=86400, stale-while-revalidate=604800' },
         ],
       },
       // Cache static assets aggressively

@@ -1,12 +1,11 @@
 'use client';
 
-import Image from 'next/image';
 import Link from 'next/link';
 import { useState } from 'react';
-import { ArrowRight, Check, ChevronDown } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { ArrowRight, ChevronDown, Zap } from 'lucide-react';
 import { type CoreMode } from '@/components/landing/soham-core';
 import { cn } from '@/lib/utils';
+import { DEVELOPER_INFO } from '@/lib/developer-info';
 
 interface HeroFeature {
   mode: CoreMode;
@@ -28,27 +27,18 @@ interface HeroProps {
   sectionVariant: object;
 }
 
-const FREE_BULLETS = [
-  '35+ AI models — Groq, Gemini, Cerebras, DeepSeek',
-  'Free image generation — just describe it',
-  'Real-time web search with citations',
-  'Voice input & output — 6 voices',
-  'PDF analysis up to 5MB',
-  'No credit card. No subscription. Ever.',
-];
-
-const TESTERS = ['Vidhan', 'Avineet', 'Vansh', 'Aayush', 'Varun', 'Pankaj', 'Masum', 'Sachin'];
-
-// Simplified model list for the interactive selector
 const MODEL_GROUPS = [
-  { provider: 'Groq', color: 'text-orange-400', models: ['Llama 4 Scout 17B', 'GPT-OSS 120B', 'Qwen3 32B', 'Llama 3.1 8B Instant'] },
-  { provider: 'Cerebras', color: 'text-blue-400', models: ['Qwen 3 235B', 'GPT-OSS 120B', 'GLM 4.7', 'Llama 3.1 8B'] },
-  { provider: 'Google', color: 'text-green-400', models: ['Gemini 2.5 Pro', 'Gemini 2.5 Flash', 'Imagen 3'] },
-  { provider: 'HuggingFace', color: 'text-yellow-400', models: ['DeepSeek R1 70B', 'Llama 3.3 70B', 'Qwen 2.5 72B'] },
-  { provider: 'OpenRouter', color: 'text-purple-400', models: ['NVIDIA Nemotron 120B', 'Arcee Trinity 400B', 'MiniMax M2.5'] },
+  { provider: 'Groq',       color: '#f97316', models: ['Llama 4 Scout 17B', 'GPT-OSS 120B', 'Qwen3 32B'] },
+  { provider: 'Cerebras',   color: '#3b82f6', models: ['Qwen 3 235B', 'GPT-OSS 120B', 'GLM 4.7'] },
+  { provider: 'Google',     color: '#22c55e', models: ['Gemini 2.5 Pro', 'Gemini 2.5 Flash'] },
+  { provider: 'HuggingFace',color: '#f5c842', models: ['DeepSeek R1 70B', 'Llama 3.3 70B'] },
+  { provider: 'OpenRouter', color: '#a78bfa', models: ['NVIDIA Nemotron 120B', 'Arcee Trinity 400B'] },
 ];
 
-function ModelSelectorDemo() {
+// Real testers — names make the social proof feel true
+const TESTERS = DEVELOPER_INFO.friends.slice(0, 8);
+
+function ModelSelector() {
   const [open, setOpen] = useState(false);
   const [selected, setSelected] = useState('Auto (Recommended)');
 
@@ -56,51 +46,68 @@ function ModelSelectorDemo() {
     <div className="relative">
       <button
         onClick={() => setOpen(o => !o)}
-        className="flex w-full items-center justify-between gap-3 rounded-xl border border-white/12 bg-white/[0.05] px-4 py-2.5 text-sm text-white transition-all hover:border-white/20 hover:bg-white/[0.08]"
+        className="flex w-full items-center justify-between gap-3 rounded-xl px-4 py-3 text-sm text-white transition-all focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#3b82f6] focus-visible:outline-offset-2"
+        style={{ border: '1px solid rgba(59,130,246,0.25)', background: 'rgba(59,130,246,0.06)' }}
+        aria-haspopup="listbox"
+        aria-expanded={open}
       >
         <div className="flex items-center gap-2">
-          <span className="h-2 w-2 rounded-full bg-green-400 animate-pulse" />
+          <span className="relative flex h-2 w-2">
+            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-green-400 opacity-75" />
+            <span className="relative inline-flex h-2 w-2 rounded-full bg-green-400" />
+          </span>
           <span className="font-medium">{selected}</span>
         </div>
         <div className="flex items-center gap-2">
-          <span className="rounded-full bg-green-500/15 px-2 py-0.5 text-[10px] font-semibold text-green-400">Free</span>
-          <ChevronDown className={cn('h-4 w-4 text-slate-400 transition-transform', open && 'rotate-180')} />
+          <span className="rounded-full px-2 py-0.5 text-[10px] font-semibold" style={{ background: 'rgba(245,200,66,0.15)', color: '#f5c842' }}>
+            Free
+          </span>
+          <ChevronDown className={cn('h-4 w-4 transition-transform duration-150', open && 'rotate-180')} style={{ color: '#94a3b8' }} />
         </div>
       </button>
 
       {open && (
-        <div className="absolute left-0 right-0 top-full z-20 mt-1.5 overflow-hidden rounded-xl border border-white/12 bg-[#0e0e12] shadow-2xl">
-          <div className="px-3 py-2 border-b border-white/8">
+        <div
+          className="absolute left-0 right-0 top-full z-20 mt-1.5 overflow-hidden rounded-xl shadow-2xl"
+          style={{ border: '1px solid rgba(59,130,246,0.2)', background: '#0f1629', boxShadow: '0 20px 60px rgba(0,0,0,0.6)' }}
+          role="listbox"
+        >
+          <div className="px-3 py-2" style={{ borderBottom: '1px solid rgba(59,130,246,0.1)' }}>
             <button
               onClick={() => { setSelected('Auto (Recommended)'); setOpen(false); }}
-              className="flex w-full items-center gap-2 rounded-lg px-2 py-1.5 text-sm text-white hover:bg-white/8 transition-all"
+              className="flex w-full items-center gap-2 rounded-lg px-2 py-1.5 text-sm text-white transition-all hover:bg-white/5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#3b82f6]"
+              role="option"
+              aria-selected={selected === 'Auto (Recommended)'}
             >
               <span className="h-2 w-2 rounded-full bg-green-400" />
               Auto (Recommended)
-              <span className="ml-auto text-[10px] text-slate-500">Picks best model per query</span>
+              <span className="ml-auto text-[10px]" style={{ color: '#94a3b8' }}>Picks best model per query</span>
             </button>
           </div>
-          <div className="max-h-64 overflow-y-auto py-1">
+          <div className="max-h-56 overflow-y-auto py-1">
             {MODEL_GROUPS.map((group) => (
               <div key={group.provider}>
-                <p className={cn('px-4 py-1.5 text-[10px] font-semibold uppercase tracking-wider', group.color)}>
+                <p className="px-4 py-1.5 text-[10px] font-semibold uppercase tracking-wider" style={{ color: group.color }}>
                   {group.provider}
                 </p>
                 {group.models.map((model) => (
                   <button
                     key={model}
                     onClick={() => { setSelected(model); setOpen(false); }}
-                    className="flex w-full items-center gap-2 px-4 py-1.5 text-sm text-slate-300 hover:bg-white/6 hover:text-white transition-all"
+                    className="flex w-full items-center gap-2 px-4 py-1.5 text-sm transition-all hover:bg-white/5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#3b82f6]"
+                    style={{ color: '#cbd5e1' }}
+                    role="option"
+                    aria-selected={selected === model}
                   >
                     {model}
-                    <span className="ml-auto text-[10px] text-green-500">Free</span>
+                    <span className="ml-auto text-[10px]" style={{ color: '#22c55e' }}>Free</span>
                   </button>
                 ))}
               </div>
             ))}
           </div>
-          <div className="border-t border-white/8 px-4 py-2 text-[11px] text-slate-500">
-            35+ models total · All free · No API key needed
+          <div className="px-4 py-2 text-[11px]" style={{ borderTop: '1px solid rgba(59,130,246,0.1)', color: '#64748b' }}>
+            35+ models · All free · Auto-routing included
           </div>
         </div>
       )}
@@ -108,255 +115,369 @@ function ModelSelectorDemo() {
   );
 }
 
-export function DesktopLandingHero({ heroFeatures, trustStats }: HeroProps) {
+/**
+ * Live preview card — shows the product working, not just describing it.
+ * A sample interaction with model attribution chip.
+ */
+function LivePreviewCard() {
   return (
-    <section className="relative mx-auto w-full max-w-6xl px-4 pt-14 pb-20 sm:px-6">
-      <div className="grid gap-12 lg:grid-cols-2 lg:items-start">
+    <div
+      className="rounded-2xl overflow-hidden"
+      style={{
+        border: '1px solid rgba(59,130,246,0.2)',
+        background: '#0f1629',
+        boxShadow: '0 8px 24px rgba(0,0,0,0.4), 0 0 0 1px rgba(59,130,246,0.1)',
+      }}
+    >
+      {/* Window chrome */}
+      <div
+        className="flex items-center gap-2 px-4 py-3"
+        style={{ borderBottom: '1px solid rgba(59,130,246,0.12)', background: 'rgba(59,130,246,0.04)' }}
+      >
+        <div className="flex gap-1.5">
+          <div className="h-2.5 w-2.5 rounded-full" style={{ background: '#ef4444', opacity: 0.7 }} />
+          <div className="h-2.5 w-2.5 rounded-full" style={{ background: '#f5c842', opacity: 0.7 }} />
+          <div className="h-2.5 w-2.5 rounded-full" style={{ background: '#22c55e', opacity: 0.7 }} />
+        </div>
+        <span className="ml-2 text-[11px]" style={{ color: '#475569' }}>SOHAM Chat</span>
+        <div className="ml-auto flex items-center gap-1.5">
+          <span className="relative flex h-1.5 w-1.5">
+            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-green-400 opacity-75" />
+            <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-green-400" />
+          </span>
+          <span className="text-[10px]" style={{ color: '#22c55e' }}>Live</span>
+        </div>
+      </div>
 
-        {/* ── Left: Copy ── */}
-        <div className="space-y-7">
-          {/* Founder badge */}
-          <div className="inline-flex items-center gap-2.5 rounded-full border border-white/12 bg-white/5 px-4 py-2 text-xs text-slate-300">
-            <div className="h-2 w-2 rounded-full bg-green-400 animate-pulse" />
-            Built by Heoster, age 16 · Khatauli, India · CODEEX-AI
-          </div>
-
-          <div className="space-y-4">
-            <h1 style={{ fontSize: 'clamp(2.4rem, 5vw, 3.75rem)', lineHeight: 1.05, fontWeight: 800, letterSpacing: '-0.02em', color: '#fff' }}>
-              The free AI that does{' '}
-              <span style={{ background: 'linear-gradient(135deg, #60a5fa, #a78bfa, #22d3ee)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>
-                everything
-              </span>
-            </h1>
-            <p className="text-lg leading-relaxed text-slate-400 max-w-lg">
-              35+ AI models, image generation, voice, web search, PDF analysis — all free.
-              No paywalls. No signup required to start.
-            </p>
-          </div>
-
-          {/* Free bullets */}
-          <ul className="space-y-2.5">
-            {FREE_BULLETS.map((b) => (
-              <li key={b} className="flex items-center gap-3 text-sm text-slate-300">
-                <div className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-green-500/15">
-                  <Check className="h-3 w-3 text-green-400" />
-                </div>
-                {b}
-              </li>
-            ))}
-          </ul>
-
-          {/* CTAs — clear visual hierarchy */}
-          <div className="flex flex-wrap items-center gap-3">
-            <Link href="/chat">
-              <Button
-                size="lg"
-                className="h-11 px-6 font-semibold text-white border-0 shadow-lg"
-                style={{ background: 'linear-gradient(135deg, #6366f1, #8b5cf6, #06b6d4)', boxShadow: '0 8px 32px rgba(99,102,241,0.35)' }}
-              >
-                Start chatting free
-                <ArrowRight className="ml-2 h-4 w-4" />
-              </Button>
-            </Link>
-            <Link href="/faq">
-              <Button
-                size="lg"
-                variant="outline"
-                className="h-11 px-6 border-white/15 bg-transparent text-slate-300 hover:text-white hover:bg-white/8"
-              >
-                See how it works
-              </Button>
-            </Link>
-          </div>
-
-          {/* Social proof */}
-          <div className="space-y-2">
-            <div className="flex items-center gap-2.5">
-              <div className="flex -space-x-2">
-                {TESTERS.slice(0, 5).map((name) => (
-                  <div
-                    key={name}
-                    className="flex h-7 w-7 items-center justify-center rounded-full border-2 border-[#060608] bg-gradient-to-br from-blue-500 to-purple-600 text-[10px] font-bold text-white"
-                  >
-                    {name[0]}
-                  </div>
-                ))}
-              </div>
-              <p className="text-xs text-slate-400">
-                Tested by {TESTERS.length}+ friends · 100+ countries
-              </p>
-            </div>
-            <p className="text-xs text-slate-500">
-              Open source MIT · Privacy-first · No data selling
-            </p>
+      <div className="p-4 space-y-3">
+        {/* User message */}
+        <div className="flex justify-end">
+          <div
+            className="max-w-[80%] rounded-2xl rounded-tr-sm px-3.5 py-2.5 text-sm"
+            style={{ background: 'rgba(59,130,246,0.15)', color: '#e2e8f0', border: '1px solid rgba(59,130,246,0.2)' }}
+          >
+            Explain quantum entanglement simply
           </div>
         </div>
 
-        {/* ── Right: Interactive panel ── */}
+        {/* AI response */}
+        <div className="flex gap-2.5">
+          <div
+            className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-[10px] font-bold"
+            style={{ background: 'linear-gradient(135deg, #f5c842, #f97316)', color: '#0a0e1a' }}
+          >
+            S
+          </div>
+          <div className="space-y-2 flex-1">
+            <div
+              className="rounded-2xl rounded-tl-sm px-3.5 py-2.5 text-sm leading-relaxed"
+              style={{ background: 'rgba(15,22,41,0.8)', color: '#cbd5e1', border: '1px solid rgba(59,130,246,0.12)' }}
+            >
+              Imagine two coins flipped at the same time — no matter how far apart they are, when one lands heads, the other instantly lands tails. Quantum entanglement works the same way: two particles share a linked state, and measuring one instantly determines the other, regardless of distance.
+            </div>
+            {/* Model attribution chip */}
+            <div className="flex items-center gap-1.5 pl-1">
+              <span
+                className="rounded-full px-2 py-0.5 text-[10px] font-medium"
+                style={{ background: 'rgba(249,115,22,0.12)', color: '#f97316', border: '1px solid rgba(249,115,22,0.2)' }}
+              >
+                Llama 4 via Groq
+              </span>
+              <span className="text-[10px]" style={{ color: '#475569' }}>· auto-routed · 0.4s</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Input bar */}
+        <div
+          className="flex items-center gap-2 rounded-xl px-3 py-2.5 mt-1"
+          style={{ border: '1px solid rgba(59,130,246,0.2)', background: 'rgba(59,130,246,0.04)' }}
+        >
+          <span className="flex-1 text-sm" style={{ color: '#475569' }}>Ask anything...</span>
+          <div
+            className="flex h-6 w-6 items-center justify-center rounded-lg"
+            style={{ background: '#f5c842' }}
+          >
+            <ArrowRight className="h-3 w-3" style={{ color: '#0a0e1a' }} />
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export function DesktopLandingHero({ trustStats }: HeroProps) {
+  return (
+    <section className="relative mx-auto w-full max-w-6xl px-6 pt-16 pb-20">
+      <div className="grid gap-14 lg:grid-cols-2 lg:items-start">
+
+        {/* ── Left column ── */}
+        <div className="space-y-8">
+          {/* Founder badge */}
+          <div
+            className="inline-flex items-center gap-2.5 rounded-full px-4 py-2 text-xs"
+            style={{ border: '1px solid rgba(245,200,66,0.25)', background: 'rgba(245,200,66,0.06)', color: '#f5c842' }}
+          >
+            <span className="h-1.5 w-1.5 rounded-full bg-[#f5c842] animate-pulse" />
+            Built by Heoster, age 16 · Khatauli, India · CODEEX-AI
+          </div>
+
+          {/* H1 — crescendo structure: each line grows in visual weight */}
+          <div className="space-y-4">
+            <h1 style={{ lineHeight: 1.05, fontWeight: 800, letterSpacing: '-0.04em' }}>
+              <span
+                className="block"
+                style={{ fontSize: 'clamp(1.8rem, 3.5vw, 2.6rem)', color: '#ffffff' }}
+              >
+                One platform.
+              </span>
+              <span
+                className="block"
+                style={{ fontSize: 'clamp(2.2rem, 4.2vw, 3.2rem)', color: '#f5c842' }}
+              >
+                Thirty-five AI models.
+              </span>
+              <span
+                className="block"
+                style={{ fontSize: 'clamp(2.6rem, 5vw, 3.75rem)', color: '#3b82f6' }}
+              >
+                Always free.
+              </span>
+            </h1>
+
+            {/* Sanskrit identity — distinctive, authentic, no Western AI product has this */}
+            <p style={{ fontSize: '13px', color: '#64748b', letterSpacing: '0.02em' }}>
+              सोऽहम् — <em>So Hum</em> — I am That
+            </p>
+
+            <p style={{ fontSize: '1.05rem', lineHeight: 1.65, color: '#94a3b8', maxWidth: '28rem' }}>
+              Chat, generate images, search the web, analyze PDFs, and use voice — all powered by the best AI models from Groq, Cerebras, Google, and more.
+            </p>
+          </div>
+
+          {/* CTAs */}
+          <div className="flex flex-wrap items-center gap-3">
+            <Link href="/chat">
+              <button
+                className="flex items-center gap-2 h-11 px-6 rounded-xl font-semibold text-sm transition-all focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#3b82f6] focus-visible:outline-offset-3"
+                style={{ background: '#f5c842', color: '#0a0e1a', boxShadow: '0 0 24px rgba(245,200,66,0.35)' }}
+                onMouseEnter={e => { (e.currentTarget).style.boxShadow = '0 0 36px rgba(245,200,66,0.55)'; }}
+                onMouseLeave={e => { (e.currentTarget).style.boxShadow = '0 0 24px rgba(245,200,66,0.35)'; }}
+              >
+                <Zap className="h-4 w-4" />
+                Open SOHAM
+                <ArrowRight className="h-4 w-4" />
+              </button>
+            </Link>
+            <Link href="/documentation">
+              <button
+                className="h-11 px-6 rounded-xl text-sm font-medium transition-all focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#3b82f6] focus-visible:outline-offset-3"
+                style={{ border: '1px solid rgba(59,130,246,0.3)', color: '#3b82f6', background: 'rgba(59,130,246,0.06)' }}
+                onMouseEnter={e => { (e.currentTarget).style.background = 'rgba(59,130,246,0.12)'; }}
+                onMouseLeave={e => { (e.currentTarget).style.background = 'rgba(59,130,246,0.06)'; }}
+              >
+                View Documentation
+              </button>
+            </Link>
+          </div>
+
+          {/* Social proof — real names, real city, real achievement */}
+          <div className="space-y-2.5">
+            <div className="flex items-center gap-3">
+              <div className="flex -space-x-2" aria-hidden="true">
+                {TESTERS.slice(0, 5).map((tester) => (
+                  <div
+                    key={tester.name}
+                    className="flex h-7 w-7 items-center justify-center rounded-full text-[10px] font-bold text-white"
+                    style={{ border: '2px solid #0a0e1a', background: 'linear-gradient(135deg, #3b82f6, #8b5cf6)' }}
+                    title={tester.name}
+                  >
+                    {tester.name[0]}
+                  </div>
+                ))}
+              </div>
+              <div>
+                <p className="text-xs" style={{ color: '#64748b' }}>
+                  Tested by {TESTERS.slice(0, 5).map(t => t.name).join(', ')} and {TESTERS.length - 5} others · Khatauli, India
+                </p>
+                <p className="text-xs mt-0.5" style={{ color: '#475569' }}>
+                  Reached 100+ countries as of 2025
+                </p>
+              </div>
+            </div>
+            <div className="flex items-center gap-1.5 flex-wrap">
+              <span className="text-xs" style={{ color: '#64748b' }}>Made in Bharat</span>
+              <span className="text-sm" aria-label="India flag">🇮🇳</span>
+              <span className="mx-1.5" style={{ color: '#1e293b' }}>·</span>
+              <span className="text-xs" style={{ color: '#64748b' }}>Open source MIT</span>
+              <span className="mx-1.5" style={{ color: '#1e293b' }}>·</span>
+              <span className="text-xs" style={{ color: '#64748b' }}>Privacy-first</span>
+            </div>
+          </div>
+        </div>
+
+        {/* ── Right column ── */}
         <div className="space-y-3">
-          {/* Stats row with live uptime indicator */}
+          {/* Stats row */}
           <div className="grid grid-cols-4 gap-2">
             {trustStats.map((s) => (
-              <div key={s.label} className="rounded-xl border border-white/8 bg-white/[0.04] p-3 text-center">
-                <div className="flex items-center justify-center gap-1.5">
-                  <p className="text-xl font-bold text-white">{s.value}</p>
+              <div
+                key={s.label}
+                className="rounded-xl p-3 text-center transition-all"
+                style={{
+                  border: '1px solid rgba(59,130,246,0.2)',
+                  background: '#0f1629',
+                  boxShadow: s.label === 'AI Models' || s.label === 'Uptime'
+                    ? '0 1px 3px rgba(0,0,0,0.3), 0 0 0 1px rgba(59,130,246,0.1)'
+                    : 'none',
+                }}
+              >
+                <div className="flex items-center justify-center gap-1">
+                  <p className="text-xl font-bold" style={{ color: s.label === 'Price' ? '#f5c842' : '#fff' }}>
+                    {s.value}
+                  </p>
                   {s.label === 'Uptime' && (
-                    <span className="relative flex h-2 w-2">
+                    <span className="relative flex h-2 w-2" aria-hidden="true">
                       <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-green-400 opacity-75" />
                       <span className="relative inline-flex h-2 w-2 rounded-full bg-green-400" />
                     </span>
                   )}
                 </div>
-                <p className="text-[10px] text-slate-500 mt-0.5">{s.label}</p>
+                <p className="text-[10px] mt-0.5" style={{ color: '#64748b' }}>{s.label}</p>
               </div>
             ))}
           </div>
 
-          {/* Interactive model selector */}
-          <div className="rounded-2xl border border-white/8 bg-white/[0.03] p-4 space-y-3">
+          {/* Model selector */}
+          <div
+            className="rounded-2xl p-4 space-y-3"
+            style={{ border: '1px solid rgba(59,130,246,0.15)', background: '#0f1629' }}
+          >
             <div className="flex items-center justify-between">
-              <p className="text-xs font-semibold text-slate-300">Choose your AI model</p>
-              <span className="text-[10px] text-slate-500">35+ available · all free</span>
+              <p className="text-xs font-semibold" style={{ color: '#e2e8f0' }}>Select AI Model</p>
+              <span className="text-[10px]" style={{ color: '#64748b' }}>35+ available</span>
             </div>
-            <ModelSelectorDemo />
-            <p className="text-[11px] text-slate-500">
-              Auto mode picks the best model for each query automatically.
+            <ModelSelector />
+            <p className="text-[11px]" style={{ color: '#475569' }}>
+              Auto mode routes each query to the best model. No settings needed.
             </p>
           </div>
 
-          {/* Feature cards */}
-          {heroFeatures.map((f) => {
-            const Icon = f.icon;
-            return (
-              <div
-                key={f.title}
-                className="flex items-start gap-4 rounded-xl border border-white/8 bg-white/[0.03] p-4 hover:bg-white/[0.06] hover:border-white/15 transition-all"
-              >
-                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-white/8 text-white">
-                  <Icon className="h-4.5 w-4.5" />
-                </div>
-                <div className="flex-1 min-w-0">
-                  <p className="text-sm font-semibold text-white">{f.title}</p>
-                  <p className="mt-0.5 text-xs leading-relaxed text-slate-400">{f.description}</p>
-                </div>
-                <span className="shrink-0 rounded-full bg-green-500/15 px-2 py-0.5 text-[10px] font-semibold text-green-400">
-                  Free
-                </span>
-              </div>
-            );
-          })}
+          {/* Live preview card — shows the product working */}
+          <LivePreviewCard />
         </div>
       </div>
     </section>
   );
 }
 
-export function MobileLandingHero({ heroFeatures, trustStats }: HeroProps) {
+export function MobileLandingHero({ trustStats }: HeroProps) {
   return (
     <section className="w-full px-4 pt-8 pb-12 space-y-7" style={{ maxWidth: '100vw', overflowX: 'hidden' }}>
 
       {/* Founder badge */}
-      <div className="inline-flex items-center gap-2 rounded-full border border-white/12 bg-white/5 px-3 py-1.5 text-[11px] text-slate-300">
-        <div className="h-1.5 w-1.5 rounded-full bg-green-400 animate-pulse" />
+      <div
+        className="inline-flex items-center gap-2 rounded-full px-3 py-1.5 text-[11px]"
+        style={{ border: '1px solid rgba(245,200,66,0.25)', background: 'rgba(245,200,66,0.06)', color: '#f5c842' }}
+      >
+        <span className="h-1.5 w-1.5 rounded-full bg-[#f5c842] animate-pulse" />
         Built by Heoster, 16 · CODEEX-AI · India
       </div>
 
-      {/* Headline — fluid font size prevents overflow */}
-      <div className="space-y-3">
-        <h1 style={{ fontSize: 'clamp(2rem, 9vw, 3rem)', lineHeight: 1.05, fontWeight: 800, letterSpacing: '-0.02em', color: '#fff' }}>
-          The free AI that does{' '}
-          <span style={{ background: 'linear-gradient(135deg, #60a5fa, #a78bfa)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>
-            everything
+      {/* H1 — crescendo structure */}
+      <div className="space-y-2">
+        <h1 style={{ lineHeight: 1.05, fontWeight: 800, letterSpacing: '-0.04em' }}>
+          <span className="block" style={{ fontSize: 'clamp(1.6rem, 7vw, 2.2rem)', color: '#ffffff' }}>
+            One platform.
+          </span>
+          <span className="block" style={{ fontSize: 'clamp(1.9rem, 8.5vw, 2.6rem)', color: '#f5c842' }}>
+            Thirty-five AI models.
+          </span>
+          <span className="block" style={{ fontSize: 'clamp(2.2rem, 9.5vw, 3rem)', color: '#3b82f6' }}>
+            Always free.
           </span>
         </h1>
-        <p className="text-base leading-relaxed text-slate-400">
-          35+ models, image gen, voice, web search, PDF — all free. No card needed.
+        {/* Sanskrit identity */}
+        <p style={{ fontSize: '12px', color: '#64748b' }}>
+          सोऽहम् — <em>So Hum</em> — I am That
+        </p>
+        <p className="text-base leading-relaxed" style={{ color: '#94a3b8', lineHeight: 1.65 }}>
+          Chat, image gen, voice, web search, PDF analysis — powered by the best AI models.
         </p>
       </div>
 
       {/* CTAs */}
       <div className="flex gap-3">
         <Link href="/chat" className="flex-1">
-          <Button
-            className="w-full h-11 font-semibold text-white border-0"
-            style={{ background: 'linear-gradient(135deg, #6366f1, #8b5cf6, #06b6d4)' }}
+          <button
+            className="flex w-full items-center justify-center gap-2 h-11 rounded-xl font-semibold text-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#3b82f6] focus-visible:outline-offset-2"
+            style={{ background: '#f5c842', color: '#0a0e1a', boxShadow: '0 0 20px rgba(245,200,66,0.3)' }}
           >
-            Start free
-            <ArrowRight className="ml-2 h-4 w-4" />
-          </Button>
+            <Zap className="h-4 w-4" />
+            Open SOHAM
+          </button>
         </Link>
         <Link href="/faq">
-          <Button variant="outline" className="h-11 border-white/15 bg-transparent text-slate-200 hover:bg-white/8">
+          <button
+            className="h-11 px-4 rounded-xl text-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#3b82f6] focus-visible:outline-offset-2"
+            style={{ border: '1px solid rgba(59,130,246,0.3)', color: '#3b82f6', background: 'rgba(59,130,246,0.06)' }}
+          >
             FAQ
-          </Button>
+          </button>
         </Link>
       </div>
 
-      {/* Stats with live uptime */}
+      {/* Stats */}
       <div className="grid grid-cols-4 gap-2">
         {trustStats.map((s) => (
-          <div key={s.label} className="rounded-xl border border-white/8 bg-white/[0.04] p-2.5 text-center">
-            <div className="flex items-center justify-center gap-1">
-              <p className="text-base font-bold text-white">{s.value}</p>
-              {s.label === 'Uptime' && (
-                <span className="relative flex h-1.5 w-1.5">
-                  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-green-400 opacity-75" />
-                  <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-green-400" />
-                </span>
-              )}
-            </div>
-            <p className="text-[9px] text-slate-500 mt-0.5 leading-tight">{s.label}</p>
+          <div
+            key={s.label}
+            className="rounded-xl p-2.5 text-center"
+            style={{
+              border: '1px solid rgba(59,130,246,0.2)',
+              background: '#0f1629',
+              boxShadow: s.label === 'AI Models' ? '0 1px 3px rgba(0,0,0,0.3), 0 0 0 1px rgba(59,130,246,0.1)' : 'none',
+            }}
+          >
+            <p className="text-base font-bold" style={{ color: s.label === 'Price' ? '#f5c842' : '#fff' }}>
+              {s.value}
+            </p>
+            <p className="text-[9px] mt-0.5 leading-tight" style={{ color: '#64748b' }}>{s.label}</p>
           </div>
         ))}
       </div>
 
-      {/* Interactive model selector */}
-      <div className="rounded-xl border border-white/8 bg-white/[0.03] p-3.5 space-y-2.5">
-        <p className="text-xs font-semibold text-slate-300">Choose your AI model</p>
-        <ModelSelectorDemo />
+      {/* Model selector */}
+      <div className="rounded-xl p-3.5 space-y-2.5" style={{ border: '1px solid rgba(59,130,246,0.15)', background: '#0f1629' }}>
+        <p className="text-xs font-semibold" style={{ color: '#e2e8f0' }}>Select AI Model</p>
+        <ModelSelector />
       </div>
 
-      {/* Feature list */}
-      <ul className="space-y-2">
-        {FREE_BULLETS.map((b) => (
-          <li key={b} className="flex items-center gap-2.5 text-sm text-slate-300">
-            <Check className="h-3.5 w-3.5 shrink-0 text-green-400" />
-            {b}
-          </li>
-        ))}
-      </ul>
+      {/* Live preview card — mobile version */}
+      <LivePreviewCard />
 
-      {/* Feature cards */}
-      <div className="space-y-2.5">
-        {heroFeatures.map((f) => {
-          const Icon = f.icon;
-          return (
-            <div key={f.title} className="flex items-start gap-3 rounded-xl border border-white/8 bg-white/[0.03] p-3.5">
-              <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-white/8 text-white">
-                <Icon className="h-4 w-4" />
+      {/* Social proof — real names */}
+      <div className="space-y-1.5">
+        <div className="flex items-center gap-2.5">
+          <div className="flex -space-x-1.5" aria-hidden="true">
+            {TESTERS.slice(0, 4).map((tester) => (
+              <div
+                key={tester.name}
+                className="flex h-6 w-6 items-center justify-center rounded-full text-[9px] font-bold text-white"
+                style={{ border: '2px solid #0a0e1a', background: 'linear-gradient(135deg, #3b82f6, #8b5cf6)' }}
+                title={tester.name}
+              >
+                {tester.name[0]}
               </div>
-              <div className="flex-1 min-w-0">
-                <p className="text-sm font-semibold text-white">{f.title}</p>
-                <p className="mt-0.5 text-xs leading-relaxed text-slate-400 line-clamp-2">{f.description}</p>
-              </div>
-              <span className="shrink-0 rounded-full bg-green-500/15 px-2 py-0.5 text-[10px] font-semibold text-green-400">
-                Free
-              </span>
-            </div>
-          );
-        })}
-      </div>
-
-      {/* Social proof */}
-      <div className="flex items-center gap-2.5">
-        <div className="flex -space-x-1.5">
-          {TESTERS.slice(0, 4).map((name) => (
-            <div key={name} className="flex h-6 w-6 items-center justify-center rounded-full border-2 border-[#060608] bg-gradient-to-br from-blue-500 to-purple-600 text-[9px] font-bold text-white">
-              {name[0]}
-            </div>
-          ))}
+            ))}
+          </div>
+          <p className="text-xs" style={{ color: '#64748b' }}>
+            Tested by {TESTERS.slice(0, 4).map(t => t.name).join(', ')} and others
+          </p>
         </div>
-        <p className="text-xs text-slate-400">Tested by {TESTERS.length}+ friends · 100+ countries</p>
+        <p className="text-xs" style={{ color: '#475569' }}>
+          Made in Bharat 🇮🇳 · Reached 100+ countries as of 2025
+        </p>
       </div>
     </section>
   );
