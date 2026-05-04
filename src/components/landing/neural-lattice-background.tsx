@@ -113,7 +113,8 @@ function LatticeScene({ mobile }: { mobile: boolean }) {
     group.position.y = THREE.MathUtils.lerp(group.position.y, pointerY * 0.45, 0.035);
 
     const huePulse = 0.5 + Math.sin(state.clock.elapsedTime * 0.3) * 0.08;
-    state.scene.fog = new THREE.FogExp2(new THREE.Color().setHSL(0.68, 0.38, huePulse * 0.08), 0.07);
+    // Blue hue (0.61 ≈ 220°) matches --primary: 220 90% 56%
+    state.scene.fog = new THREE.FogExp2(new THREE.Color().setHSL(0.61, 0.9, huePulse * 0.08), 0.07);
   });
 
   return (
@@ -128,7 +129,7 @@ function LatticeScene({ mobile }: { mobile: boolean }) {
           />
         </bufferGeometry>
         <pointsMaterial
-          color="#8df4ff"
+          color="#3b82f6"
           size={mobile ? 0.03 : 0.04}
           sizeAttenuation
           transparent
@@ -145,7 +146,7 @@ function LatticeScene({ mobile }: { mobile: boolean }) {
             itemSize={3}
           />
         </bufferGeometry>
-        <lineBasicMaterial color="#6b5cff" transparent opacity={mobile ? 0.14 : 0.18} />
+        <lineBasicMaterial color="#3b82f6" transparent opacity={mobile ? 0.14 : 0.18} />
       </lineSegments>
     </group>
   );
@@ -166,15 +167,16 @@ export function NeuralLatticeBackground() {
 
   return (
     <div className="pointer-events-none fixed inset-0 -z-20 overflow-hidden">
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(0,242,255,0.08),transparent_32%),radial-gradient(circle_at_bottom,rgba(112,0,255,0.12),transparent_38%)]" />
+      {/* Blue-tinted radial glows matching --primary */}
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(59,130,246,0.08),transparent_32%),radial-gradient(circle_at_bottom,rgba(59,130,246,0.06),transparent_38%)]" />
       <Canvas dpr={mobile ? [1, 1] : [1, 1.25]} camera={{ position: [0, 0, 15], fov: 52 }}>
-        <color attach="background" args={['#050505']} />
+        <color attach="background" args={['#09090b']} />
         <ambientLight intensity={0.18} />
-        <pointLight position={[0, 0, 8]} intensity={mobile ? 2.2 : 3} color="#00f2ff" />
-        <pointLight position={[-8, -4, -6]} intensity={mobile ? 1.6 : 2.2} color="#7000ff" />
+        <pointLight position={[0, 0, 8]} intensity={mobile ? 2.2 : 3} color="#3b82f6" />
+        <pointLight position={[-8, -4, -6]} intensity={mobile ? 1.6 : 2.2} color="#1d4ed8" />
         <LatticeScene mobile={mobile} />
       </Canvas>
-      <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(5,5,5,0.38),rgba(5,5,5,0.66)_72%,rgba(5,5,5,0.92))]" />
+      <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(9,9,11,0.38),rgba(9,9,11,0.66)_72%,rgba(9,9,11,0.92))]" />
     </div>
   );
 }

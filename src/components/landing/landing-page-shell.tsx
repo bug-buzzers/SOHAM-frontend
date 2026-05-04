@@ -22,19 +22,7 @@ const NeuralLatticeBackground = dynamic(
   { ssr: false }
 );
 
-// ─── Design tokens ────────────────────────────────────────────────────────────
-const T = {
-  bgPrimary:    '#415180ff',
-  bgCard:       '#4f6399ff',
-  bgCardHover:  '#131d35',
-  gold:         '#4187b6ff',
-  blue:         '#6e84a7ff',
-  border:       'rgba(59,130,246,0.15)',
-  borderSubtle: 'rgba(59,130,246,0.1)',
-  textPrimary:  '#ffffff',
-  textSecondary:'#94a3b8',
-  textMuted:    '#cbd2dbff',
-};
+// Design tokens removed — using CSS variables via Tailwind classes throughout
 
 // ─── Data ─────────────────────────────────────────────────────────────────────
 const heroFeatures = [
@@ -51,14 +39,14 @@ const trustStats = [
   { label: 'Price',     value: '$0' },
 ];
 
-// Gold: max 3 instances per viewport. Each accent color is unique per feature category.
+// Each accent color is unique per feature category.
 const features = [
   { icon: Cpu,        title: '35+ AI Models',        desc: 'Groq (Llama 4, GPT-OSS 120B), Cerebras (Qwen 3 235B), Gemini 2.5 Pro, DeepSeek R1, NVIDIA Nemotron 120B — all free.', example: 'Ask anything — SOHAM picks the right model automatically. No account upgrades. No model tiers.', tag: 'Core',     tagColor: '#3b82f6', wide: false },
   { icon: Brain,      title: 'Smart Auto-Routing',    desc: 'Intent detector classifies every query into 13 types. Coding goes to DeepSeek. Long docs go to Gemini. Speed goes to Groq.', example: 'Ask "debug my Python code" — SOHAM routes it to DeepSeek R1 automatically. No settings. No toggles.', tag: 'AI',       tagColor: '#8b5cf6', wide: false },
   { icon: Globe,      title: 'Real-Time Web Search',  desc: 'DuckDuckGo + GNews + Open-Meteo + CricAPI + CoinGecko. Auto-triggers on news, weather, sports, finance.', example: 'Ask "India vs Australia score right now" — SOHAM queries CricAPI and responds with live data, not training data.', tag: 'Live',     tagColor: '#22c55e', wide: false },
   { icon: ImageIcon,  title: 'Image Generation',      desc: 'Pollinations.ai FLUX + Cloudflare Workers AI + HuggingFace fallback. Around 5 seconds. Describe what you want.', example: null, tag: 'Creative', tagColor: '#ec4899', wide: true  },
   { icon: Mic,        title: 'Voice Input & Output',  desc: 'Groq Whisper V3 Turbo STT. Groq Orpheus TTS with 6 voices. Vocal direction: [cheerful], [whisper], [laughs].', example: null, tag: 'Voice',    tagColor: '#06b6d4', wide: false },
-  { icon: FileText,   title: 'PDF Analysis',          desc: 'Upload PDFs up to 5MB. Ask questions, get summaries. Gemini 2.5 Flash with 1M token context window.', example: null, tag: 'Docs',     tagColor: '#f5c842', wide: false },
+  { icon: FileText,   title: 'PDF Analysis',          desc: 'Upload PDFs up to 5MB. Ask questions, get summaries. Gemini 2.5 Flash with 1M token context window.', example: null, tag: 'Docs',     tagColor: 'hsl(var(--primary))', wide: false },
   { icon: Code2,      title: '13 Specialized Skills', desc: 'Translation (50+ languages), Grammar Check, Quiz Generator, Recipe, Sentiment Analysis, Fact-Check, Dictionary.', example: null, tag: 'Skills',   tagColor: '#f97316', wide: false },
   { icon: Search,     title: '16 Slash Commands',     desc: '/solve /summarize /search /news /weather /translate /grammar /quiz /recipe /joke /define /factcheck and more.', example: null, tag: 'Commands', tagColor: '#a78bfa', wide: true  },
   { icon: ShieldCheck,title: 'Privacy-First',         desc: "Conversations stored in your browser's localStorage. The SOHAM backend never receives conversation content — only API routing instructions.", example: 'See the source code on GitHub to verify every claim.', tag: 'Privacy',  tagColor: '#14b8a6', wide: false },
@@ -118,26 +106,22 @@ function FaqItem({ q, a }: { q: string; a: string }) {
   const [open, setOpen] = useState(false);
   return (
     <div
-      className="rounded-xl overflow-hidden transition-all"
-      style={{
-        border: `1px solid ${open ? 'rgba(59,130,246,0.25)' : 'rgba(59,130,246,0.12)'}`,
-        background: open ? '#0f1629' : 'transparent',
-      }}
+      className={`rounded-xl overflow-hidden transition-all border ${open ? 'border-primary/25 bg-card' : 'border-primary/12 bg-transparent'}`}
     >
       <button
         onClick={() => setOpen(o => !o)}
-        className="flex w-full items-center justify-between gap-4 px-5 py-4 text-left transition-all focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#3b82f6] focus-visible:outline-offset-2"
+        className="flex w-full items-center justify-between gap-4 px-5 py-4 text-left transition-all focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2"
         aria-expanded={open}
       >
-        <span className="text-sm font-semibold" style={{ color: open ? '#ffffff' : '#cbd5e1' }}>{q}</span>
+        <span className={`text-sm font-semibold ${open ? 'text-foreground' : 'text-muted-foreground'}`}>{q}</span>
         {open
-          ? <ChevronUp className="h-4 w-4 shrink-0" style={{ color: '#3b82f6' }} />
-          : <ChevronDown className="h-4 w-4 shrink-0" style={{ color: '#64748b' }} />
+          ? <ChevronUp className="h-4 w-4 shrink-0 text-primary" />
+          : <ChevronDown className="h-4 w-4 shrink-0 text-muted-foreground" />
         }
       </button>
       {open && (
         <div className="px-5 pb-4">
-          <p className="text-sm leading-relaxed" style={{ color: '#94a3b8', lineHeight: 1.65 }}>{a}</p>
+          <p className="text-sm leading-relaxed text-muted-foreground" style={{ lineHeight: 1.65 }}>{a}</p>
         </div>
       )}
     </div>
@@ -196,12 +180,11 @@ export function LandingPageShell({ isMobile }: { isMobile: boolean }) {
   }, []);
 
   return (
-    <div className="min-h-screen" style={{ background: T.bgPrimary, color: T.textPrimary, overflowX: 'hidden' }}>
+    <div className="min-h-screen bg-background text-foreground overflow-x-hidden">
       {/* Ambient radial glows */}
       <div className="pointer-events-none fixed inset-0 -z-10" style={{
-        background: `radial-gradient(ellipse 70% 40% at 50% -5%, rgba(59,130,246,0.12), transparent),
-                     radial-gradient(ellipse 50% 30% at 80% 80%, rgba(245,200,66,0.06), transparent),
-                     ${T.bgPrimary}`,
+        background: `radial-gradient(ellipse 70% 40% at 50% -5%, hsl(var(--primary)/0.12), transparent),
+                     radial-gradient(ellipse 50% 30% at 80% 80%, hsl(var(--primary)/0.06), transparent)`,
       }} />
 
       {shouldRender3D && <NeuralLatticeBackground />}
@@ -237,24 +220,16 @@ export function LandingPageShell({ isMobile }: { isMobile: boolean }) {
         )}
 
         {/* ── Provider ticker — with descriptors and fade masks ── */}
-        <div style={{
-          borderTop: `1px solid ${T.border}`,
-          borderBottom: `1px solid ${T.border}`,
-          background: 'rgba(15,22,41,0.6)',
-          overflow: 'hidden',
-          position: 'relative',
-        }}>
+        <div className="border-y border-border bg-card/50 overflow-hidden relative">
           {/* Fade masks so items don't pop in/out at edges */}
-          <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-16"
-            style={{ background: 'linear-gradient(to right, #0a0e1a, transparent)' }} />
-          <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-16"
-            style={{ background: 'linear-gradient(to left, #0a0e1a, transparent)' }} />
+          <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-16 bg-gradient-to-r from-background to-transparent" />
+          <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-16 bg-gradient-to-l from-background to-transparent" />
           <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-center gap-x-8 gap-y-2 px-4 py-4">
             {[
               { name: 'Groq',            descriptor: 'Speed',       color: '#f97316' },
-              { name: 'Cerebras',        descriptor: 'Scale',       color: '#3b82f6' },
+              { name: 'Cerebras',        descriptor: 'Scale',       color: 'hsl(var(--primary))' },
               { name: 'Google Gemini',   descriptor: 'Multimodal',  color: '#22c55e' },
-              { name: 'HuggingFace',     descriptor: 'Open Models', color: '#f5c842' },
+              { name: 'HuggingFace',     descriptor: 'Open Models', color: 'hsl(var(--primary))' },
               { name: 'DeepSeek R1',     descriptor: 'Reasoning',   color: '#ec4899' },
               { name: 'NVIDIA Nemotron', descriptor: '120B Params', color: '#06b6d4' },
               { name: 'OpenRouter',      descriptor: 'Aggregator',  color: '#a78bfa' },
@@ -267,21 +242,20 @@ export function LandingPageShell({ isMobile }: { isMobile: boolean }) {
                 <span className="text-[10px]" style={{ color: p.color, opacity: 0.65 }}>{p.descriptor}</span>
               </div>
             ))}
-            <span className="text-xs" style={{ color: T.textMuted }}>+ 28 more · all free</span>
+            <span className="text-xs text-muted-foreground">+ 28 more · all free</span>
           </div>
         </div>
 
         {/* ── How It Works — 3 steps ── */}
         <motion.section {...sectionVariant} className="mx-auto w-full max-w-6xl px-4 py-16 sm:px-6 sm:py-20">
           <div className="mb-10 text-center">
-            <p className="mb-2 text-xs font-semibold uppercase tracking-widest"
-              style={{ color: T.blue, letterSpacing: '0.12em' }}>
+            <p className="mb-2 text-xs font-semibold uppercase tracking-widest text-primary"
+              style={{ letterSpacing: '0.12em' }}>
               Get started in seconds
             </p>
-            <h2 style={{
+            <h2 className="text-foreground" style={{
               fontSize: 'clamp(1.75rem, 4vw, 2.5rem)',
               fontWeight: 700,
-              color: T.textPrimary,
               lineHeight: 1.15,
               letterSpacing: '-0.04em',
             }}>
@@ -308,24 +282,20 @@ export function LandingPageShell({ isMobile }: { isMobile: boolean }) {
             ].map((item) => (
               <div
                 key={item.step}
-                className="relative rounded-2xl p-6"
-                style={{
-                  border: `1px solid ${T.border}`,
-                  background: T.bgCard,
-                  boxShadow: '0 1px 3px rgba(0,0,0,0.3), 0 0 0 1px rgba(59,130,246,0.1)',
-                }}
+                className="relative rounded-2xl p-6 border border-border bg-card"
+                style={{ boxShadow: '0 1px 3px rgba(0,0,0,0.3), 0 0 0 1px hsl(var(--primary)/0.1)' }}
               >
                 <p
-                  className="mb-4 text-5xl font-bold select-none"
-                  style={{ color: '#1e293b', lineHeight: 1, letterSpacing: '-0.04em' }}
+                  className="mb-4 text-5xl font-bold select-none text-muted/40"
+                  style={{ lineHeight: 1, letterSpacing: '-0.04em' }}
                   aria-hidden="true"
                 >
                   {item.step}
                 </p>
-                <p className="mb-2 text-base font-bold" style={{ color: T.textPrimary, lineHeight: 1.15 }}>
+                <p className="mb-2 text-base font-bold text-foreground" style={{ lineHeight: 1.15 }}>
                   {item.title}
                 </p>
-                <p className="text-sm" style={{ color: T.textSecondary, lineHeight: 1.65 }}>{item.desc}</p>
+                <p className="text-sm text-muted-foreground" style={{ lineHeight: 1.65 }}>{item.desc}</p>
               </div>
             ))}
           </div>
@@ -334,30 +304,28 @@ export function LandingPageShell({ isMobile }: { isMobile: boolean }) {
         {/* ── Features ── */}
         <motion.section id="features" {...sectionVariant} className="mx-auto w-full max-w-6xl px-4 py-16 sm:px-6 sm:py-20">
           <div className="mb-10">
-            <p className="mb-2 text-xs font-semibold uppercase tracking-widest"
-              style={{ color: T.blue, letterSpacing: '0.12em' }}>
+            <p className="mb-2 text-xs font-semibold uppercase tracking-widest text-primary"
+              style={{ letterSpacing: '0.12em' }}>
               Everything included
             </p>
-            {/* H2 split across two lines — "At $0." gets its own gold line */}
-            <h2 style={{
+            {/* H2 split across two lines — "At $0." gets its own primary-colored line */}
+            <h2 className="text-foreground" style={{
               fontSize: 'clamp(1.75rem, 4vw, 2.5rem)',
               fontWeight: 700,
-              color: T.textPrimary,
               lineHeight: 1.15,
               letterSpacing: '-0.04em',
             }}>
               More than ChatGPT Plus.
             </h2>
-            <p style={{
+            <p className="text-primary" style={{
               fontSize: 'clamp(1.75rem, 4vw, 2.5rem)',
               fontWeight: 700,
-              color: T.gold,
               lineHeight: 1.15,
               letterSpacing: '-0.04em',
             }}>
               At $0.
             </p>
-            <p className="mt-3 text-base max-w-xl" style={{ color: T.textSecondary, lineHeight: 1.65 }}>
+            <p className="mt-3 text-base max-w-xl text-muted-foreground" style={{ lineHeight: 1.65 }}>
               Every feature a power user needs — from 35+ AI models to image generation, voice, and live web search — in one free platform.
             </p>
           </div>
@@ -367,19 +335,13 @@ export function LandingPageShell({ isMobile }: { isMobile: boolean }) {
             {features.slice(0, 3).map((f) => (
               <div
                 key={f.title}
-                className="rounded-2xl p-6 transition-all"
-                style={{
-                  border: `1px solid ${T.border}`,
-                  background: T.bgCard,
-                  boxShadow: '0 1px 3px rgba(0,0,0,0.3), 0 0 0 1px rgba(59,130,246,0.1)',
-                }}
+                className="rounded-2xl p-6 transition-all border border-border bg-card hover:bg-card/80"
+                style={{ boxShadow: '0 1px 3px rgba(0,0,0,0.3), 0 0 0 1px hsl(var(--primary)/0.1)' }}
                 onMouseEnter={e => {
-                  (e.currentTarget as HTMLElement).style.boxShadow = '0 8px 24px rgba(0,0,0,0.4), 0 0 0 1px rgba(59,130,246,0.2)';
-                  (e.currentTarget as HTMLElement).style.background = T.bgCardHover;
+                  (e.currentTarget as HTMLElement).style.boxShadow = '0 8px 24px rgba(0,0,0,0.4), 0 0 0 1px hsl(var(--primary)/0.2)';
                 }}
                 onMouseLeave={e => {
-                  (e.currentTarget as HTMLElement).style.boxShadow = '0 1px 3px rgba(0,0,0,0.3), 0 0 0 1px rgba(59,130,246,0.1)';
-                  (e.currentTarget as HTMLElement).style.background = T.bgCard;
+                  (e.currentTarget as HTMLElement).style.boxShadow = '0 1px 3px rgba(0,0,0,0.3), 0 0 0 1px hsl(var(--primary)/0.1)';
                 }}
               >
                 <div className="mb-4 flex items-center justify-between">
@@ -392,11 +354,11 @@ export function LandingPageShell({ isMobile }: { isMobile: boolean }) {
                     {f.tag}
                   </span>
                 </div>
-                <p className="mb-2 text-base font-bold" style={{ color: T.textPrimary }}>{f.title}</p>
-                <p className="text-sm" style={{ color: T.textSecondary, lineHeight: 1.65 }}>{f.desc}</p>
+                <p className="mb-2 text-base font-bold text-foreground">{f.title}</p>
+                <p className="text-sm text-muted-foreground" style={{ lineHeight: 1.65 }}>{f.desc}</p>
                 {f.example && (
-                  <p className="mt-3 text-xs italic"
-                    style={{ color: T.textMuted, borderLeft: `2px solid ${f.tagColor}40`, paddingLeft: '10px', lineHeight: 1.65 }}>
+                  <p className="mt-3 text-xs italic text-muted-foreground"
+                    style={{ borderLeft: `2px solid ${f.tagColor}40`, paddingLeft: '10px', lineHeight: 1.65 }}>
                     {f.example}
                   </p>
                 )}
@@ -409,14 +371,13 @@ export function LandingPageShell({ isMobile }: { isMobile: boolean }) {
             {features.slice(3).map((f) => (
               <div
                 key={f.title}
-                className={`rounded-xl p-4 transition-all ${f.wide && !isMobile ? 'sm:col-span-2 lg:col-span-2' : ''}`}
+                className={`rounded-xl p-4 transition-all border border-border/60 bg-card ${f.wide && !isMobile ? 'sm:col-span-2 lg:col-span-2' : ''}`}
                 style={{
-                  border: `1px solid ${T.borderSubtle}`,
-                  background: f.tag === 'Privacy' ? 'rgba(20,184,166,0.04)' : T.bgCard,
+                  background: f.tag === 'Privacy' ? 'color-mix(in srgb, hsl(var(--card)) 96%, #14b8a6 4%)' : undefined,
                   boxShadow: '0 1px 3px rgba(0,0,0,0.3)',
                 }}
                 onMouseEnter={e => {
-                  (e.currentTarget as HTMLElement).style.boxShadow = '0 8px 24px rgba(0,0,0,0.4), 0 0 0 1px rgba(59,130,246,0.2)';
+                  (e.currentTarget as HTMLElement).style.boxShadow = '0 8px 24px rgba(0,0,0,0.4), 0 0 0 1px hsl(var(--primary)/0.2)';
                 }}
                 onMouseLeave={e => {
                   (e.currentTarget as HTMLElement).style.boxShadow = '0 1px 3px rgba(0,0,0,0.3)';
@@ -427,16 +388,16 @@ export function LandingPageShell({ isMobile }: { isMobile: boolean }) {
                     style={{ background: `${f.tagColor}18` }}>
                     <f.icon className="h-3.5 w-3.5" style={{ color: f.tagColor }} />
                   </div>
-                  <p className="text-sm font-semibold" style={{ color: T.textPrimary }}>{f.title}</p>
+                  <p className="text-sm font-semibold text-foreground">{f.title}</p>
                   <span className="ml-auto rounded-full px-2 py-0.5 text-[10px] font-medium"
                     style={{ background: `${f.tagColor}15`, color: f.tagColor }}>
                     {f.tag}
                   </span>
                 </div>
-                <p className="text-xs" style={{ color: T.textMuted, lineHeight: 1.65 }}>{f.desc}</p>
+                <p className="text-xs text-muted-foreground" style={{ lineHeight: 1.65 }}>{f.desc}</p>
                 {f.example && (
-                  <p className="mt-2 text-[11px] italic"
-                    style={{ color: '#475569', borderLeft: `2px solid ${f.tagColor}40`, paddingLeft: '8px', lineHeight: 1.65 }}>
+                  <p className="mt-2 text-[11px] italic text-muted-foreground"
+                    style={{ borderLeft: `2px solid ${f.tagColor}40`, paddingLeft: '8px', lineHeight: 1.65 }}>
                     {f.example}
                   </p>
                 )}
@@ -447,10 +408,10 @@ export function LandingPageShell({ isMobile }: { isMobile: boolean }) {
           <div className="mt-8 text-center">
             <Link href="/chat">
               <button
-                className="flex items-center gap-2 mx-auto h-11 px-8 rounded-xl font-semibold text-sm transition-all focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#3b82f6] focus-visible:outline-offset-3"
-                style={{ background: T.gold, color: T.bgPrimary, boxShadow: '0 0 24px rgba(245,200,66,0.3)' }}
-                onMouseEnter={e => { (e.currentTarget as HTMLElement).style.boxShadow = '0 0 36px rgba(245,200,66,0.5)'; }}
-                onMouseLeave={e => { (e.currentTarget as HTMLElement).style.boxShadow = '0 0 24px rgba(245,200,66,0.3)'; }}
+                className="flex items-center gap-2 mx-auto h-11 px-8 rounded-xl font-semibold text-sm transition-all bg-primary text-primary-foreground focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-3"
+                style={{ boxShadow: '0 0 24px hsl(var(--primary)/0.3)' }}
+                onMouseEnter={e => { (e.currentTarget as HTMLElement).style.boxShadow = '0 0 36px hsl(var(--primary)/0.5)'; }}
+                onMouseLeave={e => { (e.currentTarget as HTMLElement).style.boxShadow = '0 0 24px hsl(var(--primary)/0.3)'; }}
               >
                 <Zap className="h-4 w-4" />
                 Try all features free
@@ -464,7 +425,7 @@ export function LandingPageShell({ isMobile }: { isMobile: boolean }) {
         <motion.section
           id="compare"
           {...sectionVariant}
-          style={{ borderTop: `1px solid ${T.border}`, borderBottom: `1px solid ${T.border}`, background: 'rgba(15,22,41,0.5)' }}
+          className="border-y border-border bg-card/50"
         >
           <div className="mx-auto w-full max-w-6xl px-4 py-16 sm:px-6 sm:py-20">
             <div className={`grid gap-10 ${isMobile ? '' : 'lg:grid-cols-2 lg:items-start'}`}>
@@ -473,42 +434,41 @@ export function LandingPageShell({ isMobile }: { isMobile: boolean }) {
                   style={{ color: '#8b5cf6', letterSpacing: '0.12em' }}>
                   SOHAM vs ChatGPT
                 </p>
-                <h2 style={{
+                <h2 className="text-foreground" style={{
                   fontSize: 'clamp(1.75rem, 4vw, 2.5rem)',
                   fontWeight: 700,
-                  color: T.textPrimary,
                   lineHeight: 1.15,
                   letterSpacing: '-0.04em',
                 }}>
-                  Why pay <span style={{ color: '#ef4444' }}>$20/month</span> for less?
+                  Why pay <span className="text-destructive">$20/month</span> for less?
                 </h2>
-                <p className="mt-3 text-base" style={{ color: T.textSecondary, lineHeight: 1.65 }}>
+                <p className="mt-3 text-base text-muted-foreground" style={{ lineHeight: 1.65 }}>
                   ChatGPT Plus locks image generation, voice, and advanced models behind a $20/month paywall.
                   SOHAM gives you all of that — plus 35+ models from 5 providers — for free.
                 </p>
               </div>
 
               <div>
-                <div className="overflow-hidden rounded-2xl"
-                  style={{ border: `1px solid ${T.border}`, background: T.bgCard, boxShadow: '0 1px 3px rgba(0,0,0,0.3), 0 0 0 1px rgba(59,130,246,0.1)' }}>
-                  <div className="grid grid-cols-3 px-4 py-3 text-[11px] font-semibold uppercase"
-                    style={{ borderBottom: `1px solid ${T.border}`, background: 'rgba(59,130,246,0.05)', letterSpacing: '0.12em' }}>
-                    <span style={{ color: T.textMuted }}>Feature</span>
-                    <span style={{ color: T.gold }}>SOHAM ✓</span>
-                    <span style={{ color: T.textMuted }}>ChatGPT</span>
+                <div className="overflow-hidden rounded-2xl border border-border bg-card"
+                  style={{ boxShadow: '0 1px 3px rgba(0,0,0,0.3), 0 0 0 1px hsl(var(--primary)/0.1)' }}>
+                  <div className="grid grid-cols-3 px-4 py-3 text-[11px] font-semibold uppercase border-b border-border bg-primary/5"
+                    style={{ letterSpacing: '0.12em' }}>
+                    <span className="text-muted-foreground">Feature</span>
+                    <span className="text-primary">SOHAM ✓</span>
+                    <span className="text-muted-foreground">ChatGPT</span>
                   </div>
                   {comparisonRows.map((row, i) => (
                     <div
                       key={row.feature}
                       className="grid grid-cols-3 items-center gap-2 px-4 py-3 text-xs"
-                      style={{ borderBottom: i < comparisonRows.length - 1 ? `1px solid ${T.borderSubtle}` : 'none' }}
+                      style={{ borderBottom: i < comparisonRows.length - 1 ? '1px solid hsl(var(--border)/0.6)' : 'none' }}
                     >
-                      <span className="font-medium" style={{ color: '#cbd5e1' }}>{row.feature}</span>
-                      <span className="flex items-center gap-1.5" style={{ color: '#22c55e' }}>
+                      <span className="font-medium text-foreground/80">{row.feature}</span>
+                      <span className="flex items-center gap-1.5 text-green-500">
                         <Check className="h-3.5 w-3.5 shrink-0" />
                         {row.soham}
                       </span>
-                      <span className="flex items-center gap-1.5" style={{ color: T.textMuted }}>
+                      <span className="flex items-center gap-1.5 text-muted-foreground">
                         <span className="h-3.5 w-3.5 shrink-0 text-center">—</span>
                         {row.other}
                       </span>
@@ -517,7 +477,7 @@ export function LandingPageShell({ isMobile }: { isMobile: boolean }) {
                 </div>
 
                 {/* Honest disclaimer — signals factual comparison, not tribal */}
-                <p className="mt-3 text-[11px]" style={{ color: '#475569', lineHeight: 1.65 }}>
+                <p className="mt-3 text-[11px] text-muted-foreground/60" style={{ lineHeight: 1.65 }}>
                   ChatGPT data based on publicly listed Plus plan features as of 2025. SOHAM is an independent platform and is not affiliated with OpenAI.
                 </p>
 
@@ -525,9 +485,8 @@ export function LandingPageShell({ isMobile }: { isMobile: boolean }) {
                 <div className="mt-5 flex flex-wrap gap-3">
                   <Link href="/chat">
                     <button
-                      className="h-10 px-5 rounded-xl font-semibold text-sm transition-all focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#3b82f6] focus-visible:outline-offset-2"
-                      style={{ background: T.gold, color: T.bgPrimary }}
-                      onMouseEnter={e => { (e.currentTarget as HTMLElement).style.boxShadow = '0 0 20px rgba(245,200,66,0.4)'; }}
+                      className="h-10 px-5 rounded-xl font-semibold text-sm transition-all bg-primary text-primary-foreground focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2"
+                      onMouseEnter={e => { (e.currentTarget as HTMLElement).style.boxShadow = '0 0 20px hsl(var(--primary)/0.4)'; }}
                       onMouseLeave={e => { (e.currentTarget as HTMLElement).style.boxShadow = 'none'; }}
                     >
                       Open SOHAM
@@ -535,8 +494,7 @@ export function LandingPageShell({ isMobile }: { isMobile: boolean }) {
                   </Link>
                   <Link href="/faq">
                     <button
-                      className="h-10 px-5 rounded-xl text-sm transition-all focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#3b82f6] focus-visible:outline-offset-2"
-                      style={{ border: `1px solid ${T.border}`, color: T.blue, background: 'rgba(59,130,246,0.06)' }}
+                      className="h-10 px-5 rounded-xl text-sm transition-all border border-primary/30 text-primary bg-primary/6 focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2"
                     >
                       See FAQ
                     </button>
@@ -548,16 +506,16 @@ export function LandingPageShell({ isMobile }: { isMobile: boolean }) {
         </motion.section>
 
         {/* ── Founder — "Built by one person" ── */}
+        {/* ── Founder — "Built by one person" ── */}
         <motion.section {...sectionVariant} className="mx-auto w-full max-w-6xl px-4 py-16 sm:px-6 sm:py-20">
           <div className="mb-8">
-            <p className="mb-2 text-xs font-semibold uppercase tracking-widest"
-              style={{ color: T.gold, letterSpacing: '0.12em' }}>
+            <p className="mb-2 text-xs font-semibold uppercase tracking-widest text-primary"
+              style={{ letterSpacing: '0.12em' }}>
               Built by one person
             </p>
-            <h2 style={{
+            <h2 className="text-foreground" style={{
               fontSize: 'clamp(1.75rem, 4vw, 2.5rem)',
               fontWeight: 700,
-              color: T.textPrimary,
               lineHeight: 1.15,
               letterSpacing: '-0.04em',
             }}>
@@ -568,44 +526,42 @@ export function LandingPageShell({ isMobile }: { isMobile: boolean }) {
           <div className={`grid gap-8 ${isMobile ? '' : 'lg:grid-cols-2 lg:items-start'}`}>
             {/* Founder card */}
             <div
-              className="rounded-2xl p-6 space-y-5"
-              style={{ border: `1px solid ${T.border}`, background: T.bgCard, boxShadow: '0 1px 3px rgba(0,0,0,0.3), 0 0 0 1px rgba(59,130,246,0.1)' }}
+              className="rounded-2xl p-6 space-y-5 border border-border bg-card"
+              style={{ boxShadow: '0 1px 3px rgba(0,0,0,0.3), 0 0 0 1px hsl(var(--primary)/0.1)' }}
             >
               <div className="flex items-start gap-4">
                 <div
-                  className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl text-xl font-bold"
-                  style={{ background: 'linear-gradient(135deg, #f5c842, #f97316)', color: '#0a0e1a' }}
+                  className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl text-xl font-bold bg-primary text-primary-foreground"
                   aria-hidden="true"
                 >
                   H
                 </div>
                 <div>
-                  <p className="font-bold text-white">Heoster (Harsh)</p>
-                  <p className="text-sm" style={{ color: T.textMuted }}>Founder, CODEEX-AI · Age 16 · Khatauli, UP, India</p>
-                  <p className="text-xs mt-0.5" style={{ color: '#475569' }}>Class 12 PCM · Maples Academy Khatauli</p>
+                  <p className="font-bold text-foreground">Heoster (Harsh)</p>
+                  <p className="text-sm text-muted-foreground">Founder, CODEEX-AI · Age 16 · Khatauli, UP, India</p>
+                  <p className="text-xs mt-0.5 text-muted-foreground/60">Class 12 PCM · Maples Academy Khatauli</p>
                 </div>
               </div>
 
-              <blockquote className="rounded-xl p-4" style={{ background: 'rgba(59,130,246,0.06)', borderLeft: `3px solid ${T.blue}` }}>
-                <p className="text-sm italic" style={{ color: '#cbd5e1', lineHeight: 1.65 }}>
+              <blockquote className="rounded-xl p-4 bg-primary/6 border-l-[3px] border-primary">
+                <p className="text-sm italic text-foreground/80" style={{ lineHeight: 1.65 }}>
                   "Advanced AI should not cost money. Every student, regardless of background, should have access to the same tools as someone paying $20 a month."
                 </p>
-                <footer className="mt-2 text-[11px]" style={{ color: T.textMuted }}>
+                <footer className="mt-2 text-[11px] text-muted-foreground">
                   — Heoster, CODEEX-AI · 2025
                 </footer>
               </blockquote>
 
               {/* Testers — with context line so names mean something */}
               <div>
-                <p className="text-xs mb-2.5" style={{ color: T.textMuted }}>
+                <p className="text-xs mb-2.5 text-muted-foreground">
                   Before any public launch, SOHAM was tested by friends from Khatauli — they broke it, questioned it, and made it better.
                 </p>
                 <div className="flex flex-wrap gap-1.5">
                   {DEVELOPER_INFO.friends.slice(0, 8).map((f) => (
                     <span
                       key={f.name}
-                      className="rounded-full px-2.5 py-1 text-[11px] font-medium"
-                      style={{ background: 'rgba(59,130,246,0.1)', color: '#94a3b8', border: '1px solid rgba(59,130,246,0.15)' }}
+                      className="rounded-full px-2.5 py-1 text-[11px] font-medium bg-primary/10 text-muted-foreground border border-primary/15"
                     >
                       {f.name}
                     </span>
@@ -614,17 +570,17 @@ export function LandingPageShell({ isMobile }: { isMobile: boolean }) {
               </div>
 
               <div className="flex items-center gap-1.5 pt-1">
-                <span className="text-xs" style={{ color: T.textMuted }}>Made in Bharat</span>
+                <span className="text-xs text-muted-foreground">Made in Bharat</span>
                 <span className="text-sm" aria-label="India flag">🇮🇳</span>
-                <span className="mx-2" style={{ color: '#1e293b' }}>·</span>
-                <span className="text-xs" style={{ color: T.textMuted }}>सोऽहम् — I am That</span>
+                <span className="mx-2 text-border">·</span>
+                <span className="text-xs text-muted-foreground">सोऽहम् — I am That</span>
               </div>
             </div>
 
             {/* Timeline — vertical on both mobile and desktop */}
             <div className="space-y-3">
-              <p className="text-xs font-semibold uppercase tracking-widest mb-4"
-                style={{ color: T.textMuted, letterSpacing: '0.12em' }}>
+              <p className="text-xs font-semibold uppercase tracking-widest mb-4 text-muted-foreground"
+                style={{ letterSpacing: '0.12em' }}>
                 Development timeline
               </p>
               {DEVELOPER_INFO.timeline.slice(-6).map((item, i) => {
@@ -633,21 +589,17 @@ export function LandingPageShell({ isMobile }: { isMobile: boolean }) {
                   <div key={item.year} className="flex gap-4">
                     <div className="flex flex-col items-center">
                       <div
-                        className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-[10px] font-bold"
-                        style={{
-                          background: isLast ? T.gold : 'rgba(59,130,246,0.15)',
-                          color: isLast ? '#0a0e1a' : T.blue,
-                        }}
+                        className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-[10px] font-bold ${isLast ? 'bg-primary text-primary-foreground' : 'bg-primary/15 text-primary'}`}
                       >
                         {item.year.replace('20', "'")}
                       </div>
                       {!isLast && (
-                        <div className="mt-1 w-px flex-1" style={{ background: 'rgba(59,130,246,0.15)', minHeight: '20px' }} />
+                        <div className="mt-1 w-px flex-1 bg-primary/15" style={{ minHeight: '20px' }} />
                       )}
                     </div>
                     <div className="pb-4">
-                      <p className="text-sm font-semibold" style={{ color: T.textPrimary }}>{item.milestone}</p>
-                      <p className="text-xs mt-0.5" style={{ color: T.textMuted, lineHeight: 1.65 }}>{item.description}</p>
+                      <p className="text-sm font-semibold text-foreground">{item.milestone}</p>
+                      <p className="text-xs mt-0.5 text-muted-foreground" style={{ lineHeight: 1.65 }}>{item.description}</p>
                     </div>
                   </div>
                 );
@@ -659,21 +611,20 @@ export function LandingPageShell({ isMobile }: { isMobile: boolean }) {
         {/* ── Open Source banner ── */}
         <motion.section
           {...sectionVariant}
-          style={{ borderTop: `1px solid ${T.border}`, borderBottom: `1px solid ${T.border}`, background: 'rgba(15,22,41,0.5)' }}
+          className="border-y border-border bg-card/50"
         >
           <div className="mx-auto w-full max-w-6xl px-4 py-8 sm:px-6">
             <div className={`flex ${isMobile ? 'flex-col gap-4' : 'items-center justify-between gap-6'}`}>
               <div className="flex items-center gap-4">
                 <div
-                  className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl"
-                  style={{ background: 'rgba(59,130,246,0.12)', border: `1px solid ${T.border}` }}
+                  className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary/12 border border-border"
                   aria-hidden="true"
                 >
-                  <Github className="h-5 w-5" style={{ color: T.blue }} />
+                  <Github className="h-5 w-5 text-primary" />
                 </div>
                 <div>
-                  <p className="font-semibold text-white text-sm">SOHAM is open source</p>
-                  <p className="text-xs mt-0.5" style={{ color: T.textMuted }}>
+                  <p className="font-semibold text-foreground text-sm">SOHAM is open source</p>
+                  <p className="text-xs mt-0.5 text-muted-foreground">
                     The full codebase — 50,000+ lines — is on GitHub under MIT license. Read the code. Fork it. Build on it.
                   </p>
                 </div>
@@ -682,10 +633,7 @@ export function LandingPageShell({ isMobile }: { isMobile: boolean }) {
                 href={DEVELOPER_INFO.contact.github}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-2 shrink-0 rounded-xl px-4 py-2 text-sm font-semibold transition-all focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#3b82f6] focus-visible:outline-offset-2"
-                style={{ border: `1px solid rgba(245,200,66,0.3)`, color: T.gold, background: 'rgba(245,200,66,0.06)' }}
-                onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = 'rgba(245,200,66,0.12)'; }}
-                onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = 'rgba(245,200,66,0.06)'; }}
+                className="flex items-center gap-2 shrink-0 rounded-xl px-4 py-2 text-sm font-semibold transition-all border border-primary/30 text-primary bg-primary/6 hover:bg-primary/12 focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2"
               >
                 <Star className="h-4 w-4" />
                 Star on GitHub
@@ -701,16 +649,15 @@ export function LandingPageShell({ isMobile }: { isMobile: boolean }) {
               style={{ color: '#14b8a6', letterSpacing: '0.12em' }}>
               Privacy & Security
             </p>
-            <h2 style={{
+            <h2 className="text-foreground" style={{
               fontSize: 'clamp(1.75rem, 4vw, 2.5rem)',
               fontWeight: 700,
-              color: T.textPrimary,
               lineHeight: 1.15,
               letterSpacing: '-0.04em',
             }}>
               Your conversations stay yours.
             </h2>
-            <p className="mt-3 text-base max-w-xl" style={{ color: T.textSecondary, lineHeight: 1.65 }}>
+            <p className="mt-3 text-base max-w-xl text-muted-foreground" style={{ lineHeight: 1.65 }}>
               Conversations are stored in your browser's localStorage. The SOHAM backend never receives conversation content — only API routing instructions.
             </p>
           </div>
@@ -738,8 +685,8 @@ export function LandingPageShell({ isMobile }: { isMobile: boolean }) {
             ].map((section) => (
               <div
                 key={section.label}
-                className="rounded-2xl p-6"
-                style={{ border: `1px solid ${section.color}30`, background: T.bgCard, boxShadow: '0 1px 3px rgba(0,0,0,0.3)' }}
+                className="rounded-2xl p-6 bg-card"
+                style={{ border: `1px solid ${section.color}30`, boxShadow: '0 1px 3px rgba(0,0,0,0.3)' }}
               >
                 <p className="mb-4 text-xs font-semibold uppercase tracking-widest"
                   style={{ color: section.color, letterSpacing: '0.12em' }}>
@@ -754,7 +701,7 @@ export function LandingPageShell({ isMobile }: { isMobile: boolean }) {
                       >
                         <Check className="h-2.5 w-2.5" style={{ color: section.color }} />
                       </div>
-                      <span className="text-sm" style={{ color: T.textSecondary, lineHeight: 1.65 }}>{point}</span>
+                      <span className="text-sm text-muted-foreground" style={{ lineHeight: 1.65 }}>{point}</span>
                     </li>
                   ))}
                 </ul>
@@ -766,18 +713,17 @@ export function LandingPageShell({ isMobile }: { isMobile: boolean }) {
         {/* ── FAQ ── */}
         <motion.section
           {...sectionVariant}
-          style={{ borderTop: `1px solid ${T.border}`, background: 'rgba(15,22,41,0.3)' }}
+          className="border-t border-border bg-card/30"
         >
           <div className="mx-auto w-full max-w-3xl px-4 py-16 sm:px-6 sm:py-20">
             <div className="mb-10 text-center">
-              <p className="mb-2 text-xs font-semibold uppercase tracking-widest"
-                style={{ color: T.blue, letterSpacing: '0.12em' }}>
+              <p className="mb-2 text-xs font-semibold uppercase tracking-widest text-primary"
+                style={{ letterSpacing: '0.12em' }}>
                 Common questions
               </p>
-              <h2 style={{
+              <h2 className="text-foreground" style={{
                 fontSize: 'clamp(1.75rem, 4vw, 2.5rem)',
                 fontWeight: 700,
-                color: T.textPrimary,
                 lineHeight: 1.15,
                 letterSpacing: '-0.04em',
               }}>
@@ -793,46 +739,46 @@ export function LandingPageShell({ isMobile }: { isMobile: boolean }) {
         </motion.section>
 
         {/* ── Final CTA — emotional close, not a fifth repetition of the same button ── */}
-        <motion.section {...sectionVariant} style={{ borderTop: `1px solid ${T.border}` }}>
+        <motion.section {...sectionVariant} className="border-t border-border">
           <div className="mx-auto w-full max-w-3xl px-4 py-20 sm:px-6 sm:py-28 text-center">
-            <p className="mb-6 text-base max-w-xl mx-auto" style={{ color: T.textSecondary, lineHeight: 1.65 }}>
+            <p className="mb-6 text-base max-w-xl mx-auto text-muted-foreground" style={{ lineHeight: 1.65 }}>
               Harsh built this while preparing for his Class 12 exams. Not for a grade. Not for a hackathon.
               Because he believed advanced AI should not cost money.
               If you agree — open SOHAM.
             </p>
             <Link href="/chat">
               <button
-                className="flex items-center gap-2 mx-auto h-12 px-10 rounded-xl font-semibold text-base transition-all focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#3b82f6] focus-visible:outline-offset-3"
-                style={{ background: T.gold, color: T.bgPrimary, boxShadow: '0 0 32px rgba(245,200,66,0.35)' }}
-                onMouseEnter={e => { (e.currentTarget as HTMLElement).style.boxShadow = '0 0 48px rgba(245,200,66,0.55)'; }}
-                onMouseLeave={e => { (e.currentTarget as HTMLElement).style.boxShadow = '0 0 32px rgba(245,200,66,0.35)'; }}
+                className="flex items-center gap-2 mx-auto h-12 px-10 rounded-xl font-semibold text-base transition-all bg-primary text-primary-foreground focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-3"
+                style={{ boxShadow: '0 0 32px hsl(var(--primary)/0.35)' }}
+                onMouseEnter={e => { (e.currentTarget as HTMLElement).style.boxShadow = '0 0 48px hsl(var(--primary)/0.55)'; }}
+                onMouseLeave={e => { (e.currentTarget as HTMLElement).style.boxShadow = '0 0 32px hsl(var(--primary)/0.35)'; }}
               >
                 Open SOHAM
                 <ArrowRight className="h-5 w-5" />
               </button>
             </Link>
-            <p className="mt-4 text-xs" style={{ color: T.textMuted }}>
+            <p className="mt-4 text-xs text-muted-foreground">
               soham-ai.vercel.app · Always free · MIT licensed
             </p>
           </div>
         </motion.section>
 
         {/* ── Footer ── */}
-        <footer style={{ borderTop: `1px solid ${T.border}`, background: T.bgCard }}>
+        <footer className="border-t border-border bg-card">
           <div className="mx-auto w-full max-w-6xl px-4 py-10 sm:px-6">
             <div className={`grid gap-8 mb-8 ${isMobile ? 'grid-cols-2' : 'sm:grid-cols-4'}`}>
               {/* Brand — Sanskrit meaning in footer elevates it from a link list */}
               <div className="col-span-2 sm:col-span-1 space-y-3">
-                <p className="font-bold text-white tracking-tight">SOHAM</p>
-                <p className="text-xs" style={{ color: T.textMuted, lineHeight: 1.65 }}>
+                <p className="font-bold text-foreground tracking-tight">SOHAM</p>
+                <p className="text-xs text-muted-foreground" style={{ lineHeight: 1.65 }}>
                   SOHAM — Sanskrit for "I am That." The unity of individual intelligence with universal knowledge.
                 </p>
-                <p className="text-xs" style={{ color: '#475569' }}>Made in Bharat 🇮🇳 · CODEEX-AI · 2024–2026</p>
+                <p className="text-xs text-muted-foreground/50">Made in Bharat 🇮🇳 · CODEEX-AI · 2024–2026</p>
               </div>
 
               <div className="space-y-3">
-                <p className="text-xs font-semibold uppercase tracking-widest"
-                  style={{ color: T.textMuted, letterSpacing: '0.12em' }}>
+                <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground"
+                  style={{ letterSpacing: '0.12em' }}>
                   Product
                 </p>
                 {[
@@ -844,10 +790,7 @@ export function LandingPageShell({ isMobile }: { isMobile: boolean }) {
                   <Link
                     key={l.href}
                     href={l.href}
-                    className="block text-xs transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#3b82f6]"
-                    style={{ color: T.textMuted }}
-                    onMouseEnter={e => { (e.currentTarget as HTMLElement).style.color = '#94a3b8'; }}
-                    onMouseLeave={e => { (e.currentTarget as HTMLElement).style.color = T.textMuted; }}
+                    className="block text-xs text-muted-foreground transition-colors hover:text-foreground focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary"
                   >
                     {l.label}
                   </Link>
@@ -855,8 +798,8 @@ export function LandingPageShell({ isMobile }: { isMobile: boolean }) {
               </div>
 
               <div className="space-y-3">
-                <p className="text-xs font-semibold uppercase tracking-widest"
-                  style={{ color: T.textMuted, letterSpacing: '0.12em' }}>
+                <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground"
+                  style={{ letterSpacing: '0.12em' }}>
                   Developer
                 </p>
                 {[
@@ -870,10 +813,7 @@ export function LandingPageShell({ isMobile }: { isMobile: boolean }) {
                     href={l.href}
                     target={l.external ? '_blank' : undefined}
                     rel={l.external ? 'noopener noreferrer' : undefined}
-                    className="block text-xs transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#3b82f6]"
-                    style={{ color: T.textMuted }}
-                    onMouseEnter={e => { (e.currentTarget as HTMLElement).style.color = '#94a3b8'; }}
-                    onMouseLeave={e => { (e.currentTarget as HTMLElement).style.color = T.textMuted; }}
+                    className="block text-xs text-muted-foreground transition-colors hover:text-foreground focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary"
                   >
                     {l.label}
                   </a>
@@ -881,8 +821,8 @@ export function LandingPageShell({ isMobile }: { isMobile: boolean }) {
               </div>
 
               <div className="space-y-3">
-                <p className="text-xs font-semibold uppercase tracking-widest"
-                  style={{ color: T.textMuted, letterSpacing: '0.12em' }}>
+                <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground"
+                  style={{ letterSpacing: '0.12em' }}>
                   Legal
                 </p>
                 {[
@@ -895,10 +835,7 @@ export function LandingPageShell({ isMobile }: { isMobile: boolean }) {
                     href={l.href}
                     target={l.external ? '_blank' : undefined}
                     rel={l.external ? 'noopener noreferrer' : undefined}
-                    className="block text-xs transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#3b82f6]"
-                    style={{ color: T.textMuted }}
-                    onMouseEnter={e => { (e.currentTarget as HTMLElement).style.color = '#94a3b8'; }}
-                    onMouseLeave={e => { (e.currentTarget as HTMLElement).style.color = T.textMuted; }}
+                    className="block text-xs text-muted-foreground transition-colors hover:text-foreground focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary"
                   >
                     {l.label}
                   </a>
@@ -906,11 +843,8 @@ export function LandingPageShell({ isMobile }: { isMobile: boolean }) {
               </div>
             </div>
 
-            <div
-              className="flex flex-wrap items-center justify-between gap-3 pt-6"
-              style={{ borderTop: `1px solid ${T.borderSubtle}` }}
-            >
-              <p className="text-xs" style={{ color: '#475569' }}>
+            <div className="flex flex-wrap items-center justify-between gap-3 pt-6 border-t border-border/60">
+              <p className="text-xs text-muted-foreground/50">
                 © 2024–2026 CODEEX-AI · Heoster (Harsh) · Khatauli, India
               </p>
               <div className="flex items-center gap-1.5">
@@ -918,7 +852,7 @@ export function LandingPageShell({ isMobile }: { isMobile: boolean }) {
                   <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-green-400 opacity-75" />
                   <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-green-400" />
                 </span>
-                <span className="text-xs" style={{ color: '#22c55e' }}>All systems operational</span>
+                <span className="text-xs text-green-500">All systems operational</span>
               </div>
             </div>
           </div>

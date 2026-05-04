@@ -11,20 +11,21 @@ function CoreMesh({ mode }: { mode: CoreMode }) {
   const meshRef = useRef<THREE.Mesh>(null);
   const shellRef = useRef<THREE.Mesh>(null);
 
+  // All mode colors use blue variants matching --primary: 220 90% 56%
   const config = useMemo(() => {
     switch (mode) {
       case 'chat':
-        return { scale: [1.15, 1.15, 1.15], color: '#00f2ff', emissive: '#1330ff' };
+        return { scale: [1.15, 1.15, 1.15], color: '#3b82f6', emissive: '#1d4ed8' };
       case 'pdf':
-        return { scale: [1.4, 0.86, 1.02], color: '#89a9ff', emissive: '#3f43ff' };
+        return { scale: [1.4, 0.86, 1.02],  color: '#60a5fa', emissive: '#2563eb' };
       case 'vision':
-        return { scale: [1.35, 1.02, 0.78], color: '#72ffd7', emissive: '#0077ff' };
+        return { scale: [1.35, 1.02, 0.78], color: '#93c5fd', emissive: '#3b82f6' };
       case 'voice':
-        return { scale: [0.92, 1.44, 0.92], color: '#c69cff', emissive: '#5a00ff' };
+        return { scale: [0.92, 1.44, 0.92], color: '#a5b4fc', emissive: '#4f46e5' };
       case 'search':
-        return { scale: [1.24, 1.24, 0.86], color: '#8cf7ff', emissive: '#0068ff' };
+        return { scale: [1.24, 1.24, 0.86], color: '#7dd3fc', emissive: '#0284c7' };
       default:
-        return { scale: [1.08, 1.08, 1.08], color: '#9fc2ff', emissive: '#3715ff' };
+        return { scale: [1.08, 1.08, 1.08], color: '#bfdbfe', emissive: '#3b82f6' };
     }
   }, [mode]);
 
@@ -39,8 +40,8 @@ function CoreMesh({ mode }: { mode: CoreMode }) {
     shell.rotation.y -= delta * 0.2;
 
     const pulse = 1 + Math.sin(state.clock.elapsedTime * 1.6) * 0.045;
-    const targetMeshScale = new THREE.Vector3(...config.scale).multiplyScalar(pulse);
-    const targetShellScale = new THREE.Vector3(...config.scale).multiplyScalar(1.22 + Math.sin(state.clock.elapsedTime * 1.2) * 0.03);
+    const targetMeshScale = new THREE.Vector3(...(config.scale as [number, number, number])).multiplyScalar(pulse);
+    const targetShellScale = new THREE.Vector3(...(config.scale as [number, number, number])).multiplyScalar(1.22 + Math.sin(state.clock.elapsedTime * 1.2) * 0.03);
 
     mesh.scale.lerp(targetMeshScale, 0.08);
     shell.scale.lerp(targetShellScale, 0.08);
@@ -78,7 +79,7 @@ function CoreMesh({ mode }: { mode: CoreMode }) {
         scale={[6, 6, 6]}
         size={2.4}
         speed={0.45}
-        color="#c4f9ff"
+        color="#bfdbfe"
         opacity={0.85}
       />
     </group>
@@ -90,8 +91,8 @@ export function SohamCore({ mode }: { mode: CoreMode }) {
     <div className="h-[380px] w-full">
       <Canvas dpr={[1, 1.5]} camera={{ position: [0, 0, 5.8], fov: 42 }}>
         <ambientLight intensity={0.7} />
-        <pointLight position={[0, 0, 3]} intensity={20} color="#00f2ff" />
-        <pointLight position={[-3, -2, -2]} intensity={14} color="#7000ff" />
+        <pointLight position={[0, 0, 3]} intensity={20} color="#3b82f6" />
+        <pointLight position={[-3, -2, -2]} intensity={14} color="#1d4ed8" />
         <CoreMesh mode={mode} />
         <OrbitControls enableZoom={false} enablePan={false} autoRotate autoRotateSpeed={0.7} />
       </Canvas>
