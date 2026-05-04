@@ -33,20 +33,17 @@ export function ChatMessages({
   };
 
   useEffect(() => {
-    // Auto-scroll when new messages are added or loading state changes
-    if (messages.length > prevMessagesLengthRef.current || isLoading) {
+    // Auto-scroll when new messages are added, loading state changes, or on initial mount
+    const isNewMessage = messages.length > prevMessagesLengthRef.current;
+    const isInitialMount = prevMessagesLengthRef.current === 0 && messages.length > 0;
+
+    if (isNewMessage || isLoading || isInitialMount) {
       // Small delay to ensure DOM is updated
-      setTimeout(scrollToBottom, 100);
+      const timer = setTimeout(scrollToBottom, 100);
+      return () => clearTimeout(timer);
     }
     prevMessagesLengthRef.current = messages.length;
   }, [messages.length, isLoading]);
-
-  // Also scroll on mount if there are messages
-  useEffect(() => {
-    if (messages.length > 0) {
-      scrollToBottom();
-    }
-  }, []);
 
   return (
     <div 

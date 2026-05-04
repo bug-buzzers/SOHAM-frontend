@@ -66,7 +66,7 @@ export function SubCommunityView({ slug }: { slug: string }) {
     }
   }, [slug, sortMode]);
 
-  useEffect(() => { loadPosts(sortMode); }, [sortMode]);
+  useEffect(() => { loadPosts(sortMode); }, [sortMode, loadPosts]);
 
   const handleDelete = useCallback((id: string) => {
     setPosts((prev) => prev.filter((p) => p.id !== id));

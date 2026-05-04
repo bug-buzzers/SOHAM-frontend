@@ -116,7 +116,7 @@ export function CommunityFeed() {
     }
   }, [sortMode, activeTag]);
 
-  useEffect(() => { loadPosts(sortMode); }, [sortMode, activeTag]);
+  useEffect(() => { loadPosts(sortMode); }, [sortMode, activeTag, loadPosts]);
 
   const handleDelete = useCallback((id: string) => {
     setAllPosts(prev => prev.filter(p => p.id !== id));

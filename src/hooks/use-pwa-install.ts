@@ -33,6 +33,9 @@ export function usePWAInstall() {
   const [isStandalone, setIsStandalone] = useState(true);
   const [isInstallable, setIsInstallable] = useState(false);
 
+  const isStandaloneRef = useRef(isStandalone);
+  useEffect(() => { isStandaloneRef.current = isStandalone; }, [isStandalone]);
+
   useEffect(() => {
     const ios = /iphone|ipad|ipod/i.test(window.navigator.userAgent);
     const standalone = isStandaloneMode();
@@ -71,7 +74,7 @@ export function usePWAInstall() {
     };
 
     const handleOpenRequest = () => {
-      if (!isStandalone) {
+      if (!isStandaloneRef.current) {
         setOpen(true);
       }
     };

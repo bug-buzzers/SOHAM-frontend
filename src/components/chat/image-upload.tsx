@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useRef, useCallback } from 'react';
+import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { ImageIcon, X, Loader2, Upload, Scan, Calculator, FileSearch, Wand2, Eye } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
@@ -183,7 +184,14 @@ export function ImageUpload({ userId, onImageUploaded, onCancel }: ImageUploadPr
         <div className="space-y-4">
           {/* Image preview */}
           <div className="relative rounded-xl overflow-hidden border bg-muted/20">
-            <img src={preview} alt="Preview" className="w-full h-auto max-h-52 object-contain" />
+            <Image 
+              src={preview} 
+              alt="Preview" 
+              width={800}
+              height={500}
+              className="w-full h-auto max-h-52 object-contain" 
+              unoptimized
+            />
             <button
               onClick={handleCancel}
               className="absolute top-2 right-2 flex h-7 w-7 items-center justify-center rounded-full bg-black/60 hover:bg-black/80 transition-colors"

@@ -547,7 +547,7 @@ export function CommunityBoard() {
   // Helper to set posts (used inside loadPosts closure)
   const setPosts = (posts: CommunityPost[]) => setAllPosts(posts);
 
-  useEffect(() => { loadPosts(sortMode); }, [sortMode, activeTag]);
+  useEffect(() => { loadPosts(sortMode); }, [sortMode, activeTag, loadPosts]);
 
   const handleLike = useCallback(async (postId: string) => {
     if (likedIds.has(postId)) return;
