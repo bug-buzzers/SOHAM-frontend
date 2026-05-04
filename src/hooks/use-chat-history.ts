@@ -104,7 +104,7 @@ export function useChatHistory() {
   }, [userId]);
 
   const addMessage = useCallback(
-    (chatId: string, message: Omit<Message, 'id' | 'createdAt'>, newTitle?: string) => {
+    (chatId: string, message: Omit<Message, 'id' | 'createdAt'>, newTitle?: string, skipPersist = false) => {
       const ownerId = userId ?? 'guest';
       const now = new Date().toISOString();
       const newMsg: Message = { ...message, id: crypto.randomUUID(), createdAt: now };
@@ -115,17 +115,63 @@ export function useChatHistory() {
         c.id === chatId ? { ...c, title: newTitle ?? c.title, updatedAt: now } : c
       ));
 
-      // Persist to IndexedDB
-      if (isIDBAvailable()) {
+      // Persist to IndexedDB — skip for streaming placeholders (empty assistant messages)
+      if (!skipPersist && isIDBAvailable()) {
         idbAddMessage(toDBMessage(newMsg, chatId, ownerId)).catch(console.warn);
-        // Update chat updatedAt
+        const chat = chats.find(c => c.id === chatId);
+        if (chat) {
+          idbPutChat(toDBChat({ ...chat, title: newTitle ?? chat.title, updatedAt: now })).catch(console.warn);
+        }
+      } else if (skipPersist && isIDBAvailable()) {
+        // Still update the chat title/timestamp even for placeholders
         const chat = chats.find(c => c.id === chatId);
         if (chat) {
           idbPutChat(toDBChat({ ...chat, title: newTitle ?? chat.title, updatedAt: now })).catch(console.warn);
         }
       }
+
+      return newMsg.id;
     },
     [userId, chats]
+  );
+
+  /**
+   * Patch an existing message in-place (used for streaming token accumulation).
+   * Does NOT persist to IndexedDB — call finalizeMessage() when the stream is done.
+   */
+  const updateMessage = useCallback(
+    (chatId: string, messageId: string, patch: Partial<Pick<Message, 'content' | 'modelUsed' | 'autoRouted' | 'imageUrl' | 'imageProvider'>>) => {
+      setMessages(prev => {
+        const msgs = prev[chatId];
+        if (!msgs) return prev;
+        return {
+          ...prev,
+          [chatId]: msgs.map(m => m.id === messageId ? { ...m, ...patch } : m),
+        };
+      });
+    },
+    []
+  );
+
+  /**
+   * Persist a streamed message to IndexedDB once the stream is complete.
+   * Uses idbPutChat (upsert) so it works whether or not the message was previously saved.
+   */
+  const finalizeMessage = useCallback(
+    (chatId: string, messageId: string) => {
+      const ownerId = userId ?? 'guest';
+      setMessages(prev => {
+        const msgs = prev[chatId];
+        if (!msgs) return prev;
+        const msg = msgs.find(m => m.id === messageId);
+        if (msg && isIDBAvailable()) {
+          // Use put (upsert) to handle both new and updated messages
+          idbAddMessage(toDBMessage(msg, chatId, ownerId)).catch(console.warn);
+        }
+        return prev;
+      });
+    },
+    [userId]
   );
 
   const deleteChat = useCallback((chatId: string) => {
@@ -170,6 +216,8 @@ export function useChatHistory() {
     isLoaded,
     createNewChat,
     addMessage,
+    updateMessage,
+    finalizeMessage,
     deleteChat,
     renameChat,
     deleteAllUserChats,

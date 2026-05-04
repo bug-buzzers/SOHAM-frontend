@@ -92,6 +92,8 @@ export function ChatLayout() {
     createNewChat,
     deleteAllUserChats,
     addMessage,
+    updateMessage,
+    finalizeMessage,
     deleteChat,
     renameChat,
     exportChat,
@@ -388,6 +390,8 @@ export function ChatLayout() {
               settings={settings}
               messages={activeChatMessages}
               addMessage={addMessage}
+              updateMessage={updateMessage}
+              finalizeMessage={finalizeMessage}
             />
           ) : (
             <div className="flex flex-1 items-center justify-center px-4">
