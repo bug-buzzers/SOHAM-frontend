@@ -218,21 +218,21 @@ export function DesktopLandingHero({ trustStats }: HeroProps) {
             <h1 style={{ lineHeight: 1.05, fontWeight: 800, letterSpacing: '-0.04em' }}>
               <span
                 className="block"
-                style={{ fontSize: 'clamp(1.8rem, 3.5vw, 2.6rem)', color: '#ffffff' }}
+                style={{ fontSize: 'clamp(1.8rem, 3.5vw, 2.6rem)', color: '#94a3b8' }}
               >
-                One platform.
+                Every AI model you need.
               </span>
               <span
                 className="block text-primary"
                 style={{ fontSize: 'clamp(2.2rem, 4.2vw, 3.2rem)', fontWeight: 800, letterSpacing: '-0.04em' }}
               >
-                Thirty-five AI models.
+                One place. Zero cost.
               </span>
               <span
                 className="block"
                 style={{ fontSize: 'clamp(2.6rem, 5vw, 3.75rem)', color: '#3b82f6' }}
               >
-                Always free.
+                Endlessly powerful.
               </span>
             </h1>
 
@@ -271,7 +271,6 @@ export function DesktopLandingHero({ trustStats }: HeroProps) {
               </button>
             </Link>
           </div>
-
           {/* Social proof — real names, real city, real achievement */}
           <div className="space-y-2.5">
             <div className="flex items-center gap-3">
@@ -366,14 +365,14 @@ export function MobileLandingHero({ trustStats }: HeroProps) {
       {/* H1 — crescendo structure */}
       <div className="space-y-2">
         <h1 style={{ lineHeight: 1.05, fontWeight: 800, letterSpacing: '-0.04em' }}>
-          <span className="block" style={{ fontSize: 'clamp(1.6rem, 7vw, 2.2rem)', color: '#ffffff' }}>
-            One platform.
+          <span className="block" style={{ fontSize: 'clamp(1.6rem, 7vw, 2.2rem)', color: '#94a3b8' }}>
+            Every AI model you need.
           </span>
           <span className="block text-primary" style={{ fontSize: 'clamp(1.9rem, 8.5vw, 2.6rem)', fontWeight: 800, letterSpacing: '-0.04em' }}>
-            Thirty-five AI models.
+            One place. Zero cost.
           </span>
           <span className="block" style={{ fontSize: 'clamp(2.2rem, 9.5vw, 3rem)', color: '#3b82f6' }}>
-            Always free.
+            Endlessly powerful.
           </span>
         </h1>
         {/* Sanskrit identity */}

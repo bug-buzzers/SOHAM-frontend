@@ -1,11 +1,13 @@
 'use client';
 
-import {useCallback, useEffect, useMemo, useState} from 'react';
+import {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import {idbGet, idbSet} from '@/lib/indexed-db';
 
 const DISMISS_KEY = 'pwa-prompt-dismissed-at-v2';
 const INSTALLED_KEY = 'pwa-installed-v2';
-const DISMISS_DURATION_MS = 3 * 24 * 60 * 60 * 1000;
+const FIRST_VISIT_KEY = 'pwa-first-visit-at-v2';
+const DISMISS_DURATION_MS = 3 * 24 * 60 * 60 * 1000; // 3 days
+const ENGAGEMENT_DELAY_MS = 10 * 60 * 1000;           // 10 minutes
 const OPEN_EVENT = 'soham:pwa-open-request';
 
 export interface BeforeInstallPromptEvent extends Event {
@@ -51,11 +53,35 @@ export function usePWAInstall() {
       const snoozed = !!dismissedAt && Date.now() - dismissedAt < DISMISS_DURATION_MS;
 
       if (!isMounted) return;
-
       setIsReady(true);
 
-      if (!standalone && !installed && !snoozed && (ios || isInstallable || !!deferredPrompt)) {
-        autoOpenTimer = window.setTimeout(() => setOpen(true), 2200);
+      // Already installed or snoozed — nothing to do
+      if (standalone || installed || snoozed) return;
+
+      // Record first visit timestamp if not already set
+      let firstVisitAt = await idbGet<number>(FIRST_VISIT_KEY);
+      if (!firstVisitAt) {
+        firstVisitAt = Date.now();
+        await idbSet(FIRST_VISIT_KEY, firstVisitAt);
+      }
+
+      // Only show for iOS or when the browser install prompt is available
+      const canShow = ios || isInstallable || !!deferredPrompt;
+      if (!canShow) return;
+
+      const elapsed = Date.now() - firstVisitAt;
+      const remaining = ENGAGEMENT_DELAY_MS - elapsed;
+
+      if (remaining <= 0) {
+        // 10 minutes already passed on a previous visit — show right away
+        autoOpenTimer = window.setTimeout(() => {
+          if (isMounted) setOpen(true);
+        }, 800);
+      } else {
+        // Schedule for the remaining time in this session
+        autoOpenTimer = window.setTimeout(() => {
+          if (isMounted) setOpen(true);
+        }, remaining);
       }
     };
 
@@ -87,9 +113,7 @@ export function usePWAInstall() {
 
     return () => {
       isMounted = false;
-      if (autoOpenTimer) {
-        window.clearTimeout(autoOpenTimer);
-      }
+      if (autoOpenTimer) window.clearTimeout(autoOpenTimer);
       window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
       window.removeEventListener('appinstalled', handleAppInstalled);
       window.removeEventListener(OPEN_EVENT, handleOpenRequest);
