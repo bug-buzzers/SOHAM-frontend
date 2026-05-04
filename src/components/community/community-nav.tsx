@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Home, Search, PlusCircle, Bell, User, ChevronLeft } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import Image from 'next/image';
+import { SohamLogo } from '@/components/soham-logo';
 import { Button } from '@/components/ui/button';
 
 const NAV_ITEMS = [
@@ -33,10 +33,7 @@ export function CommunityTopNav() {
 
         {/* Logo */}
         <Link href="/community" className="flex items-center gap-2 shrink-0">
-          <div className="relative">
-            <Image src="/FINALSOHAM.png" alt="SOHAM" width={28} height={28} className="rounded-lg" />
-            <div className="absolute -bottom-0.5 -right-0.5 h-2.5 w-2.5 rounded-full bg-green-500 ring-2 ring-background" />
-          </div>
+          <SohamLogo size={28} showDot />
           <div className="hidden sm:block">
             <span className="font-bold text-sm leading-none">SOHAM</span>
             <span className="block text-[10px] text-muted-foreground leading-none mt-0.5">Community</span>

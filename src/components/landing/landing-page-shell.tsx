@@ -13,6 +13,7 @@ import {
 import { type CoreMode } from '@/components/landing/soham-core';
 import { DesktopLandingHeader, MobileLandingHeader } from '@/components/landing/landing-header';
 import { DesktopLandingHero, MobileLandingHero } from '@/components/landing/landing-hero';
+import { SohamLogo } from '@/components/soham-logo';
 import { DEVELOPER_INFO } from '@/lib/developer-info';
 import { useAuth } from '@/hooks/use-auth';
 import { idbGet, idbSet } from '@/lib/indexed-db';
@@ -769,7 +770,10 @@ export function LandingPageShell({ isMobile }: { isMobile: boolean }) {
             <div className={`grid gap-8 mb-8 ${isMobile ? 'grid-cols-2' : 'sm:grid-cols-4'}`}>
               {/* Brand — Sanskrit meaning in footer elevates it from a link list */}
               <div className="col-span-2 sm:col-span-1 space-y-3">
-                <p className="font-bold text-foreground tracking-tight">SOHAM</p>
+                <Link href="/" className="flex items-center gap-2.5 group w-fit">
+                  <SohamLogo size={36} showDot />
+                  <span className="font-bold text-foreground tracking-tight text-base">SOHAM</span>
+                </Link>
                 <p className="text-xs text-muted-foreground" style={{ lineHeight: 1.65 }}>
                   SOHAM — Sanskrit for "I am That." The unity of individual intelligence with universal knowledge.
                 </p>

@@ -1,8 +1,8 @@
 'use client';
 
-import Image from 'next/image';
 import Link from 'next/link';
 import { Menu, X, Zap } from 'lucide-react';
+import { SohamLogo } from '@/components/soham-logo';
 
 interface HeaderProps {
   isScrolled: boolean;
@@ -20,11 +20,7 @@ const navLinks = [
 function Brand() {
   return (
     <Link href="/" className="flex items-center gap-2.5 group" aria-label="SOHAM home">
-      <div className="relative">
-        <Image src="/FINALSOHAM.png" alt="SOHAM" width={30} height={30} priority className="rounded-lg" />
-        {/* Primary-colored status dot */}
-        <div className="absolute -bottom-0.5 -right-0.5 h-2.5 w-2.5 rounded-full bg-primary ring-2 ring-background" />
-      </div>
+      <SohamLogo size={34} showDot priority />
       <span className="text-base font-bold tracking-tight text-foreground">SOHAM</span>
     </Link>
   );

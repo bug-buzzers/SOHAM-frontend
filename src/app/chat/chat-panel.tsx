@@ -5,7 +5,7 @@ import {ChatInput} from '@/components/chat/chat-input';
 import {ChatMessages} from '@/components/chat/chat-messages';
 import {ExamplePrompts} from '@/components/chat/example-prompts';
 import {useState, useRef, useEffect, useCallback} from 'react';
-import Image from 'next/image';
+import { SohamLogo } from '@/components/soham-logo';
 import Link from 'next/link';
 import {useAuth} from '@/hooks/use-auth';
 import {hybridTTS} from '@/lib/hybrid-tts';
@@ -293,15 +293,12 @@ export function ChatPanel({
           /* Welcome / empty state */
           <div className="flex flex-col items-center justify-center px-4 py-6 md:py-12 min-h-full animate-in fade-in slide-in-from-bottom-4 duration-700">
             <div className="mb-6 md:mb-10 flex flex-col items-center text-center w-full max-w-lg">
-              <div className="mb-5 md:mb-8 relative">
+              <div className="mb-5 md:mb-8 relative flex items-center justify-center">
                 <div className="absolute inset-0 bg-primary/15 blur-[80px] rounded-full scale-150" />
-                <Image
-                  src="/FINALSOHAM.png"
-                  alt="SOHAM Logo"
-                  width={120}
-                  height={120}
-                  className="relative rounded-2xl shadow-2xl border border-white/5 opacity-90 transition-transform hover:scale-105 duration-500 md:w-[180px] md:h-[180px]"
+                <SohamLogo
+                  size={120}
                   priority
+                  className="relative shadow-2xl opacity-90 transition-transform hover:scale-105 duration-500 md:!w-[180px] md:!h-[180px]"
                 />
               </div>
               <h2 className="text-2xl sm:text-4xl md:text-5xl font-extrabold tracking-tight mb-3 leading-tight">

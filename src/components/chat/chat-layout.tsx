@@ -1,7 +1,6 @@
 'use client';
 
 import {useState, useEffect, useRef} from 'react';
-import Image from 'next/image';
 import Link from 'next/link';
 import {
   SidebarProvider,
@@ -57,6 +56,7 @@ import {Avatar, AvatarFallback, AvatarImage} from '@/components/ui/avatar';
 import {useChatHistory} from '@/hooks/use-chat-history';
 import {useLocalStorage} from '@/hooks/use-local-storage';
 import { InstallPWAButton } from '../install-pwa-button';
+import { SohamLogo } from '@/components/soham-logo';
 
 const defaultSettings: Settings = {
   model: 'auto',
@@ -139,16 +139,7 @@ export function ChatLayout() {
       <Sidebar variant="inset" collapsible="offcanvas">
         <SidebarHeader className="space-y-4 border-b p-4">
           <div className="flex items-center gap-3">
-            <div className="relative">
-              <Image
-                src="/FINALSOHAM.png"
-                alt="SOHAM icon"
-                width={32}
-                height={32}
-                className="rounded-lg"
-              />
-              <div className="absolute -bottom-1 -right-1 h-3 w-3 rounded-full bg-green-500 ring-2 ring-background" />
-            </div>
+            <SohamLogo size={32} showDot priority />
             <div>
               <h1 className="text-lg font-bold">SOHAM</h1>
               <p className="text-xs text-muted-foreground">Adaptive AI workspace</p>
@@ -359,7 +350,7 @@ export function ChatLayout() {
         <header className="shrink-0 sticky top-0 z-10 flex h-16 items-center gap-3 border-b bg-background/95 px-4 backdrop-blur supports-[backdrop-filter]:bg-background/70 md:px-6">
           <SidebarTrigger className="-ml-2" />
           <div className="flex items-center gap-2 md:hidden">
-            <Image src="/FINALSOHAM.png" alt="SOHAM icon" width={26} height={26} className="rounded-md" />
+            <SohamLogo size={26} />
           </div>
           <div className="flex-1 min-w-0">
             <h1 className="text-base md:text-lg font-semibold truncate">

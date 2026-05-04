@@ -19,6 +19,7 @@ import {Prism as SyntaxHighlighter} from 'react-syntax-highlighter';
 import {oneDark} from 'react-syntax-highlighter/dist/cjs/styles/prism';
 import {hybridTTS} from '@/lib/hybrid-tts';
 import {VoiceFilter} from '@/lib/voice-filter';
+import {SohamLogo} from '@/components/soham-logo';
 
 interface ChatMessageProps {
   message: Message;
@@ -453,9 +454,9 @@ export function ChatMessage({message, settings, onRegenerate}: ChatMessageProps)
             >
               {isAssistant ? (
                 <>
-                  <AvatarImage src="/FINALSOHAM.png" alt="SOHAM" />
+                  <AvatarImage src="/soham-logo.svg" alt="SOHAM" />
                   <AvatarFallback className="bg-primary text-primary-foreground font-semibold">
-                    C
+                    <SohamLogo size={24} />
                   </AvatarFallback>
                 </>
               ) : (

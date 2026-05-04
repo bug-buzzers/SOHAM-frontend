@@ -2,8 +2,7 @@
 
 import { ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
-import Image from 'next/image';
-import { Button } from '@/components/ui/button';
+import { SohamLogo } from '@/components/soham-logo';
 
 interface PageHeaderProps {
   backLink: string;
@@ -19,13 +18,8 @@ export function PageHeader({ backLink, backText, title }: PageHeaderProps) {
           <ArrowLeft className="h-4 w-4" />
           {backText}
         </Link>
-        <Link href="/" className="flex items-center gap-2">
-          <Image
-            src="/FINALSOHAM.png"
-            alt="SOHAM Logo"
-            width={28}
-            height={28}
-          />
+        <Link href="/" className="flex items-center gap-2.5">
+          <SohamLogo size={30} priority />
           <span className="text-lg md:text-xl font-bold text-foreground">SOHAM</span>
         </Link>
         <div className="w-20" /> {/* Spacer for centering */}
