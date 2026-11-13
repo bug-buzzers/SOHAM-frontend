@@ -1,6 +1,6 @@
 'use client';
 
-import {useState, useEffect, useRef, useMemo} from 'react';
+import {useState, useRef, useMemo} from 'react';
 import Link from 'next/link';
 import {
   SidebarProvider,
@@ -58,6 +58,7 @@ import {useLocalStorage} from '@/hooks/use-local-storage';
 import {isValidModelId} from '@/lib/settings-storage';
 import { InstallPWAButton } from '../install-pwa-button';
 import { SohamLogo } from '@/components/soham-logo';
+import { SohamLoader } from '@/components/soham-loader';
 
 const defaultSettings: Settings = {
   model: 'auto',
@@ -89,6 +90,7 @@ export function ChatLayout() {
     activeChat,
     activeChatId,
     setActiveChatId,
+    isLoaded,
     activeChatMessages,
     createNewChat,
     deleteAllUserChats,
@@ -128,14 +130,6 @@ export function ChatLayout() {
   const [deleteChatId, setDeleteChatId] = useState<string | null>(null);
 
   const auth = getAuth();
-
-  // Auto-create new chat when user logs in or app restarts
-  useEffect(() => {
-    if (user && chats.length === 0) {
-      console.log('[ChatLayout] Auto-creating new chat for user');
-      createNewChat();
-    }
-  }, [user, chats.length, createNewChat]);
 
   const handleSignOut = async () => {
     await signOut(auth);
@@ -393,7 +387,11 @@ export function ChatLayout() {
          * so the ChatPanel's input bar is never hidden behind it.
          */}
         <main className="flex-1 min-h-0 flex flex-col overflow-hidden pb-[64px] md:pb-0">
-          {activeChat ? (
+          {!isLoaded ? (
+            <div className="flex flex-1 items-center justify-center">
+              <SohamLoader variant="inline" label="Loading chats…" />
+            </div>
+          ) : activeChat ? (
             <ChatPanel
               key={activeChat.id}
               chat={activeChat}
