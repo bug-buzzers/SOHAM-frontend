@@ -143,7 +143,7 @@ function ExampleChatPreview() {
               <div className="flex flex-wrap items-center gap-2 text-xs">
                 <span className="flex items-center gap-1.5 rounded-md border border-border/50 bg-background/50 px-2 py-1">
                   <Sparkles className="h-3.5 w-3.5 text-blue-500" />
-                  <span className="font-medium text-foreground">Llama 3.3 70B Versatile</span>
+                  <span className="font-medium text-foreground">Gemini 3.6 Flash</span>
                 </span>
                 <span className="flex items-center gap-1 rounded-md border border-primary/20 bg-primary/10 px-2 py-1">
                   <Zap className="h-3 w-3 text-primary" />

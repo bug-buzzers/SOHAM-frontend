@@ -89,7 +89,7 @@ export const DEVELOPER_INFO = {
   // Key Achievements
   achievements: [
     "Built SOHAM, a multi-model AI workspace, at age 16",
-    "Connected models from five AI providers behind one chat with Auto mode",
+    "Connected models from several AI providers behind one chat with Auto mode",
     "Integrated voice input, read-aloud replies and speech recognition",
     "Built a PDF analyzer and an image math solver",
     "Shipped SOHAM as an installable Progressive Web App",
@@ -176,7 +176,7 @@ export const DEVELOPER_INFO = {
       role: "Founder & Lead Developer",
       company: "CODEEX-AI",
       duration: "2024 – Present",
-      description: "Founded and built SOHAM, a full-stack AI platform integrating models from Groq, Cerebras, Google Gemini, Hugging Face and OpenRouter. Designed the multi-provider architecture, intelligent routing system, and developer API from scratch."
+      description: "Founded and built SOHAM, a full-stack AI platform integrating models from Google Gemini, Groq and OpenRouter. Designed the multi-provider architecture, intelligent routing system, and developer API from scratch."
     },
     {
       role: "Full-Stack Developer",
@@ -316,7 +316,7 @@ export function getContextualDeveloperResponse(message: string): string {
   } else if (lowercaseMsg.includes('soham meaning') || lowercaseMsg.includes('what does soham mean') || lowercaseMsg.includes('meaning of soham')) {
     response = `**SOHAM** is both a product name and a Sanskrit mantra. In Sanskrit, **Soham (So Hum)** means **"${DEVELOPER_INFO.product.sanskritMeaning}"**. It points to the idea that the individual self is not separate from universal consciousness. Heoster adapted that depth into the product brand while also expanding SOHAM to mean **${DEVELOPER_INFO.product.expandedName}** in the AI context.`;
   } else if (lowercaseMsg.includes('stack') || lowercaseMsg.includes('tech') || lowercaseMsg.includes('built with')) {
-    response = `I was built using **Next.js, TypeScript, and Tailwind CSS**. My creator connected models from **Groq, Cerebras, Google Gemini, Hugging Face and OpenRouter** using a custom multi-provider architecture he designed from scratch.`;
+    response = `I was built using **Next.js, TypeScript, and Tailwind CSS**. My creator connected models from **Google Gemini, Groq and OpenRouter** using a custom multi-provider architecture he designed from scratch.`;
   } else if (lowercaseMsg.includes('school') || lowercaseMsg.includes('study')) {
     response = `He studies at **${DEVELOPER_INFO.education.school}** in **${DEVELOPER_INFO.education.class}** (${DEVELOPER_INFO.education.stream} stream). Balancing full-stack AI development with school studies is one of his remarkable achievements!`;
   }

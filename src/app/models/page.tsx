@@ -26,6 +26,7 @@ import {
   formatContextWindow,
   getEnabledModels,
   groupModels,
+  formatProviderList,
 } from '@/lib/model-catalog';
 import modelsConfigData from '@/lib/models-config.json';
 
@@ -99,8 +100,8 @@ export default function ModelsPage() {
             <span className="block gradient-text">for Every Task</span>
           </h1>
           <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
-            SOHAM currently offers {enabledModels.length} models from Groq, Cerebras, Google Gemini,
-            Hugging Face and OpenRouter. Pick one yourself, or let Auto mode choose one for each request.
+            SOHAM currently offers {enabledModels.length} models from {formatProviderList(enabledModels)}.
+            Pick one yourself, or let Auto mode choose one for each request.
           </p>
         </div>
 
@@ -217,16 +218,18 @@ export default function ModelsPage() {
             <AccordionItem value="item-1">
               <AccordionTrigger>How does auto-routing work?</AccordionTrigger>
               <AccordionContent>
-                Our query classifier analyzes your message using pattern matching and keyword detection
-                to determine the category (coding, math, conversation, etc.). It then selects the most
-                appropriate model from that category. You&apos;ll see which model was used in the response.
+                SOHAM&apos;s server works out what kind of request you sent, such as everyday chat, code,
+                an explanation, a fact check or a web search. It then tries a preferred list of models
+                for that kind of request, in order, until one answers. The reply shows which model
+                answered.
               </AccordionContent>
             </AccordionItem>
             <AccordionItem value="item-2">
               <AccordionTrigger>Can I manually select a model?</AccordionTrigger>
               <AccordionContent>
-                Yes! You can disable auto-routing in settings and manually select any available model.
-                This is useful when you want to use a specific model for all your queries.
+                Yes. Pick a model in the model selector or in Settings, and SOHAM uses it for your
+                messages. If that model can&apos;t answer at the moment, another available model answers
+                instead, and the reply shows which one it was.
               </AccordionContent>
             </AccordionItem>
             <AccordionItem value="item-3">
@@ -234,15 +237,15 @@ export default function ModelsPage() {
               <AccordionContent>
                 You don&apos;t need any API keys to use SOHAM. The server that runs SOHAM is
                 configured with one key per provider ({apiKeyEnvVars}), and a provider&apos;s
-                models are only available while its key and quota are valid.
+                models are only available while its key and quota are valid. The Groq models also need
+                Groq to be switched on for the server; when it is off, another model answers.
               </AccordionContent>
             </AccordionItem>
             <AccordionItem value="item-4">
               <AccordionTrigger>What happens if a model is unavailable?</AccordionTrigger>
               <AccordionContent>
-                If your selected model is unavailable, the system automatically falls back to an
-                available model in the same category. If no models in that category are available,
-                it falls back to the default general-purpose model.
+                SOHAM tries the next model on its fallback list, which can include models from other
+                providers. The reply always shows which model answered.
               </AccordionContent>
             </AccordionItem>
           </Accordion>

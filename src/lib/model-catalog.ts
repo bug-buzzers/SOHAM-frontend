@@ -9,7 +9,7 @@ import modelsConfigData from '@/lib/models-config.json';
 
 export interface CatalogModel {
   id: string;
-  /** Name as configured, e.g. "Llama 3.1 8B Instruct (HF)". */
+  /** Name as configured, e.g. "GPT-OSS 120B (Groq)". */
   name: string;
   /** Name without provider tags, for use under a provider heading. */
   shortName: string;
@@ -22,11 +22,9 @@ export interface CatalogModel {
 }
 
 export const PROVIDER_LABELS: Record<string, string> = {
-  groq: 'Groq',
-  cerebras: 'Cerebras',
   google: 'Google Gemini',
-  huggingface: 'Hugging Face',
   openrouter: 'OpenRouter',
+  groq: 'Groq',
 };
 
 export const CATEGORY_LABELS: Record<string, string> = {
@@ -36,11 +34,11 @@ export const CATEGORY_LABELS: Record<string, string> = {
   multimodal: 'Multimodal (text and images)',
 };
 
-/** Drops tags a provider heading already shows, e.g. "(HF)" or "(OpenRouter Free)". */
+/** Drops tags a provider heading already shows, e.g. "(Groq)" or a leading "OpenRouter". */
 function toShortName(name: string): string {
   return name
-    .replace(/\s*\((?:HF|OpenRouter Free|Free)\)\s*$/i, '')
-    .replace(/^Cerebras\s+/i, '')
+    .replace(/\s*\((?:Groq|HF|OpenRouter Free|Free)\)\s*$/i, '')
+    .replace(/^(?:Cerebras|OpenRouter)\s+/i, '')
     .trim();
 }
 
@@ -79,4 +77,11 @@ export function groupModels(
 export function formatContextWindow(tokens: number): string {
   if (tokens >= 1_000_000) return `${Math.round(tokens / 1_048_576)}M tokens`;
   return `${Math.round(tokens / 1024)}K tokens`;
+}
+
+/** Provider names in config order, joined for prose: "Google Gemini, OpenRouter and Groq". */
+export function formatProviderList(models: CatalogModel[] = getEnabledModels()): string {
+  const names = groupModels(models, 'provider').map(({ key }) => PROVIDER_LABELS[key] ?? key);
+  if (names.length <= 1) return names.join('');
+  return `${names.slice(0, -1).join(', ')} and ${names[names.length - 1]}`;
 }

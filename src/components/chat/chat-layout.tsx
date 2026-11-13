@@ -1,6 +1,6 @@
 'use client';
 
-import {useState, useEffect, useRef} from 'react';
+import {useState, useEffect, useRef, useMemo} from 'react';
 import Link from 'next/link';
 import {
   SidebarProvider,
@@ -55,6 +55,7 @@ import {getAuth, signOut} from 'firebase/auth';
 import {Avatar, AvatarFallback, AvatarImage} from '@/components/ui/avatar';
 import {useChatHistory} from '@/hooks/use-chat-history';
 import {useLocalStorage} from '@/hooks/use-local-storage';
+import {isValidModelId} from '@/lib/settings-storage';
 import { InstallPWAButton } from '../install-pwa-button';
 import { SohamLogo } from '@/components/soham-logo';
 
@@ -100,9 +101,18 @@ export function ChatLayout() {
   } = useChatHistory();
 
   // Persist settings to localStorage
-  const [settings, setSettings] = useLocalStorage<Settings>(
+  const [storedSettings, setSettings] = useLocalStorage<Settings>(
     user?.uid ? `${user.uid}_settings` : 'guest_settings',
     defaultSettings
+  );
+  // A saved model can disappear when the model list changes. Fall back to Auto
+  // so the picker shows a real option and requests never name a missing model.
+  const settings = useMemo<Settings>(
+    () =>
+      isValidModelId(storedSettings.model)
+        ? storedSettings
+        : {...storedSettings, model: 'auto'},
+    [storedSettings]
   );
   const [isClearHistoryAlertOpen, setIsClearHistoryAlertOpen] = useState(false);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);

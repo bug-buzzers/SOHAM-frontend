@@ -1,16 +1,17 @@
 import type {Metadata} from 'next';
+import { formatProviderList } from '@/lib/model-catalog';
 
 export const metadata: Metadata = {
   title: 'AI Chat App | SOHAM - Free Chat, Coding Help, Smart Search',
   description:
-    'Use SOHAM AI chat for coding help, web search, reasoning and everyday questions, with models from Groq, Cerebras, Google Gemini, Hugging Face and OpenRouter. Sign in to start.',
+    `Use SOHAM AI chat for coding help, web search, reasoning and everyday questions, with models from ${formatProviderList()}. Sign in to start.`,
   alternates: {
     canonical: 'https://soham-ai.vercel.app/chat',
   },
   openGraph: {
     title: 'AI Chat App | SOHAM - Free Chat, Coding Help, Smart Search',
     description:
-      'Use SOHAM AI chat for coding help, web search, reasoning and everyday questions, with models from Groq, Cerebras, Google Gemini, Hugging Face and OpenRouter. Sign in to start.',
+      `Use SOHAM AI chat for coding help, web search, reasoning and everyday questions, with models from ${formatProviderList()}. Sign in to start.`,
     url: 'https://soham-ai.vercel.app/chat',
     images: [
       {

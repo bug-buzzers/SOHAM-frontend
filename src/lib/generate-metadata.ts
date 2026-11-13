@@ -151,7 +151,7 @@ export const metadataGenerators = {
 
   blog: () => generatePageMetadata({
     title: 'Blog - AI News, Tutorials & Updates | SOHAM',
-    description: 'SOHAM blog: Latest AI news, tutorials, model comparisons, tips & tricks. Learn about Groq, Gemini, Cerebras, and more. Stay updated with AI technology.',
+    description: 'SOHAM blog: Latest AI news, tutorials, model comparisons, tips & tricks. Learn about Gemini, Groq, OpenRouter and more. Stay updated with AI technology.',
     keywords: ['ai blog', 'ai news', 'ai tutorials', 'model comparisons', 'SOHAM blog'],
     path: '/blog',
   }),

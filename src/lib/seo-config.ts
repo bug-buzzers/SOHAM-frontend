@@ -5,6 +5,17 @@
  */
 
 import { DEVELOPER_INFO } from './developer-info';
+import { formatProviderList, getEnabledModels, groupModels } from './model-catalog';
+
+// Provider and model facts come from the same config as the model selector.
+const ENABLED_MODELS = getEnabledModels();
+const PROVIDERS = formatProviderList(ENABLED_MODELS);
+const PROVIDER_COUNT = groupModels(ENABLED_MODELS, 'provider').length;
+const MODEL_SUMMARY = groupModels(ENABLED_MODELS, 'provider')
+  .map(({ models }) => `${models[0].providerLabel} (${models.map((model) => model.shortName).join(', ')})`)
+  .join(', ');
+const NUMBER_WORDS = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine'];
+const PROVIDER_COUNT_WORD = NUMBER_WORDS[PROVIDER_COUNT] ?? String(PROVIDER_COUNT);
 
 export interface SEOConfig {
   title: string | { default: string; template: string };
@@ -29,7 +40,7 @@ export const defaultSEO: SEOConfig = {
     template: '%s | SOHAM'
   },
   description:
-    'SOHAM is an adaptive AI workspace by CODEEX-AI. Chat with models from Groq, Cerebras, Google Gemini, Hugging Face and OpenRouter, with web search, image generation, voice input, read-aloud replies, PDF analysis and an image math solver. Built by Heoster.',
+    `SOHAM is an adaptive AI workspace by CODEEX-AI. Chat with models from ${PROVIDERS}, with web search, image generation, voice input, read-aloud replies, PDF analysis and an image math solver. Built by Heoster.`,
   keywords: [
     // Core Brand
     'SOHAM', 'SOHAM AI', 'SOHAM by CODEEX-AI', 'CODEEX-AI', 'Heoster',
@@ -38,9 +49,9 @@ export const defaultSEO: SEOConfig = {
     'free ai chat', 'free ai platform', 'free chatgpt alternative',
     'ai chat free', 'free ai models',
     // Models
-    'groq llama', 'google gemini 2.5', 'cerebras qwen 3 235b',
-    'deepseek r1 free', 'llama 3.3 70b free', 'qwen 3 235b free',
-    'gemini 2.5 flash free', 'multi model ai',
+    'google gemini 3.6 flash', 'gemini flash lite', 'groq gpt-oss 120b',
+    'gpt-oss 20b', 'qwen 3.8 27b', 'openrouter free models',
+    'multi model ai',
     // Features
     'free image generation ai', 'ai image generator free',
     'ai voice chat free', 'pdf analyzer ai free',
@@ -65,28 +76,28 @@ export const pageSEO = {
   home: {
     title: 'SOHAM — Adaptive AI Workspace by CODEEX-AI',
     description:
-      'Adaptive AI workspace by CODEEX-AI. Chat with models from Groq, Cerebras, Google Gemini, Hugging Face and OpenRouter, plus web search, voice, images and PDF tools.',
+      `Adaptive AI workspace by CODEEX-AI. Chat with models from ${PROVIDERS}, plus web search, voice, images and PDF tools.`,
     keywords: [
       'SOHAM', 'SOHAM AI', 'SOHAM by CODEEX-AI', 'CODEEX-AI', 'Heoster',
-      'adaptive ai workspace', 'multi-model ai chat', 'groq', 'google gemini', 'cerebras',
-      'hugging face', 'openrouter', 'ai image generation', 'ai voice chat', 'pdf analyzer',
+      'adaptive ai workspace', 'multi-model ai chat', 'google gemini', 'groq',
+      'openrouter', 'ai image generation', 'ai voice chat', 'pdf analyzer',
       'image math solver',
     ],
   },
   chat: {
     title: 'AI Chat — Multi-Model AI Chat | SOHAM by CODEEX-AI',
     description:
-      'Chat with AI models from Groq, Cerebras, Google Gemini, Hugging Face and OpenRouter, including Llama 4 Scout, Qwen 3 235B, Gemini 2.5 Pro and DeepSeek R1 Distill. Pick a model or use Auto mode. Free account required.',
+      `Chat with AI models from ${PROVIDERS}, including Gemini 3.6 Flash, GPT-OSS 120B and Qwen 3.8 27B. Pick a model or use Auto mode. Free account required.`,
     keywords: [
-      'ai chat free', 'SOHAM chat', 'multi model ai chat', 'groq llama free',
-      'cerebras qwen 3 235b', 'gemini 2.5 free', 'deepseek r1 free',
+      'ai chat free', 'SOHAM chat', 'multi model ai chat', 'groq gpt-oss',
+      'gemini 3.6 flash', 'gpt-oss 120b', 'qwen 3.8 27b',
       'free chatgpt alternative', 'SOHAM', 'SOHAM AI', 'SOHAM by CODEEX-AI', 'CODEEX-AI', 'Heoster',
     ],
   },
   features: {
     title: 'Features — AI Models, Image Gen, Voice, PDF, Web Search | SOHAM',
     description:
-      'SOHAM features: models from five AI providers, image generation (FLUX), voice input and read-aloud (Groq Whisper + Orpheus TTS), PDF analysis, web search and slash commands. Free to use.',
+      `SOHAM features: models from ${PROVIDER_COUNT_WORD} AI providers, image generation (FLUX), voice chat and read-aloud replies in supported browsers, PDF analysis, web search and slash commands. Free to use.`,
     keywords: [
       'SOHAM features', 'free ai features', 'free image generation',
       'ai voice free', 'pdf analyzer ai', 'ai web search', 'SOHAM', 'SOHAM AI', 'SOHAM by CODEEX-AI', 'CODEEX-AI', 'Heoster',
@@ -152,13 +163,13 @@ export const pageSEO = {
     ],
   },
   models: {
-    title: 'AI Models — Groq, Gemini 2.5, Cerebras Qwen 3 235B, DeepSeek R1 Distill | SOHAM',
+    title: 'AI Models — Gemini 3.6 Flash, GPT-OSS 120B, Qwen 3.8 27B | SOHAM',
     description:
-      'Every model in the SOHAM model selector: Groq (Llama 4 Scout, GPT-OSS 120B), Cerebras (Qwen 3 235B), Google (Gemini 2.5 Pro and Flash), Hugging Face (DeepSeek R1 Distill, Llama 3.3 70B) and OpenRouter (NVIDIA Nemotron 3 Super, Arcee Trinity Large).',
+      `Every model in the SOHAM model selector: ${MODEL_SUMMARY}.`,
     keywords: [
-      'SOHAM models', 'free ai models', 'groq models free', 'gemini 2.5 free',
-      'cerebras qwen 3 235b free', 'deepseek r1 free', 'llama 3.3 70b free',
-      'nvidia nemotron free', 'SOHAM', 'SOHAM AI', 'SOHAM by CODEEX-AI', 'CODEEX-AI', 'Heoster',
+      'SOHAM models', 'free ai models', 'gemini 3.6 flash', 'gemini 3.5 flash-lite',
+      'gpt-oss 120b', 'gpt-oss 20b', 'qwen 3.8 27b', 'openrouter free router',
+      'SOHAM', 'SOHAM AI', 'SOHAM by CODEEX-AI', 'CODEEX-AI', 'Heoster',
     ],
   },
 };
@@ -290,10 +301,10 @@ export const structuredData = {
       priceCurrency: 'USD',
       availability: 'https://schema.org/InStock',
     },
-    description: `SOHAM is an adaptive AI workspace from CODEEX-AI. Chat with models from Groq, Cerebras, Google Gemini, Hugging Face and OpenRouter, pick one yourself or use Auto mode, and use web search, image generation, voice input, read-aloud replies, a PDF analyzer and an image math solver. Free to use; sign-in required.`,
-    keywords: 'SOHAM, CODEEX-AI, Heoster, adaptive AI workspace, multi-model AI chat, Groq, Google Gemini, Cerebras, Hugging Face, OpenRouter, AI image generation, voice AI, PDF analyzer, image math solver',
+    description: `SOHAM is an adaptive AI workspace from CODEEX-AI. Chat with models from ${PROVIDERS}, pick one yourself or use Auto mode, and use web search, image generation, voice input, read-aloud replies, a PDF analyzer and an image math solver. Free to use; sign-in required.`,
+    keywords: 'SOHAM, CODEEX-AI, Heoster, adaptive AI workspace, multi-model AI chat, Google Gemini, Groq, OpenRouter, AI image generation, voice AI, PDF analyzer, image math solver',
     featureList: [
-      'Chat with models from Groq, Cerebras, Google Gemini, Hugging Face and OpenRouter',
+      `Chat with models from ${PROVIDERS}`,
       'Auto (Smart Routing) or manual model selection',
       'Streaming replies labelled with the model that answered',
       'Web search with the /search command',
@@ -388,7 +399,7 @@ export const structuredData = {
         name: 'What AI models does SOHAM support?',
         acceptedAnswer: {
           '@type': 'Answer',
-          text: 'SOHAM offers models from Groq (Llama 3.1 8B Instant, Llama 3.3 70B, Llama 4 Scout, Qwen3 32B, GPT-OSS), Cerebras (Llama 3.1 8B, Qwen 3 235B), Google (Gemini 2.5 Flash, Flash Lite and Pro), Hugging Face (Llama, Qwen 2.5 and DeepSeek R1 Distill 70B) and OpenRouter (free GPT-OSS, Nemotron, Gemma 3 and more). You can pick a model or use Auto mode.',
+          text: `SOHAM offers models from ${MODEL_SUMMARY}. You can pick a model or use Auto mode.`,
         },
       },
       {
@@ -404,7 +415,7 @@ export const structuredData = {
         name: 'What makes SOHAM unique?',
         acceptedAnswer: {
           '@type': 'Answer',
-          text: `SOHAM is built by a ${DEVELOPER_INFO.age}-year-old student developer from ${DEVELOPER_INFO.location.city}, India. It brings models from five AI providers into one workspace with Auto mode, web search, image generation, voice, PDF analysis and an image math solver. It was tested by a group of friends including Vidhan, Avineet, Vansh, Aayush, Varun, Pankaj, Masum, Sachin, Pardhuman, Shivansh, Vaibhav, Kartik and Harsh.`,
+          text: `SOHAM is built by a ${DEVELOPER_INFO.age}-year-old student developer from ${DEVELOPER_INFO.location.city}, India. It brings models from ${PROVIDER_COUNT_WORD} AI providers into one workspace with Auto mode, web search, image generation, voice, PDF analysis and an image math solver. It was tested by a group of friends including Vidhan, Avineet, Vansh, Aayush, Varun, Pankaj, Masum, Sachin, Pardhuman, Shivansh, Vaibhav, Kartik and Harsh.`,
         },
       },
       {
@@ -412,7 +423,7 @@ export const structuredData = {
         name: 'What features does SOHAM offer?',
         acceptedAnswer: {
           '@type': 'Answer',
-          text: 'SOHAM offers streaming chat with models from five providers, Auto mode or manual model choice, code help, step-by-step maths with /solve, web search with /search, summaries with /summarize, image generation, voice input and read-aloud replies, a PDF analyzer (up to 5 MB), an image math solver, chat export to JSON and an installable PWA. It is free to use with a free account.',
+          text: `SOHAM offers streaming chat with models from ${PROVIDER_COUNT_WORD} providers, Auto mode or manual model choice, code help, step-by-step maths with /solve, web search with /search, summaries with /summarize, image generation, voice input and read-aloud replies, a PDF analyzer (up to 5 MB), an image math solver, chat export to JSON and an installable PWA. It is free to use with a free account.`,
         },
       },
     ],

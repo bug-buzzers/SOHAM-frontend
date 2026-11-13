@@ -10,6 +10,7 @@ import {AuthProvider} from '@/hooks/use-auth';
 import LoadingManager from '@/components/loading-manager';
 import PageTransition from '@/components/page-transition';
 import { PWAPrompt } from '@/components/pwa-prompt';
+import { formatProviderList } from '@/lib/model-catalog';
 import { ServerKeepAlive } from '@/components/server-keepalive';
 import { validateStartup } from '@/lib/startup-validation';
 import { StructuredData } from '@/components/seo/structured-data';
@@ -54,7 +55,7 @@ export const metadata: Metadata = {
     url: process.env.NEXT_PUBLIC_SITE_URL || 'https://soham-ai.vercel.app',
     siteName: 'SOHAM',
     title: 'SOHAM — Adaptive AI Workspace by CODEEX-AI',
-    description: 'Chat with AI models from Groq, Cerebras, Google Gemini, Hugging Face and OpenRouter. Code, solve maths, analyze PDFs and search the web. Free to use with a free account.',
+    description: `Chat with AI models from ${formatProviderList()}. Code, solve maths, analyze PDFs and search the web. Free to use with a free account.`,
     images: [
       {
         url: 'https://soham-ai.vercel.app/Multi-Chat.png',
@@ -67,7 +68,7 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary_large_image',
     title: 'SOHAM — Adaptive AI Workspace by CODEEX-AI',
-    description: 'Chat with AI models from Groq, Cerebras, Google Gemini, Hugging Face and OpenRouter. Code, solve maths, analyze PDFs and search the web. Free to use with a free account.',
+    description: `Chat with AI models from ${formatProviderList()}. Code, solve maths, analyze PDFs and search the web. Free to use with a free account.`,
     site: '@The_Heoster_',
     creator: '@The_Heoster_',
     images: ['https://soham-ai.vercel.app/Multi-Chat.png'],

@@ -7,37 +7,17 @@ import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
 import { Loader2, CheckCircle, XCircle, Brain, Search, FileText, Image, FileImage } from 'lucide-react';
+import { getEnabledModels } from '@/lib/model-catalog';
 
+// Same list as the chat model picker (models-config.json).
 const MODELS = [
   { id: 'auto', name: 'Auto (Smart Routing)', provider: 'System', category: 'auto' },
-  // Groq — fastest
-  { id: 'llama-3.1-8b-instant', name: 'Llama 3.1 8B Instant', provider: 'Groq', category: 'general' },
-  { id: 'llama-3.3-70b-versatile', name: 'Llama 3.3 70B Versatile', provider: 'Groq', category: 'general' },
-  { id: 'groq-llama-4-scout-17b', name: 'Llama 4 Scout 17B', provider: 'Groq', category: 'multimodal' },
-  { id: 'groq-qwen3-32b', name: 'Qwen3 32B', provider: 'Groq', category: 'general' },
-  { id: 'groq-gpt-oss-120b', name: 'GPT-OSS 120B', provider: 'Groq', category: 'coding' },
-  { id: 'groq-gpt-oss-20b', name: 'GPT-OSS 20B', provider: 'Groq', category: 'general' },
-  // Cerebras — ultra-fast hardware
-  { id: 'cerebras-llama3.1-8b', name: 'Cerebras Llama 3.1 8B', provider: 'Cerebras', category: 'general' },
-  { id: 'cerebras-qwen-3-235b', name: 'Cerebras Qwen 3 235B', provider: 'Cerebras', category: 'general' },
-  // Google Gemini — multimodal
-  { id: 'gemini-2.5-flash', name: 'Gemini 2.5 Flash', provider: 'Google', category: 'multimodal' },
-  { id: 'gemini-2.5-flash-lite', name: 'Gemini 2.5 Flash Lite', provider: 'Google', category: 'conversation' },
-  { id: 'gemini-2.5-pro', name: 'Gemini 2.5 Pro', provider: 'Google', category: 'multimodal' },
-  // HuggingFace — free fallback
-  { id: 'hf-llama-3.1-8b-instruct', name: 'Llama 3.1 8B (HF)', provider: 'HuggingFace', category: 'general' },
-  { id: 'hf-llama-3.3-70b-instruct', name: 'Llama 3.3 70B (HF)', provider: 'HuggingFace', category: 'general' },
-  { id: 'hf-qwen2.5-72b-instruct', name: 'Qwen 2.5 72B (HF)', provider: 'HuggingFace', category: 'general' },
-  { id: 'hf-qwen2.5-7b-instruct', name: 'Qwen 2.5 7B (HF)', provider: 'HuggingFace', category: 'general' },
-  { id: 'hf-deepseek-r1-distill-llama-70b', name: 'DeepSeek R1 Distill 70B (HF)', provider: 'HuggingFace', category: 'coding' },
-  // OpenRouter — free tier
-  { id: 'openrouter-gpt-oss-20b-free', name: 'GPT-OSS 20B (OR Free)', provider: 'OpenRouter', category: 'general' },
-  { id: 'openrouter-gpt-oss-120b-free', name: 'GPT-OSS 120B (OR Free)', provider: 'OpenRouter', category: 'coding' },
-  { id: 'openrouter-nvidia-nemotron-super-free', name: 'NVIDIA Nemotron 120B (OR Free)', provider: 'OpenRouter', category: 'general' },
-  { id: 'openrouter-gemma-3-12b-free', name: 'Gemma 3 12B (OR Free)', provider: 'OpenRouter', category: 'general' },
-  { id: 'openrouter-arcee-trinity-free', name: 'Arcee Trinity Large (OR Free)', provider: 'OpenRouter', category: 'general' },
-  { id: 'openrouter-minimax-m2.5-free', name: 'MiniMax M2.5 (OR Free)', provider: 'OpenRouter', category: 'coding' },
-  { id: 'openrouter-elephant-alpha', name: 'Elephant Alpha (OR Free)', provider: 'OpenRouter', category: 'general' },
+  ...getEnabledModels().map((model) => ({
+    id: model.id,
+    name: model.name,
+    provider: model.providerLabel,
+    category: model.category,
+  })),
 ];
 
 const SERVICES = [

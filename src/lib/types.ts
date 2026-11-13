@@ -18,36 +18,19 @@ export type Chat = {
   updatedAt: string;
 };
 
-// All available model IDs (tested and verified working)
+// Model IDs offered in the model picker. Keep in sync with models-config.json,
+// which mirrors the backend's routing/models-config.json.
 export type ModelId =
-  // Groq — fastest inference
-  | 'llama-3.1-8b-instant'
-  | 'llama-3.3-70b-versatile'
-  | 'groq-llama-4-scout-17b'
-  | 'groq-qwen3-32b'
+  // Google Gemini
+  | 'gemini-3.6-flash'
+  | 'gemini-3.5-flash-lite'
+  | 'gemini-3.1-flash-lite'
+  // OpenRouter free router
+  | 'openrouter-free-router'
+  // Groq (only answers when Groq is enabled on the backend)
   | 'groq-gpt-oss-120b'
   | 'groq-gpt-oss-20b'
-  // Cerebras — ultra-fast hardware
-  | 'cerebras-llama3.1-8b'
-  | 'cerebras-qwen-3-235b'
-  // Google Gemini — multimodal
-  | 'gemini-2.5-flash'
-  | 'gemini-2.5-flash-lite'
-  | 'gemini-2.5-pro'
-  // HuggingFace — free fallback
-  | 'hf-llama-3.1-8b-instruct'
-  | 'hf-llama-3.3-70b-instruct'
-  | 'hf-qwen2.5-72b-instruct'
-  | 'hf-qwen2.5-7b-instruct'
-  | 'hf-deepseek-r1-distill-llama-70b'
-  // OpenRouter — free tier
-  | 'openrouter-gpt-oss-20b-free'
-  | 'openrouter-gpt-oss-120b-free'
-  | 'openrouter-nvidia-nemotron-super-free'
-  | 'openrouter-gemma-3-12b-free'
-  | 'openrouter-arcee-trinity-free'
-  | 'openrouter-minimax-m2.5-free'
-  | 'openrouter-elephant-alpha';
+  | 'groq-qwen3.8-27b';
 
 // Alias for backward compatibility
 export type Model = ModelId;
