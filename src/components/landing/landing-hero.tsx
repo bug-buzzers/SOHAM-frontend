@@ -1,460 +1,181 @@
-'use client';
-
 import Link from 'next/link';
-import { useState } from 'react';
-import { ArrowRight, ChevronDown, Zap } from 'lucide-react';
-import { type CoreMode } from '@/components/landing/soham-core';
-import { cn } from '@/lib/utils';
-import { DEVELOPER_INFO } from '@/lib/developer-info';
+import type { MouseEvent } from 'react';
+import {
+  ArrowRight,
+  CheckCircle2,
+  Image as ImageIcon,
+  KeyRound,
+  Mic,
+  Paperclip,
+  Send,
+  Smartphone,
+  Sparkles,
+  Zap,
+} from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { SohamLogo } from '@/components/soham-logo';
+import { formatList, type LandingModelStats } from '@/components/landing/landing-content';
 
-interface HeroFeature {
-  mode: CoreMode;
-  title: string;
-  description: string;
-  icon: React.ComponentType<{ className?: string }>;
+/** Same accent wash as the AI Services hero, so the landing page matches the app. */
+export const HERO_GRADIENT =
+  'bg-[radial-gradient(circle_at_top_right,rgba(251,146,60,0.15),transparent_35%),radial-gradient(circle_at_bottom_left,rgba(56,189,248,0.12),transparent_30%)]';
+
+interface LandingHeroProps {
+  modelStats: LandingModelStats;
+  isSignedIn: boolean;
+  onNavigate: (event: MouseEvent<HTMLAnchorElement>, href: string) => void;
 }
 
-interface TrustStat {
-  label: string;
-  value: string;
-}
-
-interface HeroProps {
-  activeMode: CoreMode;
-  setActiveMode: (mode: CoreMode) => void;
-  heroFeatures: HeroFeature[];
-  trustStats: TrustStat[];
-  sectionVariant: object;
-}
-
-const MODEL_GROUPS = [
-  { provider: 'Groq',       color: '#f97316', models: ['Llama 4 Scout 17B', 'GPT-OSS 120B', 'Qwen3 32B'] },
-  { provider: 'Cerebras',   color: '#3b82f6', models: ['Qwen 3 235B', 'GPT-OSS 120B', 'GLM 4.7'] },
-  { provider: 'Google',     color: '#22c55e', models: ['Gemini 2.5 Pro', 'Gemini 2.5 Flash'] },
-  { provider: 'HuggingFace',color: 'hsl(var(--primary))', models: ['DeepSeek R1 70B', 'Llama 3.3 70B'] },
-  { provider: 'OpenRouter', color: '#a78bfa', models: ['NVIDIA Nemotron 120B', 'Arcee Trinity 400B'] },
-];
-
-// Real testers — names make the social proof feel true
-const TESTERS = DEVELOPER_INFO.friends.slice(0, 8);
-
-function ModelSelector() {
-  const [open, setOpen] = useState(false);
-  const [selected, setSelected] = useState('Auto (Recommended)');
+export function LandingHero({ modelStats, isSignedIn, onNavigate }: LandingHeroProps) {
+  const providerNames = formatList(modelStats.providers.map((provider) => provider.name));
 
   return (
-    <div className="relative">
-      <button
-        onClick={() => setOpen(o => !o)}
-        className="flex w-full items-center justify-between gap-3 rounded-xl px-4 py-3 text-sm text-white transition-all focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#3b82f6] focus-visible:outline-offset-2"
-        style={{ border: '1px solid rgba(59,130,246,0.25)', background: 'rgba(59,130,246,0.06)' }}
-        aria-haspopup="listbox"
-        aria-expanded={open}
-      >
-        <div className="flex items-center gap-2">
-          <span className="relative flex h-2 w-2">
-            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-green-400 opacity-75" />
-            <span className="relative inline-flex h-2 w-2 rounded-full bg-green-400" />
-          </span>
-          <span className="font-medium">{selected}</span>
-        </div>
-        <div className="flex items-center gap-2">
-          <span className="rounded-full px-2 py-0.5 text-[10px] font-semibold bg-primary/15 text-primary">
-            Free
-          </span>
-          <ChevronDown className={cn('h-4 w-4 transition-transform duration-150 text-muted-foreground', open && 'rotate-180')} />
-        </div>
-      </button>
+    <section
+      aria-labelledby="landing-hero-title"
+      className="relative overflow-hidden rounded-3xl border bg-card p-6 shadow-sm sm:p-8 md:p-10 lg:p-12"
+    >
+      <div aria-hidden className={`pointer-events-none absolute inset-0 ${HERO_GRADIENT}`} />
 
-      {open && (
-        <div
-          className="absolute left-0 right-0 top-full z-20 mt-1.5 overflow-hidden rounded-xl shadow-2xl border border-border bg-card"
-          style={{ boxShadow: '0 20px 60px rgba(0,0,0,0.6)' }}
-          role="listbox"
-        >
-          <div className="px-3 py-2" style={{ borderBottom: '1px solid rgba(59,130,246,0.1)' }}>
-            <button
-              onClick={() => { setSelected('Auto (Recommended)'); setOpen(false); }}
-              className="flex w-full items-center gap-2 rounded-lg px-2 py-1.5 text-sm text-white transition-all hover:bg-white/5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#3b82f6]"
-              role="option"
-              aria-selected={selected === 'Auto (Recommended)'}
+      <div className="relative grid items-center gap-10 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] lg:gap-12">
+        <div className="space-y-6">
+          <div className="inline-flex items-center gap-2 rounded-full border bg-background/80 px-3 py-1 text-xs font-medium text-muted-foreground">
+            <Sparkles className="h-3.5 w-3.5 text-primary" />
+            Adaptive AI workspace by CODEEX-AI
+          </div>
+
+          <div className="space-y-4">
+            <h1
+              id="landing-hero-title"
+              className="text-3xl font-bold tracking-tight sm:text-4xl md:text-5xl md:leading-[1.1]"
             >
-              <span className="h-2 w-2 rounded-full bg-green-400" />
-              Auto (Recommended)
-              <span className="ml-auto text-[10px] text-muted-foreground">Picks best model per query</span>
-            </button>
+              Ask anything. Pick a model, or let SOHAM choose.
+            </h1>
+            <p className="max-w-xl text-sm leading-6 text-muted-foreground md:text-base md:leading-7">
+              SOHAM brings {modelStats.total} AI models from {providerNames} into one chat, with web
+              search, image generation, voice, a PDF analyzer and an image math solver alongside.
+            </p>
           </div>
-          <div className="max-h-56 overflow-y-auto py-1">
-            {MODEL_GROUPS.map((group) => (
-              <div key={group.provider}>
-                <p className="px-4 py-1.5 text-[10px] font-semibold uppercase tracking-wider" style={{ color: group.color }}>
-                  {group.provider}
-                </p>
-                {group.models.map((model) => (
-                  <button
-                    key={model}
-                    onClick={() => { setSelected(model); setOpen(false); }}
-                    className="flex w-full items-center gap-2 px-4 py-1.5 text-sm transition-all hover:bg-white/5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#3b82f6] text-foreground/80"
-                    role="option"
-                    aria-selected={selected === model}
-                  >
-                    {model}
-                    <span className="ml-auto text-[10px]" style={{ color: '#22c55e' }}>Free</span>
-                  </button>
-                ))}
-              </div>
-            ))}
+
+          <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+            <Button asChild size="lg">
+              <Link href="/chat">
+                {isSignedIn ? 'Open chat' : 'Start chatting'}
+                <ArrowRight className="h-4 w-4" />
+              </Link>
+            </Button>
+            <Button asChild size="lg" variant="outline">
+              <a href="#features" onClick={(event) => onNavigate(event, '#features')}>
+                Explore features
+              </a>
+            </Button>
           </div>
-          <div className="px-4 py-2 text-[11px] text-muted-foreground" style={{ borderTop: '1px solid rgba(59,130,246,0.1)' }}>
-            35+ models · All free · Auto-routing included
-          </div>
+
+          <ul className="flex flex-wrap gap-x-5 gap-y-2 text-xs text-muted-foreground sm:text-sm">
+            <li className="flex items-center gap-1.5">
+              <CheckCircle2 className="h-4 w-4 text-primary" />
+              Free to use
+            </li>
+            <li className="flex items-center gap-1.5">
+              <KeyRound className="h-4 w-4 text-primary" />
+              Sign in with Google or email
+            </li>
+            <li className="flex items-center gap-1.5">
+              <Smartphone className="h-4 w-4 text-primary" />
+              Installable on phone and desktop
+            </li>
+          </ul>
         </div>
-      )}
-    </div>
+
+        <ExampleChatPreview />
+      </div>
+    </section>
   );
 }
 
 /**
- * Live preview card — shows the product working, not just describing it.
- * A sample interaction with model attribution chip.
+ * A static, clearly labelled illustration that reuses the chat workspace's
+ * bubble, attribution chip and composer styles. It is not a live response.
  */
-function LivePreviewCard() {
+function ExampleChatPreview() {
   return (
-    <div
-      className="rounded-2xl overflow-hidden border border-border bg-card"
-      style={{
-        boxShadow: '0 8px 24px rgba(0,0,0,0.4), 0 0 0 1px rgba(59,130,246,0.1)',
-      }}
-    >
-      {/* Window chrome */}
-      <div
-        className="flex items-center gap-2 px-4 py-3"
-        style={{ borderBottom: '1px solid rgba(59,130,246,0.12)', background: 'rgba(59,130,246,0.04)' }}
-      >
-        <div className="flex gap-1.5">
-          <div className="h-2.5 w-2.5 rounded-full" style={{ background: '#ef4444', opacity: 0.7 }} />
-          <div className="h-2.5 w-2.5 rounded-full bg-muted-foreground/40" style={{ opacity: 0.7 }} />
-          <div className="h-2.5 w-2.5 rounded-full" style={{ background: '#22c55e', opacity: 0.7 }} />
-        </div>
-        <span className="ml-2 text-[11px] text-muted-foreground/60">SOHAM Chat</span>
-        <div className="ml-auto flex items-center gap-1.5">
-          <span className="relative flex h-1.5 w-1.5">
-            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-green-400 opacity-75" />
-            <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-green-400" />
-          </span>
-          <span className="text-[10px]" style={{ color: '#22c55e' }}>Live</span>
-        </div>
-      </div>
+    <figure className="relative mx-auto w-full max-w-lg lg:max-w-none">
+      <div aria-hidden className="pointer-events-none absolute inset-8 rounded-full bg-primary/15 blur-[80px]" />
 
-      <div className="p-4 space-y-3">
-        {/* User message */}
-        <div className="flex justify-end">
-          <div
-            className="max-w-[80%] rounded-2xl rounded-tr-sm px-3.5 py-2.5 text-sm text-foreground"
-            style={{ background: 'rgba(59,130,246,0.15)', border: '1px solid rgba(59,130,246,0.2)' }}
-          >
-            Explain quantum entanglement simply
-          </div>
-        </div>
-
-        {/* AI response */}
-        <div className="flex gap-2.5">
-          <div
-            className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-[10px] font-bold bg-primary text-primary-foreground"
-          >
-            S
-          </div>
-          <div className="space-y-2 flex-1">
-            <div
-              className="rounded-2xl rounded-tl-sm px-3.5 py-2.5 text-sm leading-relaxed text-foreground/80 bg-card border border-border/60"
-            >
-              Imagine two coins flipped at the same time — no matter how far apart they are, when one lands heads, the other instantly lands tails. Quantum entanglement works the same way: two particles share a linked state, and measuring one instantly determines the other, regardless of distance.
-            </div>
-            {/* Model attribution chip */}
-            <div className="flex items-center gap-1.5 pl-1">
-              <span
-                className="rounded-full px-2 py-0.5 text-[10px] font-medium"
-                style={{ background: 'rgba(249,115,22,0.12)', color: '#f97316', border: '1px solid rgba(249,115,22,0.2)' }}
-              >
-                Llama 4 via Groq
-              </span>
-              <span className="text-[10px] text-muted-foreground/60">· auto-routed · 0.4s</span>
+      <div className="relative overflow-hidden rounded-3xl border bg-background shadow-sm">
+        <div className="flex items-center justify-between gap-3 border-b px-4 py-3">
+          <div className="flex min-w-0 items-center gap-2.5">
+            <SohamLogo size={26} />
+            <div className="min-w-0">
+              <p className="truncate text-sm font-semibold">Solve a quadratic</p>
+              <p className="truncate text-[11px] text-muted-foreground">Model: Auto (Smart Routing)</p>
             </div>
           </div>
-        </div>
-
-        {/* Input bar */}
-        <div
-          className="flex items-center gap-2 rounded-xl px-3 py-2.5 mt-1"
-          style={{ border: '1px solid rgba(59,130,246,0.2)', background: 'rgba(59,130,246,0.04)' }}
-        >
-          <span className="flex-1 text-sm text-muted-foreground/60">Ask anything...</span>
-          <div
-            className="flex h-6 w-6 items-center justify-center rounded-lg bg-primary"
+          <Badge
+            variant="outline"
+            className="shrink-0 rounded-full text-[10px] font-semibold uppercase tracking-wider text-muted-foreground"
           >
-            <ArrowRight className="h-3 w-3 text-primary-foreground" />
-          </div>
+            Example
+          </Badge>
         </div>
-      </div>
-    </div>
-  );
-}
 
-export function DesktopLandingHero({ trustStats }: HeroProps) {
-  return (
-    <section className="relative mx-auto w-full max-w-6xl px-6 pt-16 pb-20">
-      <div className="grid gap-14 lg:grid-cols-2 lg:items-start">
-
-        {/* ── Left column ── */}
-        <div className="space-y-8">
-          {/* Founder badge */}
-          <div className="inline-flex items-center gap-2.5 rounded-full px-4 py-2 text-xs border border-primary/25 bg-primary/6 text-primary">
-            <span className="h-1.5 w-1.5 rounded-full bg-primary animate-pulse" />
-            Built by Heoster, age 16 · Khatauli, India · CODEEX-AI
+        <div className="space-y-4 px-4 py-5">
+          <div className="flex justify-end">
+            <div className="max-w-[85%] rounded-2xl rounded-tr-sm bg-primary px-4 py-2.5 text-sm text-primary-foreground shadow-sm">
+              <span className="font-mono">/solve</span> 2x² − 8x + 6 = 0
+            </div>
           </div>
 
-          {/* H1 — crescendo structure: each line grows in visual weight */}
-          <div className="space-y-4">
-            <h1 style={{ lineHeight: 1.05, fontWeight: 800, letterSpacing: '-0.04em' }}>
-              <span
-                className="block"
-                style={{ fontSize: 'clamp(1.8rem, 3.5vw, 2.6rem)', color: '#94a3b8' }}
-              >
-                Every AI model you need.
-              </span>
-              <span
-                className="block text-primary"
-                style={{ fontSize: 'clamp(2.2rem, 4.2vw, 3.2rem)', fontWeight: 800, letterSpacing: '-0.04em' }}
-              >
-                One place. Zero cost.
-              </span>
-              <span
-                className="block"
-                style={{ fontSize: 'clamp(2.6rem, 5vw, 3.75rem)', color: '#3b82f6' }}
-              >
-                Endlessly powerful.
-              </span>
-            </h1>
-
-            {/* Sanskrit identity — distinctive, authentic, no Western AI product has this */}
-            <p style={{ fontSize: '13px', letterSpacing: '0.02em' }} className="text-muted-foreground">
-              सोऽहम् — <em>So Hum</em> — I am That
-            </p>
-
-            <p style={{ fontSize: '1.05rem', lineHeight: 1.65, maxWidth: '28rem' }} className="text-muted-foreground">
-              Chat, generate images, search the web, analyze PDFs, and use voice — all powered by the best AI models from Groq, Cerebras, Google, and more.
-            </p>
-          </div>
-
-          {/* CTAs */}
-          <div className="flex flex-wrap items-center gap-3">
-            <Link href="/chat">
-              <button
-                className="flex items-center gap-2 h-11 px-6 rounded-xl font-semibold text-sm transition-all focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#3b82f6] focus-visible:outline-offset-3 bg-primary text-primary-foreground"
-                style={{ boxShadow: '0 0 24px hsl(var(--primary)/0.35)' }}
-                onMouseEnter={e => { (e.currentTarget).style.boxShadow = '0 0 36px hsl(var(--primary)/0.55)'; }}
-                onMouseLeave={e => { (e.currentTarget).style.boxShadow = '0 0 24px hsl(var(--primary)/0.35)'; }}
-              >
-                <Zap className="h-4 w-4" />
-                Open SOHAM
-                <ArrowRight className="h-4 w-4" />
-              </button>
-            </Link>
-            <Link href="/documentation">
-              <button
-                className="h-11 px-6 rounded-xl text-sm font-medium transition-all focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#3b82f6] focus-visible:outline-offset-3"
-                style={{ border: '1px solid rgba(59,130,246,0.3)', color: '#3b82f6', background: 'rgba(59,130,246,0.06)' }}
-                onMouseEnter={e => { (e.currentTarget).style.background = 'rgba(59,130,246,0.12)'; }}
-                onMouseLeave={e => { (e.currentTarget).style.background = 'rgba(59,130,246,0.06)'; }}
-              >
-                View Documentation
-              </button>
-            </Link>
-          </div>
-          {/* Social proof — real names, real city, real achievement */}
-          <div className="space-y-2.5">
-            <div className="flex items-center gap-3">
-              <div className="flex -space-x-2" aria-hidden="true">
-                {TESTERS.slice(0, 5).map((tester) => (
-                  <div
-                    key={tester.name}
-                    className="flex h-7 w-7 items-center justify-center rounded-full text-[10px] font-bold text-white ring-2 ring-background"
-                    style={{ background: 'linear-gradient(135deg, #3b82f6, #8b5cf6)' }}
-                    title={tester.name}
-                  >
-                    {tester.name[0]}
-                  </div>
-                ))}
+          <div className="flex items-start gap-3">
+            <span className="flex h-8 w-8 shrink-0 items-center justify-center overflow-hidden rounded-full border bg-background ring-2 ring-primary/20 ring-offset-2 ring-offset-background">
+              <SohamLogo size={22} />
+            </span>
+            <div className="min-w-0 flex-1 space-y-2">
+              <div className="space-y-1.5 rounded-2xl rounded-tl-sm bg-muted px-4 py-3 text-sm leading-6 text-foreground shadow-sm">
+                <p>Divide every term by 2:</p>
+                <p className="font-mono text-[13px]">x² − 4x + 3 = 0</p>
+                <p>Factor the left side:</p>
+                <p className="font-mono text-[13px]">(x − 1)(x − 3) = 0</p>
+                <p>
+                  So <strong>x = 1</strong> or <strong>x = 3</strong>.
+                </p>
               </div>
-             
-            </div>
-            <div className="flex items-center gap-1.5 flex-wrap">
-              <span className="text-xs text-muted-foreground">Made in Bharat</span>
-              <span className="text-sm" aria-label="India flag">🇮🇳</span>
-              <span className="mx-1.5" style={{ color: '#1e293b' }}>·</span>
-              <span className="text-xs text-muted-foreground">Open source MIT</span>
-              <span className="mx-1.5" style={{ color: '#1e293b' }}>·</span>
-              <span className="text-xs text-muted-foreground">Privacy-first</span>
-            </div>
-          </div>
-        </div>
-
-        {/* ── Right column ── */}
-        <div className="space-y-3">
-          {/* Stats row */}
-          <div className="grid grid-cols-4 gap-2">
-            {trustStats.map((s) => (
-              <div
-                key={s.label}
-                className="rounded-xl p-3 text-center transition-all border border-border bg-card"
-                style={{
-                  boxShadow: s.label === 'AI Models' || s.label === 'Uptime'
-                    ? '0 1px 3px rgba(0,0,0,0.3), 0 0 0 1px rgba(59,130,246,0.1)'
-                    : 'none',
-                }}
-              >
-                <div className="flex items-center justify-center gap-1">
-                  <p className={cn('text-xl font-bold', s.label === 'Price' ? 'text-primary' : 'text-foreground')}>
-                    {s.value}
-                  </p>
-                  {s.label === 'Uptime' && (
-                    <span className="relative flex h-2 w-2" aria-hidden="true">
-                      <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-green-400 opacity-75" />
-                      <span className="relative inline-flex h-2 w-2 rounded-full bg-green-400" />
-                    </span>
-                  )}
-                </div>
-                <p className="text-[10px] mt-0.5 text-muted-foreground">{s.label}</p>
+              <div className="flex flex-wrap items-center gap-2 text-xs">
+                <span className="flex items-center gap-1.5 rounded-md border border-border/50 bg-background/50 px-2 py-1">
+                  <Sparkles className="h-3.5 w-3.5 text-blue-500" />
+                  <span className="font-medium text-foreground">Llama 3.3 70B Versatile</span>
+                </span>
+                <span className="flex items-center gap-1 rounded-md border border-primary/20 bg-primary/10 px-2 py-1">
+                  <Zap className="h-3 w-3 text-primary" />
+                  <span className="font-medium text-primary">Auto-routed</span>
+                </span>
               </div>
-            ))}
-          </div>
-
-          {/* Model selector */}
-          <div
-            className="rounded-2xl p-4 space-y-3 border border-border bg-card"
-            style={{ borderColor: 'rgba(59,130,246,0.15)' }}
-          >
-            <div className="flex items-center justify-between">
-              <p className="text-xs font-semibold text-foreground">Select AI Model</p>
-              <span className="text-[10px] text-muted-foreground">35+ available</span>
             </div>
-            <ModelSelector />
-            <p className="text-[11px] text-muted-foreground/60">
-              Auto mode routes each query to the best model. No settings needed.
-            </p>
           </div>
+        </div>
 
-          {/* Live preview card — shows the product working */}
-          <LivePreviewCard />
+        <div className="border-t bg-card/60 p-3" aria-hidden>
+          <div className="flex items-center gap-1 rounded-3xl border bg-background py-1.5 pl-4 pr-1.5 shadow-sm">
+            <span className="flex-1 truncate text-sm text-muted-foreground">Ask me anything...</span>
+            <span className="hidden h-8 w-8 items-center justify-center rounded-xl text-muted-foreground sm:flex">
+              <ImageIcon className="h-4 w-4" />
+            </span>
+            <span className="hidden h-8 w-8 items-center justify-center rounded-xl text-muted-foreground sm:flex">
+              <Paperclip className="h-4 w-4" />
+            </span>
+            <span className="flex h-8 w-8 items-center justify-center rounded-xl text-muted-foreground">
+              <Mic className="h-4 w-4" />
+            </span>
+            <span className="flex h-8 w-8 items-center justify-center rounded-xl bg-primary text-primary-foreground">
+              <Send className="h-4 w-4" />
+            </span>
+          </div>
         </div>
       </div>
-    </section>
-  );
-}
 
-export function MobileLandingHero({ trustStats }: HeroProps) {
-  return (
-    <section className="w-full px-4 pt-8 pb-12 space-y-7" style={{ maxWidth: '100vw', overflowX: 'hidden' }}>
-
-      {/* Founder badge */}
-      <div className="inline-flex items-center gap-2 rounded-full px-3 py-1.5 text-[11px] border border-primary/25 bg-primary/6 text-primary">
-        <span className="h-1.5 w-1.5 rounded-full bg-primary animate-pulse" />
-        Built by Heoster, 16 · CODEEX-AI · India
-      </div>
-
-      {/* H1 — crescendo structure */}
-      <div className="space-y-2">
-        <h1 style={{ lineHeight: 1.05, fontWeight: 800, letterSpacing: '-0.04em' }}>
-          <span className="block" style={{ fontSize: 'clamp(1.6rem, 7vw, 2.2rem)', color: '#94a3b8' }}>
-            Every AI model you need.
-          </span>
-          <span className="block text-primary" style={{ fontSize: 'clamp(1.9rem, 8.5vw, 2.6rem)', fontWeight: 800, letterSpacing: '-0.04em' }}>
-            One place. Zero cost.
-          </span>
-          <span className="block" style={{ fontSize: 'clamp(2.2rem, 9.5vw, 3rem)', color: '#3b82f6' }}>
-            Endlessly powerful.
-          </span>
-        </h1>
-        {/* Sanskrit identity */}
-        <p className="text-muted-foreground" style={{ fontSize: '12px' }}>
-          सोऽहम् — <em>So Hum</em> — I am That
-        </p>
-        <p className="text-base leading-relaxed text-muted-foreground" style={{ lineHeight: 1.65 }}>
-          Chat, image gen, voice, web search, PDF analysis — powered by the best AI models.
-        </p>
-      </div>
-
-      {/* CTAs */}
-      <div className="flex gap-3">
-        <Link href="/chat" className="flex-1">
-          <button
-            className="flex w-full items-center justify-center gap-2 h-11 rounded-xl font-semibold text-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#3b82f6] focus-visible:outline-offset-2 bg-primary text-primary-foreground"
-            style={{ boxShadow: '0 0 20px hsl(var(--primary)/0.3)' }}
-          >
-            <Zap className="h-4 w-4" />
-            Open SOHAM
-          </button>
-        </Link>
-        <Link href="/faq">
-          <button
-            className="h-11 px-4 rounded-xl text-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#3b82f6] focus-visible:outline-offset-2"
-            style={{ border: '1px solid rgba(59,130,246,0.3)', color: '#3b82f6', background: 'rgba(59,130,246,0.06)' }}
-          >
-            FAQ
-          </button>
-        </Link>
-      </div>
-
-      {/* Stats */}
-      <div className="grid grid-cols-4 gap-2">
-        {trustStats.map((s) => (
-          <div
-            key={s.label}
-            className="rounded-xl p-2.5 text-center border border-border bg-card"
-            style={{
-              boxShadow: s.label === 'AI Models' ? '0 1px 3px rgba(0,0,0,0.3), 0 0 0 1px rgba(59,130,246,0.1)' : 'none',
-            }}
-          >
-            <p className={cn('text-base font-bold', s.label === 'Price' ? 'text-primary' : 'text-foreground')}>
-              {s.value}
-            </p>
-            <p className="text-[9px] mt-0.5 leading-tight text-muted-foreground">{s.label}</p>
-          </div>
-        ))}
-      </div>
-
-      {/* Model selector */}
-      <div className="rounded-xl p-3.5 space-y-2.5 border border-border bg-card" style={{ borderColor: 'rgba(59,130,246,0.15)' }}>
-        <p className="text-xs font-semibold text-foreground">Select AI Model</p>
-        <ModelSelector />
-      </div>
-
-      {/* Live preview card — mobile version */}
-      <LivePreviewCard />
-
-      {/* Social proof — real names */}
-      <div className="space-y-1.5">
-        <div className="flex items-center gap-2.5">
-          <div className="flex -space-x-1.5" aria-hidden="true">
-            {TESTERS.slice(0, 4).map((tester) => (
-              <div
-                key={tester.name}
-                className="flex h-6 w-6 items-center justify-center rounded-full text-[9px] font-bold text-white ring-2 ring-background"
-                style={{ background: 'linear-gradient(135deg, #3b82f6, #8b5cf6)' }}
-                title={tester.name}
-              >
-                {tester.name[0]}
-              </div>
-            ))}
-          </div>
-          <p className="text-xs text-muted-foreground">
-            Tested by {TESTERS.slice(0, 4).map(t => t.name).join(', ')} and others
-          </p>
-        </div>
-        <p className="text-xs text-muted-foreground/60">
-          Made in Bharat 🇮🇳 · Reached 100+ countries as of 2025
-        </p>
-      </div>
-    </section>
+      <figcaption className="mt-3 text-center text-xs text-muted-foreground">
+        Illustration only. Real replies and the model chosen depend on your question.
+      </figcaption>
+    </figure>
   );
 }

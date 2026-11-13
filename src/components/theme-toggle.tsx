@@ -5,15 +5,20 @@ import {Moon, Sun} from 'lucide-react';
 import {useTheme} from 'next-themes';
 
 import {Button} from '@/components/ui/button';
+import {cn} from '@/lib/utils';
 
-export function ThemeToggle() {
-  const {setTheme, theme} = useTheme();
+export function ThemeToggle({className}: {className?: string}) {
+  // `resolvedTheme` is the theme actually applied, which also covers "system".
+  const {resolvedTheme, setTheme} = useTheme();
 
   return (
     <Button
+      type="button"
       variant="ghost"
       size="icon"
-      onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}
+      className={cn('relative', className)}
+      onClick={() => setTheme(resolvedTheme === 'dark' ? 'light' : 'dark')}
+      title="Toggle theme"
     >
       <Sun className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
       <Moon className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
