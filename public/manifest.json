@@ -22,8 +22,8 @@
       "purpose": "maskable"
     }
   ],
-  "theme_color": "#020817",
-  "background_color": "#020817",
+  "theme_color": "#0e1425",
+  "background_color": "#0e1425",
   "start_url": "/chat?source=pwa",
   "scope": "/",
   "id": "soham-codeex-ai",

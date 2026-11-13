@@ -359,7 +359,7 @@ function TipCard({
         <ul className="space-y-2">
           {tips.map((tip, index) => (
             <li key={index} className="flex items-start gap-2 text-sm">
-              <Zap className="h-4 w-4 text-gray-600 mt-0.5 shrink-0" />
+              <Zap className="h-4 w-4 text-muted-foreground mt-0.5 shrink-0" />
               {tip}
             </li>
           ))}

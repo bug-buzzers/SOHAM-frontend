@@ -76,7 +76,7 @@ const SpeechInputComponent = () => {
           Recognized Text: <strong>{transcript}</strong>
         </p>
       )}
-      {isListening && <p className="mt-2 text-sm text-gray-500">Listening for commands...</p>}
+      {isListening && <p className="mt-2 text-sm text-muted-foreground">Listening for commands...</p>}
     </div>
   );
 };

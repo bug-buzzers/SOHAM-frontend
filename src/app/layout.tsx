@@ -95,7 +95,7 @@ export const metadata: Metadata = {
     'mobile-web-app-capable': 'yes',
     'apple-mobile-web-app-capable': 'yes',
     'apple-mobile-web-app-status-bar-style': 'black-translucent',
-    'msapplication-TileColor': '#020817',
+    'msapplication-TileColor': '#0e1425',
     'msapplication-config': '/browserconfig.xml',
     'developer': DEVELOPER_INFO.name,
     'developer-age': DEVELOPER_INFO.age.toString(),
@@ -109,7 +109,7 @@ export const viewport: Viewport = {
   initialScale: 1,
   maximumScale: 5,
   userScalable: true,
-  themeColor: '#020817',
+  themeColor: '#0e1425',
 };
 
 export default function RootLayout({

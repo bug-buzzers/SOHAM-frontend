@@ -417,7 +417,7 @@ export function ChatMessage({message, settings, onRegenerate}: ChatMessageProps)
           style={oneDark}
           language={match[1]}
           PreTag="div"
-          className="!mt-0 !rounded-none !border-0"
+          className="soham-code-block !mt-0 !rounded-none !border-0"
           customStyle={{
             margin: 0,
             background: 'transparent',
@@ -513,6 +513,9 @@ export function ChatMessage({message, settings, onRegenerate}: ChatMessageProps)
               // User bubble — always light text on primary bg
               !isAssistant && [
                 'prose-invert',
+                // prose-invert's body colour is gray-300, which is hard to read on the
+                // blue bubble; use the primary foreground instead.
+                '[--tw-prose-invert-body:hsl(var(--primary-foreground))]',
                 'prose-p:my-2.5 prose-p:leading-7',
                 'prose-a:text-white/90 prose-a:underline',
                 'prose-strong:text-white',
