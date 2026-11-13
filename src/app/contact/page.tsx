@@ -203,14 +203,14 @@ export default function ContactPage() {
             <div className="space-y-4">
               <Badge variant="outline" className="gap-2 text-sm">
                 <MessageSquare className="h-3.5 w-3.5 text-primary" />
-                We respond to every message
+                Built by one developer
               </Badge>
               <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight">
                 Get in Touch with <span className="text-primary">SOHAM</span>
               </h1>
               <p className="text-lg text-muted-foreground leading-relaxed">
                 Whether you have a question, found a bug, want to collaborate, or just want to say hi —
-                we&apos;re here. SOHAM is built by one developer who genuinely reads every message.
+                we&apos;re here. SOHAM is built by one developer, so your message goes straight to him.
               </p>
               <div className="flex flex-wrap gap-3 pt-2">
                 <Link href={`mailto:${DEVELOPER_INFO.contact.email}`}>
@@ -223,10 +223,10 @@ export default function ContactPage() {
             </div>
             <div className="grid grid-cols-2 gap-3">
               {[
-                { label: 'Response Time', value: '< 24h', icon: Clock },
-                { label: 'Support Channels', value: '4+', icon: MessageSquare },
+                { label: 'Reply time', value: 'Varies', icon: Clock },
+                { label: 'Support channels', value: '4', icon: MessageSquare },
                 { label: 'Languages', value: 'EN / HI', icon: MapPin },
-                { label: 'Availability', value: '24/7', icon: Zap },
+                { label: 'Built by', value: 'One developer', icon: Zap },
               ].map((stat) => (
                 <div key={stat.label} className="rounded-2xl border bg-background/80 p-4 text-center">
                   <stat.icon className="h-5 w-5 text-primary mx-auto mb-2" />

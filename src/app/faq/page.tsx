@@ -482,7 +482,7 @@ export default function FAQPage() {
           <CardHeader>
             <CardTitle>Still Need Help?</CardTitle>
             <CardDescription>
-              Can&apos;t find the answer? We respond to every message.
+              Can&apos;t find the answer? Send a message or browse the docs.
             </CardDescription>
           </CardHeader>
           <CardContent>
