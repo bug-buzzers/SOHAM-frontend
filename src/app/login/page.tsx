@@ -319,8 +319,8 @@ function LoginPageInner() {
                   Professional access to your AI workspace
                 </h2>
                 <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
-                  Sign in to resume conversations, manage multi-device memory, and run tool-driven workflows in a
-                  serverless-ready environment.
+                  Sign in to pick up your conversations in this browser and use chat, web search, voice, image
+                  generation and the PDF analyzer in one place.
                 </p>
               </div>
 
@@ -339,8 +339,8 @@ function LoginPageInner() {
                     <Sparkles size={18} />
                   </div>
                   <div>
-                    <p className="text-sm font-medium text-foreground">Unified agent stack</p>
-                    <p className="text-xs text-muted-foreground">Tools, memory, and model routing in one flow.</p>
+                    <p className="text-sm font-medium text-foreground">One workspace</p>
+                    <p className="text-xs text-muted-foreground">Pick a model or let Auto routing choose one for you.</p>
                   </div>
                 </div>
                 <div className="flex items-center gap-3 rounded-2xl border border-border/70 bg-background/60 p-4">
