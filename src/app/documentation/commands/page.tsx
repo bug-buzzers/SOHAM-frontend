@@ -277,8 +277,8 @@ export default function CommandsPage() {
             auto-routing picks the wrong mode.
           </p>
           <p>
-            Think of slash commands as <strong className="text-foreground">overrides</strong> — they
-            guarantee a specific behaviour regardless of how the message reads.
+            Think of slash commands as <strong className="text-foreground">overrides</strong>: they tell
+            SOHAM which mode to use, however the rest of the message is worded.
           </p>
         </CardContent>
       </Card>

@@ -3,20 +3,20 @@ import type {Metadata} from 'next';
 export const metadata: Metadata = {
   title: 'AI Chat App | SOHAM - Free Chat, Coding Help, Smart Search',
   description:
-    'Use SOHAM AI chat for coding help, smart search, reasoning, and multi-model responses with 35+ models and no signup required.',
+    'Use SOHAM AI chat for coding help, web search, reasoning and everyday questions, with models from Groq, Cerebras, Google Gemini, Hugging Face and OpenRouter. Sign in to start.',
   alternates: {
     canonical: 'https://soham-ai.vercel.app/chat',
   },
   openGraph: {
     title: 'AI Chat App | SOHAM - Free Chat, Coding Help, Smart Search',
     description:
-      'Use SOHAM AI chat for coding help, smart search, reasoning, and multi-model responses with 35+ models and no signup required.',
+      'Use SOHAM AI chat for coding help, web search, reasoning and everyday questions, with models from Groq, Cerebras, Google Gemini, Hugging Face and OpenRouter. Sign in to start.',
     url: 'https://soham-ai.vercel.app/chat',
     images: [
       {
         url: 'https://soham-ai.vercel.app/Multi-Chat.png',
-        width: 1200,
-        height: 630,
+        width: 1536,
+        height: 1024,
         alt: 'SOHAM AI chat interface',
       },
     ],

@@ -58,7 +58,7 @@ const coreFeatures = [
 const interfaceItems = [
   { label: 'Message Input',        desc: 'Type your message here. Supports multi-line input with Shift+Enter.' },
   { label: 'Voice Button (🎤)',     desc: 'Hold to record, release to transcribe. Powered by Groq Whisper V3 Turbo.' },
-  { label: 'Model Selector',       desc: 'Click to switch between 13+ AI models mid-conversation.' },
+  { label: 'Model Selector',       desc: 'Click to switch models mid-conversation, or choose Auto.' },
   { label: 'Settings (⚙️)',         desc: 'Adjust tone, technical level, TTS voice, and theme.' },
   { label: 'Clear Conversation',   desc: 'Wipe the current session from memory. Irreversible.' },
   { label: 'Export / Share',       desc: 'Export the conversation or share a specific message.' },
@@ -109,7 +109,7 @@ export default function ChatPage() {
         <div className="inline-flex items-center gap-2 rounded-full border bg-muted px-4 py-2 text-sm">
           <MessageSquare className="h-4 w-4 text-primary" />
           <span className="font-medium">Chat Interface</span>
-          <Badge variant="secondary" className="text-xs">13+ Models</Badge>
+          <Badge variant="secondary" className="text-xs">Multi-model</Badge>
         </div>
         <h1 className="text-4xl font-bold tracking-tight">Chat Interface Guide</h1>
         <p className="text-xl text-muted-foreground max-w-2xl">
@@ -307,7 +307,7 @@ export default function ChatPage() {
         <div className="grid gap-3 sm:grid-cols-2">
           {[
             { title: 'Touch-optimised layout',       desc: 'Larger tap targets, swipe gestures, and a bottom-anchored input bar for thumb-friendly typing.' },
-            { title: 'Bottom sheet model selector',  desc: 'Tap the model name to open a full-screen bottom sheet with all 13+ models listed.' },
+            { title: 'Bottom sheet model selector',  desc: 'Tap the model name to open a full-screen bottom sheet with every available model listed.' },
             { title: 'Voice priority',               desc: 'The microphone button is prominently placed for quick voice input — ideal when typing is inconvenient.' },
             { title: 'PWA full-screen mode',         desc: 'Install as a PWA for a native app feel with no browser chrome. See the Installation guide.' },
           ].map(({ title, desc }) => (
@@ -326,7 +326,7 @@ export default function ChatPage() {
       <div className="rounded-xl border bg-gradient-to-br from-primary/10 via-primary/5 to-background p-8 text-center space-y-4">
         <h2 className="text-xl font-bold">Start chatting</h2>
         <p className="text-muted-foreground text-sm max-w-md mx-auto">
-          No account needed. Open the chat and start typing — or speak your first message.
+          Sign in, open the chat and start typing, or speak your first message.
         </p>
         <div className="flex flex-col sm:flex-row gap-3 justify-center">
           <Button asChild size="lg">

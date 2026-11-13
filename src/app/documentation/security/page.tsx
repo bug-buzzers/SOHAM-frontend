@@ -38,22 +38,22 @@ export default function SecurityPage() {
               <div className="flex items-start gap-3">
                 <Badge variant="outline" className="mt-1">Encrypted</Badge>
                 <div>
-                  <h4 className="font-semibold">End-to-End Encryption</h4>
-                  <p className="text-sm text-muted-foreground">All data transmission is encrypted using industry-standard protocols.</p>
+                  <h4 className="font-semibold">Encrypted in Transit</h4>
+                  <p className="text-sm text-muted-foreground">Connections use HTTPS, so data is encrypted between your browser and SOHAM&apos;s servers.</p>
                 </div>
               </div>
               <div className="flex items-start gap-3">
-                <Badge variant="outline" className="mt-1">Secure</Badge>
+                <Badge variant="outline" className="mt-1">On device</Badge>
                 <div>
-                  <h4 className="font-semibold">No Data Storage</h4>
-                  <p className="text-sm text-muted-foreground">Conversations are not permanently stored on our servers.</p>
+                  <h4 className="font-semibold">Chat History in Your Browser</h4>
+                  <p className="text-sm text-muted-foreground">Your chat history and settings are stored in your browser (IndexedDB), not synced to other devices.</p>
                 </div>
               </div>
               <div className="flex items-start gap-3">
-                <Badge variant="outline" className="mt-1">Private</Badge>
+                <Badge variant="outline" className="mt-1">Third party</Badge>
                 <div>
-                  <h4 className="font-semibold">Local Processing</h4>
-                  <p className="text-sm text-muted-foreground">When possible, processing happens locally on your device.</p>
+                  <h4 className="font-semibold">Sent to AI Providers</h4>
+                  <p className="text-sm text-muted-foreground">To answer you, messages are processed by SOHAM&apos;s servers and a third-party AI provider.</p>
                 </div>
               </div>
             </div>
@@ -76,8 +76,8 @@ export default function SecurityPage() {
               <div className="flex items-start gap-3">
                 <Badge variant="outline" className="mt-1">Protected</Badge>
                 <div>
-                  <h4 className="font-semibold">API Key Protection</h4>
-                  <p className="text-sm text-muted-foreground">Your API keys are stored securely and never exposed to third parties.</p>
+                  <h4 className="font-semibold">Provider Keys Stay on the Server</h4>
+                  <p className="text-sm text-muted-foreground">SOHAM&apos;s AI provider API keys are kept on the server and are not sent to your browser.</p>
                 </div>
               </div>
               <div className="flex items-start gap-3">

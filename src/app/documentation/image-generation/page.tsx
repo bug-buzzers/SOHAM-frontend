@@ -76,8 +76,8 @@ export default function ImageGenerationPage() {
         </div>
         <h1 className="text-4xl font-bold tracking-tight">Image Generation</h1>
         <p className="text-xl text-muted-foreground max-w-2xl">
-          Generate images directly in the chat using HuggingFace FLUX.1-schnell — one of the
-          fastest open-source image generation models available.
+          Generate images directly in the chat with FLUX models, served by Cloudflare Workers AI,
+          Pollinations.ai or Hugging Face, whichever is available. Rate limits apply.
         </p>
       </div>
 

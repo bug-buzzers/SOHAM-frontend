@@ -167,7 +167,7 @@ export default function PrivacyPage() {
               <div>
                 <h4 className="font-semibold mb-2">Service Delivery</h4>
                 <ul className="list-disc list-inside space-y-1 ml-4">
-                  <li>Provide access to 35+ AI models and features</li>
+                  <li>Provide access to AI models and features</li>
                   <li>Process your requests and generate AI responses</li>
                   <li>Enable chat, math solving, PDF analysis, and other features</li>
                   <li>Maintain your account and preferences</li>

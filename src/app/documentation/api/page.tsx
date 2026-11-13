@@ -270,17 +270,17 @@ export default function ApiPage() {
             <Github className="h-4 w-4" />
             Self-Hosting
           </CardTitle>
-          <CardDescription>SOHAM is open-source and self-hostable</CardDescription>
+          <CardDescription>An earlier version of SOHAM is public on GitHub under the MIT License</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <p className="text-sm text-muted-foreground">
-            Clone the repository, add your own API keys for Groq, HuggingFace, and Google AI in{' '}
+            To run your own copy, clone that repository, add your own API keys for the AI providers in{' '}
             <code className="bg-muted px-1.5 py-0.5 rounded">.env.local</code>, and deploy to
             Vercel, Netlify, or any Node.js host.
           </p>
           <div className="rounded-lg bg-muted px-4 py-3 font-mono text-sm space-y-1">
-            <p>git clone https://github.com/heoster/soham-ai</p>
-            <p>cd soham-ai</p>
+            <p>git clone https://github.com/Heoster/SOHAM</p>
+            <p>cd SOHAM</p>
             <p>cp .env.local.example .env.local</p>
             <p>npm install && npm run dev</p>
           </div>

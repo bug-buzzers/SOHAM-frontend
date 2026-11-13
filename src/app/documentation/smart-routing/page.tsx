@@ -31,7 +31,7 @@ export default function SmartRoutingPage() {
           Intelligent Model Selection
         </h1>
         <p className="text-xl text-muted-foreground">
-          SOHAM automatically analyzes your queries and routes them to the most appropriate AI model for optimal results.
+          In Auto mode, SOHAM looks at each request and routes it to a model suited to the task. Each reply shows which model answered.
         </p>
       </div>
 
@@ -58,13 +58,13 @@ export default function SmartRoutingPage() {
               <ProcessStep
                 step={2}
                 title="Model Matching"
-                description="Selects the best-suited model from 13+ available options"
+                description="Chooses a suitable model from those in the model selector"
                 icon={Zap}
               />
               <ProcessStep
                 step={3}
                 title="Optimized Response"
-                description="Delivers the highest quality answer for your specific query"
+                description="Answers with that model, and the reply shows which model it was"
                 icon={CheckCircle}
               />
             </div>
@@ -73,9 +73,9 @@ export default function SmartRoutingPage() {
               <h4 className="font-medium mb-2">🎯 Key Benefits</h4>
               <ul className="text-sm space-y-1 text-muted-foreground">
                 <li>• No manual model selection required</li>
-                <li>• Always get the best model for each task</li>
-                <li>• Seamless switching between specialized models</li>
-                <li>• Optimal performance without complexity</li>
+                <li>• A model chosen for each request</li>
+                <li>• Can switch models between requests when needed</li>
+                <li>• You can still pick a model yourself at any time</li>
               </ul>
             </div>
           </div>
@@ -100,7 +100,7 @@ export default function SmartRoutingPage() {
               'Calculate the area of a circle with radius 5',
               'Explain the quadratic formula'
             ]}
-            targetModels={['WizardMath 70B', 'Qwen 2.5 (Math capable)', 'Llama models with math training']}
+            targetModels={['General-purpose models (there is no dedicated maths category)', 'Llama 3.3 70B', 'Qwen 3 235B']}
             color="text-blue-500"
           />
 
@@ -114,7 +114,7 @@ export default function SmartRoutingPage() {
               'Explain React hooks',
               'Best practices for API design'
             ]}
-            targetModels={['DeepSeek V3.2', 'Coding-specialized models', 'Programming-trained variants']}
+            targetModels={['GPT-OSS 120B', 'DeepSeek R1 Distill 70B', 'MiniMax M2.5']}
             color="text-green-500"
           />
 
@@ -128,7 +128,7 @@ export default function SmartRoutingPage() {
               'Tell me about the history of Rome',
               'How do I improve my writing skills?'
             ]}
-            targetModels={['Llama 3.1 models', 'General purpose models', 'Conversational variants']}
+            targetModels={['Llama 3.3 70B', 'Llama 3.1 8B Instant', 'Gemini 2.5 Flash Lite']}
             color="text-orange-500"
           />
 
@@ -142,7 +142,7 @@ export default function SmartRoutingPage() {
               'Analyze this chart or graph',
               'Read text from this image'
             ]}
-            targetModels={['Gemini 2.5 Flash', 'Gemini Flash Latest', 'Vision-capable models']}
+            targetModels={['Gemini 2.5 Flash', 'Gemini 2.5 Pro', 'Llama 4 Scout 17B']}
             color="text-pink-500"
           />
         </div>
@@ -167,7 +167,7 @@ export default function SmartRoutingPage() {
                   <AnalysisIndicator
                     type="Mathematical Keywords"
                     examples={['solve', 'calculate', 'equation', 'derivative', 'integral']}
-                    action="Routes to math models"
+                    action="Routes to general-purpose models"
                   />
                   <AnalysisIndicator
                     type="Programming Terms"
@@ -215,7 +215,7 @@ export default function SmartRoutingPage() {
           <RoutingExample
             query="Solve the equation 2x + 5 = 15"
             analysis="Mathematical equation with 'solve' keyword"
-            selectedModel="Math-specialized model (e.g., WizardMath)"
+            selectedModel="General-purpose model (e.g., Llama 3.3 70B)"
             reasoning="Query contains mathematical equation and explicit solve request"
             category="Mathematics"
           />
@@ -223,7 +223,7 @@ export default function SmartRoutingPage() {
           <RoutingExample
             query="Write a Python function to reverse a string"
             analysis="Programming request with specific language"
-            selectedModel="Coding model (e.g., DeepSeek V3.2)"
+            selectedModel="Coding model (e.g., GPT-OSS 120B)"
             reasoning="Contains programming language and function creation request"
             category="Programming"
           />
@@ -239,7 +239,7 @@ export default function SmartRoutingPage() {
           <RoutingExample
             query="Explain the concept of machine learning"
             analysis="Educational explanation request"
-            selectedModel="Conversational model (e.g., Llama 3.1)"
+            selectedModel="General model (e.g., Llama 3.3 70B)"
             reasoning="General knowledge explanation, benefits from conversational model"
             category="Education"
           />
@@ -265,7 +265,7 @@ export default function SmartRoutingPage() {
                 <ul className="text-sm space-y-1 text-muted-foreground">
                   <li>• Most general usage scenarios</li>
                   <li>• Mixed conversation topics</li>
-                  <li>• When you want optimal results</li>
+                  <li>• When you&apos;re not sure which model to pick</li>
                   <li>• Learning and exploration</li>
                   <li>• First-time users</li>
                 </ul>
@@ -309,22 +309,22 @@ export default function SmartRoutingPage() {
             <BenefitCard
               title="Higher Accuracy"
               description="Specialized models perform better on their target tasks"
-              metric="Up to 40% better results"
+              metric="Task-matched"
             />
             <BenefitCard
               title="Faster Responses"
               description="Right-sized models for each query type"
-              metric="Optimized speed"
+              metric="Right-sized"
             />
             <BenefitCard
               title="Better Context"
               description="Models trained for specific domains understand context better"
-              metric="Improved relevance"
+              metric="Category-aware"
             />
             <BenefitCard
               title="Seamless Experience"
               description="No manual switching or configuration needed"
-              metric="Zero complexity"
+              metric="No setup"
             />
           </div>
         </CardContent>

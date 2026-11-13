@@ -22,11 +22,15 @@ import { Button } from '@/components/ui/button';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { PageHeader } from '@/components/page-header';
+import { getEnabledModels, groupModels } from '@/lib/model-catalog';
+
+// From models-config.json, the same list the chat model selector shows.
+const PROVIDER_COUNT = groupModels(getEnabledModels(), 'provider').length;
 
 const integrations = [
   {
     name: 'REST API',
-    description: 'Full REST API access to all SOHAM capabilities',
+    description: 'The HTTP endpoints the SOHAM web app uses',
     icon: <Code className="h-6 w-6" />,
     status: 'available',
     category: 'API',
@@ -137,9 +141,9 @@ export default function IntegrationsPage() {
                 <Code className="h-6 w-6" />
               </div>
               <div>
-                <CardTitle>REST API - Available Now</CardTitle>
+                <CardTitle>REST API</CardTitle>
                 <CardDescription>
-                  Start integrating immediately with our full-featured REST API
+                  Rate-limited endpoints with no API keys. They can change without notice.
                 </CardDescription>
               </div>
             </div>
@@ -151,7 +155,7 @@ export default function IntegrationsPage() {
                 <div className="text-sm text-muted-foreground">API Endpoints</div>
               </div>
               <div className="text-center">
-                <div className="text-2xl font-bold text-primary">3</div>
+                <div className="text-2xl font-bold text-primary">{PROVIDER_COUNT}</div>
                 <div className="text-sm text-muted-foreground">AI Providers</div>
               </div>
               <div className="text-center">
@@ -159,8 +163,8 @@ export default function IntegrationsPage() {
                 <div className="text-sm text-muted-foreground">File Support</div>
               </div>
               <div className="text-center">
-                <div className="text-2xl font-bold text-primary">99.9%</div>
-                <div className="text-sm text-muted-foreground">Uptime</div>
+                <div className="text-2xl font-bold text-primary">None</div>
+                <div className="text-sm text-muted-foreground">API Keys Needed</div>
               </div>
               <div className="text-center">
                 <div className="text-2xl font-bold text-primary">Auto</div>

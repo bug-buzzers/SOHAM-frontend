@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { getEnabledModels, groupModels, PROVIDER_LABELS } from '@/lib/model-catalog';
 import {
   Settings,
   Brain,
@@ -20,6 +21,21 @@ import {
   Moon,
   Laptop,
 } from 'lucide-react';
+
+const PROVIDER_NOTES: Record<string, string> = {
+  groq: 'Low-latency responses',
+  cerebras: 'Fast inference on Cerebras hardware',
+  google: 'Multimodal, with very long context (about 1M tokens)',
+  huggingface: 'Open-weight models via the Hugging Face router',
+  openrouter: 'Free-tier models from several labs',
+};
+
+// Built from models-config.json, the same list the chat model selector shows.
+const providerGroups = groupModels(getEnabledModels(), 'provider').map(({ key, models }) => ({
+  provider: PROVIDER_LABELS[key] ?? key,
+  models: models.map((model) => model.shortName),
+  note: PROVIDER_NOTES[key] ?? '',
+}));
 
 export default function SettingsPage() {
   return (
@@ -86,17 +102,12 @@ export default function SettingsPage() {
                 <Badge>Default</Badge>
               </div>
               <p className="text-sm text-muted-foreground">
-                SOHAM picks the best model for each message automatically — fast models for simple
-                questions, powerful models for complex reasoning.
+                In Auto mode SOHAM chooses a model for each message. You can also pick one yourself
+                from the model selector.
               </p>
             </div>
             <div className="grid gap-3 sm:grid-cols-2">
-              {[
-                { provider: 'Groq', models: ['Llama 3.1 8B Instant'], note: 'Fastest responses, great for quick Q&A' },
-                { provider: 'HuggingFace', models: ['Llama 3.1 70B', 'Llama 3.2 1B', 'Qwen 2.5 7B', 'DeepSeek V3.2', 'RNJ-1'], note: 'Wide variety, strong reasoning' },
-                { provider: 'Google', models: ['Gemini 2.5 Flash', 'Gemini Flash Latest', 'Gemini 2.5 Flash Lite'], note: 'Excellent for multimodal and long context' },
-                { provider: 'OpenRouter', models: ['Auto'], note: 'Routes to the best available model' },
-              ].map(({ provider, models, note }) => (
+              {providerGroups.map(({ provider, models, note }) => (
                 <div key={provider} className="rounded-lg border p-4">
                   <p className="font-semibold text-sm mb-1">{provider}</p>
                   <div className="flex flex-wrap gap-1 mb-2">
@@ -110,7 +121,7 @@ export default function SettingsPage() {
             </div>
             <p className="text-xs text-muted-foreground flex items-center gap-1">
               <CheckCircle className="h-3 w-3 text-green-500" />
-              All 13+ models are free — no API key or account required.
+              You don&apos;t need your own API keys. A free SOHAM account is required to chat, and rate limits apply.
             </p>
           </CardContent>
         </Card>
@@ -319,16 +330,16 @@ export default function SettingsPage() {
                 desc: 'All settings and conversation history are stored in your browser\'s localStorage. Nothing is sent to SOHAM servers.',
               },
               {
-                title: 'Clear Session',
-                desc: 'Use the "Clear conversation" button in the chat header to wipe the current session from memory. This is immediate and irreversible.',
+                title: 'Delete Chats',
+                desc: 'Delete a chat from the chat sidebar to remove it from this browser. Deleting is immediate and cannot be undone.',
               },
               {
-                title: 'No Account Required',
-                desc: 'SOHAM is 100% free with no sign-up. Without an account, no data is tied to an identity. Creating an account (optional) enables cross-device memory sync.',
+                title: 'Account Required',
+                desc: 'Chatting requires a free account (Google, or email and password). Chat history and settings stay in your browser and do not sync across devices.',
               },
               {
                 title: 'API Calls',
-                desc: 'Messages are sent to third-party AI providers (Groq, HuggingFace, Google, OpenRouter) to generate responses. Review their respective privacy policies for data handling.',
+                desc: 'Messages are sent to third-party AI providers (Groq, Cerebras, Google, Hugging Face, OpenRouter) to generate responses. Review their respective privacy policies for data handling.',
               },
             ].map(({ title, desc }) => (
               <div key={title} className="flex items-start gap-3 rounded-lg border p-4">

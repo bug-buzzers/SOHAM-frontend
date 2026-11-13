@@ -267,7 +267,7 @@ export default function InstallationPage() {
             'Auto-updates in the background — always up to date',
             'All SOHAM features: chat, image gen, PDF analysis, voice',
             'Works on Android (Chrome), iOS (Safari), and desktop',
-            '100% free — no account, no subscription, no app store',
+            'Free to use: no subscription and no app store (sign-in required to chat)',
           ].map((item) => (
             <div key={item} className="flex items-center gap-3 rounded-lg border p-3">
               <CheckCircle className="h-4 w-4 text-green-500 shrink-0" />

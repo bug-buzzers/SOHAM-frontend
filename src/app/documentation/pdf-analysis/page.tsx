@@ -329,11 +329,11 @@ export default function PDFAnalysisPage() {
             <div className="space-y-3">
               <h4 className="font-semibold text-blue-600">🛡️ Privacy Protection</h4>
               <ul className="text-sm space-y-1">
-                <li>• Files are not saved or stored</li>
-                <li>• Content is not used for training</li>
-                <li>• Processing happens in real-time</li>
-                <li>• No sharing with third parties</li>
-                <li>• GDPR and privacy compliant</li>
+                <li>• SOHAM doesn&apos;t save uploaded PDFs</li>
+                <li>• SOHAM doesn&apos;t train models on your files</li>
+                <li>• Processing happens when you ask</li>
+                <li>• The PDF is sent to an AI provider to answer you</li>
+                <li>• Details are in the Privacy Policy</li>
               </ul>
             </div>
           </div>

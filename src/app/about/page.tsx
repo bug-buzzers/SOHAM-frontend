@@ -2,6 +2,7 @@ import { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
 import { pageSEO } from '@/lib/seo-config';
+import { getEnabledModels, groupModels } from '@/lib/model-catalog';
 import {
   ArrowRight,
   Award,
@@ -47,11 +48,14 @@ const companyFacts = [
   { label: 'Location', value: `${DEVELOPER_INFO.location.city}, ${DEVELOPER_INFO.location.state}` },
 ];
 
+// Model counts come from models-config.json, the same list the chat model selector shows.
+const ENABLED_MODELS = getEnabledModels();
+
 const profileStats = [
   { label: 'Age', value: String(DEVELOPER_INFO.age) },
-  { label: 'Models Integrated', value: `${DEVELOPER_INFO.projectStats.modelsIntegrated}+` },
+  { label: 'AI Models in SOHAM', value: String(ENABLED_MODELS.length) },
   { label: 'Lines of Code', value: DEVELOPER_INFO.projectStats.linesOfCode },
-  { label: 'Daily Users', value: DEVELOPER_INFO.projectStats.dailyUsers },
+  { label: 'AI Providers', value: String(groupModels(ENABLED_MODELS, 'provider').length) },
 ];
 
 export default function AboutPage() {
@@ -224,10 +228,10 @@ export default function AboutPage() {
               <div className="rounded-2xl border bg-background p-5">
                 <div className="flex items-center gap-2 text-base font-semibold">
                   <Globe className="h-4 w-4 text-primary" />
-                  Reach
+                  Product
                 </div>
                 <p className="mt-3 text-sm leading-6 text-muted-foreground">
-                  {DEVELOPER_INFO.projectStats.countriesReached} countries and {DEVELOPER_INFO.projectStats.dailyUsers} daily users.
+                  SOHAM: multi-model AI chat with web search, voice, a PDF Analyzer and Visual Math.
                 </p>
               </div>
             </div>

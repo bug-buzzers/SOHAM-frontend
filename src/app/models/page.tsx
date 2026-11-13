@@ -1,11 +1,10 @@
 'use client';
 
-import { Metadata } from 'next';
-import { 
-  Sparkles, 
-  Code, 
-  Calculator, 
-  MessageCircle, 
+import type { ReactNode } from 'react';
+import {
+  Sparkles,
+  Code,
+  MessageCircle,
   Image as ImageIcon,
   Zap,
   CheckCircle,
@@ -22,142 +21,66 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from '@/components/ui/accordion';
+import {
+  CATEGORY_LABELS,
+  formatContextWindow,
+  getEnabledModels,
+  groupModels,
+} from '@/lib/model-catalog';
+import modelsConfigData from '@/lib/models-config.json';
 
-const modelCategories = [
-  {
-    name: 'General Purpose',
+const CATEGORY_STYLES: Record<string, { icon: ReactNode; color: string; bgColor: string; description: string }> = {
+  general: {
     icon: <Sparkles className="h-6 w-6" />,
     color: 'text-blue-500',
     bgColor: 'bg-blue-500/10',
-    description: 'Versatile models for everyday conversations, general queries, and broad knowledge tasks',
-    models: [
-      {
-        name: 'DialoGPT Medium',
-        provider: 'Hugging Face',
-        description: 'Free conversational model for natural dialogue',
-        contextWindow: '1K tokens',
-        features: ['Natural dialogue', 'Fast inference'],
-        recommended: true,
-      },
-      {
-        name: 'FLAN-T5 Base',
-        provider: 'Hugging Face',
-        description: 'Instruction-tuned model for general tasks',
-        contextWindow: '512 tokens',
-        features: ['Instruction following', 'Flexible'],
-      },
-      {
-        name: 'Qwen 2.5 72B Instruct',
-        provider: 'Hugging Face',
-        description: 'Excellent at code generation, math, and multilingual support',
-        contextWindow: '32K tokens',
-        features: ['Multilingual', 'Code generation', 'Math reasoning'],
-      },
-      {
-        name: 'Llama 2 70B',
-        provider: 'Hugging Face',
-        description: 'Strong general-purpose model with good analytical capabilities',
-        contextWindow: '4K tokens',
-        features: ['Open source', 'Strong analytics', 'Reliable'],
-      },
-    ],
+    description: 'Versatile models for everyday questions, writing and broad knowledge tasks',
   },
-  {
-    name: 'Coding',
+  coding: {
     icon: <Code className="h-6 w-6" />,
     color: 'text-green-500',
     bgColor: 'bg-green-500/10',
-    description: 'Specialized models optimized for code generation, debugging, and technical explanations',
-    models: [
-      {
-        name: 'DeepSeek Coder 33B',
-        provider: 'Hugging Face',
-        description: 'Superior code generation across multiple programming languages',
-        contextWindow: '16K tokens',
-        features: ['Multi-language', 'Code completion', 'Bug detection'],
-        recommended: true,
-      },
-      {
-        name: 'WizardCoder Python 34B',
-        provider: 'Hugging Face',
-        description: 'Python-focused coding assistant with excellent performance',
-        contextWindow: '8K tokens',
-        features: ['Python expert', 'Code optimization', 'Best practices'],
-      },
-    ],
+    description: 'Models suited to code generation, debugging and multi-step reasoning',
   },
-  {
-    name: 'Mathematics',
-    icon: <Calculator className="h-6 w-6" />,
-    color: 'text-purple-500',
-    bgColor: 'bg-purple-500/10',
-    description: 'Models fine-tuned for mathematical reasoning, problem solving, and step-by-step solutions',
-    models: [
-      {
-        name: 'WizardMath 70B',
-        provider: 'Hugging Face',
-        description: 'Specialized in mathematical reasoning with step-by-step solutions',
-        contextWindow: '8K tokens',
-        features: ['Step-by-step', 'LaTeX formatting', 'Complex equations'],
-        recommended: true,
-      },
-    ],
-  },
-  {
-    name: 'Conversation',
+  conversation: {
     icon: <MessageCircle className="h-6 w-6" />,
     color: 'text-orange-500',
     bgColor: 'bg-orange-500/10',
-    description: 'Models optimized for natural dialogue, chat interactions, and conversational AI',
-    models: [
-      {
-        name: 'DialoGPT Large',
-        provider: 'Hugging Face',
-        description: 'Optimized for engaging, natural conversations',
-        contextWindow: '1K tokens',
-        features: ['Natural dialogue', 'Context aware', 'Engaging responses'],
-      },
-      {
-        name: 'BlenderBot 400M',
-        provider: 'Hugging Face',
-        description: 'Lightweight conversational model for chat applications',
-        contextWindow: '512 tokens',
-        features: ['Lightweight', 'Fast', 'Conversational'],
-      },
-    ],
+    description: 'Lightweight models for quick conversational replies',
   },
-  {
-    name: 'Multimodal',
+  multimodal: {
     icon: <ImageIcon className="h-6 w-6" />,
     color: 'text-pink-500',
     bgColor: 'bg-pink-500/10',
-    description: 'Models that understand both text and images for visual problem solving',
-    models: [
-      {
-        name: 'BLIP-2',
-        provider: 'Hugging Face',
-        description: 'Multimodal image understanding and captioning',
-        contextWindow: '2K tokens',
-        features: ['Image understanding', 'Captioning'],
-        recommended: true,
-      },
-      {
-        name: 'Kosmos-2',
-        provider: 'Hugging Face',
-        description: 'Vision and language model for multimodal tasks',
-        contextWindow: '2K tokens',
-        features: ['Vision + text', 'Object detection', 'Image captioning'],
-      },
-      {
-        name: 'BLIP-2',
-        provider: 'Hugging Face',
-        description: 'Specialized in image understanding and description',
-        contextWindow: '2K tokens',
-        features: ['Image understanding', 'Visual QA', 'Captioning'],
-      },
-    ],
+    description: 'Models that can work with images as well as text',
   },
-];
+};
+
+// Built from models-config.json (enabled models only), the same list the chat model selector shows.
+const enabledModels = getEnabledModels();
+
+const modelCategories = groupModels(enabledModels, 'category').map(({ key, models }) => {
+  const style = CATEGORY_STYLES[key] ?? CATEGORY_STYLES.general;
+  return {
+    name: CATEGORY_LABELS[key] ?? key,
+    icon: style.icon,
+    color: style.color,
+    bgColor: style.bgColor,
+    description: style.description,
+    models: models.map((model) => ({
+      name: model.name,
+      provider: model.providerLabel,
+      description: model.description,
+      contextWindow: formatContextWindow(model.contextWindow),
+      features: model.supportsStreaming ? ['Streaming'] : [],
+      recommended: false,
+    })),
+  };
+});
+
+const apiKeyEnvVars = Object.values(modelsConfigData.providers as Record<string, { apiKeyEnvVar: string }>)
+  .map((provider) => provider.apiKeyEnvVar)
+  .join(', ');
 
 export default function ModelsPage() {
   return (
@@ -172,12 +95,12 @@ export default function ModelsPage() {
         {/* Hero Section */}
         <div className="text-center space-y-4 mb-12">
           <h1 className="text-4xl md:text-5xl font-bold tracking-tight">
-            Choose the Right Model
+            Choose the Right Model{' '}
             <span className="block gradient-text">for Every Task</span>
           </h1>
           <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
-            SOHAM provides access to multiple specialized AI models from leading providers.
-            Our smart auto-routing system automatically selects the best model for your query.
+            SOHAM currently offers {enabledModels.length} models from Groq, Cerebras, Google Gemini,
+            Hugging Face and OpenRouter. Pick one yourself, or let Auto mode choose one for each request.
           </p>
         </div>
 
@@ -191,16 +114,16 @@ export default function ModelsPage() {
               <div>
                 <CardTitle>Smart Auto-Routing</CardTitle>
                 <CardDescription>
-                  Let AI choose the best model automatically
+                  Let SOHAM choose a model for each request
                 </CardDescription>
               </div>
             </div>
           </CardHeader>
           <CardContent>
             <p className="text-muted-foreground mb-4">
-              Enable auto-routing in settings and our AI will analyze your query to select
-              the most appropriate model. Coding questions go to coding models, math problems
-              to math models, and so on.
+              Leave the model selector on Auto (Smart Routing) and SOHAM looks at your request to
+              choose a model for it. Each reply shows which model answered, so you can switch
+              manually whenever you prefer a different one.
             </p>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div className="flex items-start gap-2">
@@ -213,8 +136,8 @@ export default function ModelsPage() {
               <div className="flex items-start gap-2">
                 <CheckCircle className="h-5 w-5 text-primary mt-0.5" />
                 <div>
-                  <p className="font-medium">Optimal Performance</p>
-                  <p className="text-sm text-muted-foreground">Best model for each task</p>
+                  <p className="font-medium">Matched to the request</p>
+                  <p className="text-sm text-muted-foreground">Chooses by the kind of task</p>
                 </div>
               </div>
               <div className="flex items-start gap-2">
@@ -309,9 +232,9 @@ export default function ModelsPage() {
             <AccordionItem value="item-3">
               <AccordionTrigger>Which models require API keys?</AccordionTrigger>
               <AccordionContent>
-                Google AI models require a GOOGLE_GENAI_API_KEY. Hugging Face models require a
-                HUGGINGFACE_API_KEY. OpenRouter models require an OPENROUTER_API_KEY. You can
-                configure these in your environment variables.
+                You don&apos;t need any API keys to use SOHAM. The server that runs SOHAM is
+                configured with one key per provider ({apiKeyEnvVars}), and a provider&apos;s
+                models are only available while its key and quota are valid.
               </AccordionContent>
             </AccordionItem>
             <AccordionItem value="item-4">

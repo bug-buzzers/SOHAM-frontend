@@ -268,8 +268,8 @@ export default function ApiReferencePage() {
         <CardContent className="pt-6">
           <p className="text-sm text-muted-foreground">
             <strong className="text-foreground">Note:</strong> There is no public API key system
-            currently. Direct API integration is via the web app endpoints above. SOHAM is
-            open-source — see the{' '}
+            currently. Direct API integration is via the web app endpoints above. An earlier
+            version of SOHAM is public on GitHub — see the{' '}
             <a
               href={APP_CONFIG.DEVELOPER.github}
               target="_blank"

@@ -22,6 +22,7 @@ import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
 import { PageHeader } from '@/components/page-header';
+import { CATEGORY_LABELS, getEnabledModels, groupModels } from '@/lib/model-catalog';
 import { Badge } from '@/components/ui/badge';
 
 const coreFeatures = [
@@ -35,7 +36,7 @@ const coreFeatures = [
   {
     icon: <Zap className="h-6 w-6" />,
     title: 'Smart Auto-Routing',
-    description: 'AI automatically selects the best model for your query, ensuring optimal responses every time.',
+    description: 'Leave the selector on Auto and SOHAM chooses a model for each request. Every reply shows which model answered.',
     badge: 'Smart',
     color: 'text-yellow-500',
   },
@@ -54,14 +55,14 @@ const coreFeatures = [
   {
     icon: <Search className="h-6 w-6" />,
     title: 'Web Search Integration',
-    description: 'Get real-time information from the web with privacy-focused DuckDuckGo search.',
+    description: 'Use /search, or ask about something recent, and SOHAM can look it up on the web before answering.',
     badge: 'Privacy',
     color: 'text-orange-500',
   },
   {
     icon: <ScanLine className="h-6 w-6" />,
     title: 'Visual Problem Solver',
-    description: 'Upload images of handwritten equations and get instant recognition and solutions.',
+    description: 'Upload a photo of an equation to see it recognised and solved step by step.',
     color: 'text-pink-500',
   },
   {
@@ -79,19 +80,19 @@ const coreFeatures = [
   {
     icon: <History className="h-6 w-6" />,
     title: 'Persistent History',
-    description: 'Your conversations are automatically saved locally, never lose your work.',
+    description: 'Chats are saved in your browser automatically, so you can pick up where you left off on this device.',
     color: 'text-teal-500',
   },
   {
     icon: <Terminal className="h-6 w-6" />,
     title: 'Slash Commands',
-    description: 'Use powerful commands like /solve, /search, and /summarize for instant actions.',
+    description: 'Start a message with /solve, /search or /summarize to pick a specific mode.',
     color: 'text-red-500',
   },
   {
     icon: <Smartphone className="h-6 w-6" />,
     title: 'Mobile Optimized',
-    description: 'Responsive design with touch-friendly controls and PWA support for offline use.',
+    description: 'Responsive design with touch-friendly controls. Install it as a PWA for an app-like window.',
     color: 'text-violet-500',
   },
   {
@@ -102,38 +103,32 @@ const coreFeatures = [
   },
 ];
 
-const modelCategories = [
-  {
-    name: 'General Purpose',
+const CATEGORY_DETAILS: Record<string, { icon: JSX.Element; description: string }> = {
+  general: {
     icon: <Sparkles className="h-5 w-5" />,
-    description: 'Versatile models for everyday conversations and general queries',
-    models: ['FLAN-T5 Base', 'BLOOM 560M', 'Qwen 2.5 72B', 'Llama 2 70B'],
+    description: 'Versatile models for everyday questions and general tasks',
   },
-  {
-    name: 'Coding',
+  coding: {
     icon: <Code className="h-5 w-5" />,
-    description: 'Specialized models for code generation and debugging',
-    models: ['DeepSeek Coder 33B', 'WizardCoder Python 34B'],
+    description: 'Models suited to code generation, debugging and reasoning',
   },
-  {
-    name: 'Mathematics',
-    icon: <Calculator className="h-5 w-5" />,
-    description: 'Models optimized for mathematical reasoning and problem solving',
-    models: ['WizardMath 70B'],
-  },
-  {
-    name: 'Conversation',
+  conversation: {
     icon: <MessageSquare className="h-5 w-5" />,
-    description: 'Models fine-tuned for natural dialogue and chat',
-    models: ['DialoGPT Large', 'BlenderBot 400M'],
+    description: 'Lightweight models for quick conversational replies',
   },
-  {
-    name: 'Multimodal',
+  multimodal: {
     icon: <Globe className="h-5 w-5" />,
-    description: 'Models that understand both text and images',
-    models: ['BLIP-2', 'Kosmos-2'],
+    description: 'Models that can work with images as well as text',
   },
-];
+};
+
+// Built from models-config.json, the same list the chat model selector shows.
+const modelCategories = groupModels(getEnabledModels(), 'category').map(({ key, models }) => ({
+  name: CATEGORY_LABELS[key] ?? key,
+  icon: CATEGORY_DETAILS[key]?.icon ?? <Sparkles className="h-5 w-5" />,
+  description: CATEGORY_DETAILS[key]?.description ?? '',
+  models: models.map((model) => model.name),
+}));
 
 export default function FeaturesPage() {
   return (
@@ -192,8 +187,8 @@ export default function FeaturesPage() {
         <div className="mb-16">
           <h2 className="text-3xl font-bold mb-4 text-center">AI Model Categories</h2>
           <p className="text-center text-muted-foreground mb-8 max-w-2xl mx-auto">
-            Access multiple specialized AI models, each optimized for specific tasks.
-            Our smart routing automatically selects the best model for your needs.
+            Every model the chat model selector offers, grouped by what it is suited to.
+            Pick one yourself or let Auto mode choose for each request.
           </p>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {modelCategories.map((category, index) => (

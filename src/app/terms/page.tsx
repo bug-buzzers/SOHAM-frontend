@@ -112,7 +112,7 @@ export default function TermsPage() {
                 <li>Text-to-speech capabilities</li>
               </ul>
               <p>
-                We provide access to 35+ AI models from multiple providers including Groq, Google, Hugging Face, and Cerebras. Services are provided "as is" and may be modified or discontinued at any time.
+                We provide access to AI models from multiple providers, including Groq, Cerebras, Google, Hugging Face and OpenRouter. Services are provided "as is" and may be modified or discontinued at any time.
               </p>
             </CardContent>
           </Card>

@@ -34,8 +34,8 @@ export default function QuickStartPage() {
         </div>
         <h1 className="text-4xl font-bold tracking-tight">Get Started in 3 Minutes</h1>
         <p className="text-xl text-muted-foreground">
-          SOHAM requires no signup. Open chat, type your question, and the AI picks the best model
-          automatically. Here's everything you need to know to get the most out of it.
+          Sign in with Google or email, open the chat and type your question. Leave the model on Auto
+          and SOHAM chooses one for you. Here's everything you need to know to get the most out of it.
         </p>
       </div>
 
@@ -49,7 +49,8 @@ export default function QuickStartPage() {
             <code className="bg-muted px-2 py-0.5 rounded text-xs">
               https://soham-ai.vercel.app/chat
             </code>{' '}
-            or click the Chat button from the homepage. No account needed.
+            or click the Chat button on the homepage. You&apos;ll be asked to sign in with Google or
+            an email and password first.
           </p>
           <div className="bg-muted/50 p-4 rounded-lg mb-3">
             <p className="text-sm font-medium mb-2">Try these first prompts:</p>
@@ -76,7 +77,7 @@ export default function QuickStartPage() {
             {[
               {
                 title: 'AI Model',
-                desc: 'Leave on "Auto" — SOHAM picks the best model per query. Or choose manually from 13+ options.',
+                desc: 'Leave it on "Auto" and SOHAM chooses a model for each request, or pick one from the model selector.',
               },
               {
                 title: 'Response Tone',
@@ -206,7 +207,7 @@ export default function QuickStartPage() {
           {[
             {
               title: 'AI Models Guide',
-              desc: 'Learn about all 13+ models and when to use each',
+              desc: 'Learn about the available models and when to use each',
               href: '/documentation/ai-models',
               icon: Sparkles,
             },

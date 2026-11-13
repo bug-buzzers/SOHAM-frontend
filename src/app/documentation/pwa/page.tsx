@@ -36,8 +36,8 @@ export default function PWAPage() {
         </div>
         <h1 className="text-4xl font-bold tracking-tight">SOHAM as a PWA</h1>
         <p className="text-xl text-muted-foreground max-w-2xl">
-          Install SOHAM directly on your device — no app store required. Get a native-like
-          experience with offline support, fast loading, and a home screen icon.
+          Install SOHAM directly on your device, with no app store required. Get an app-like window,
+          a cached app shell for faster loading, and a home screen icon.
         </p>
       </div>
 
@@ -56,7 +56,7 @@ export default function PWAPage() {
             install it from your browser — no Play Store or App Store needed.
           </p>
           <p>
-            Once installed, it lives on your home screen, opens full-screen, loads instantly from cache,
+            Once installed, it lives on your home screen, opens full-screen, loads quickly from cache,
             and works even with a poor connection.
           </p>
         </CardContent>
@@ -68,7 +68,7 @@ export default function PWAPage() {
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {[
             { icon: Zap,    title: 'Instant Launch',      desc: 'Opens in under a second from your home screen thanks to service-worker caching.' },
-            { icon: WifiOff,title: 'Offline Ready',       desc: 'Browse previous conversations and use cached UI even without internet.' },
+            { icon: WifiOff,title: 'Offline Ready',       desc: 'The app can open without internet and show chats saved on this device. New replies need a connection.' },
             { icon: Home,   title: 'Home Screen Icon',    desc: 'Looks and feels like a native app — no browser chrome, just SOHAM.' },
             { icon: Bell,   title: 'Push Notifications',  desc: 'Receive update alerts on Android (Chrome). Coming to iOS 16.4+.' },
             { icon: RefreshCw, title: 'Auto Updates',     desc: 'Always runs the latest version — updates happen silently in the background.' },

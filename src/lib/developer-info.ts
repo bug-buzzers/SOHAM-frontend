@@ -88,16 +88,15 @@ export const DEVELOPER_INFO = {
 
   // Key Achievements
   achievements: [
-    "Built SOHAM with 26+ AI models at age 16",
-    "Created the world's largest free AI model collection",
-    "Developed innovative 'Six Souls' workflow for Smart Notes Pro",
-    "Achieved sub-second load times with advanced optimization",
-    "Built comprehensive PWA with 99.9% uptime",
-    "Integrated voice synthesis and speech recognition",
-    "Implemented advanced trust scoring system",
-    "Created privacy-first web search integration",
+    "Built SOHAM, a multi-model AI workspace, at age 16",
+    "Connected models from five AI providers behind one chat with Auto mode",
+    "Integrated voice input, read-aloud replies and speech recognition",
+    "Built a PDF analyzer and an image math solver",
+    "Shipped SOHAM as an installable Progressive Web App",
+    "Developed 'Six Souls' workflow for Smart Notes Pro",
+    "Built web search with live data sources",
     "Developed mobile-first responsive design",
-    "Built comprehensive API with developer tools"
+    "Built the HTTP API and its documentation"
   ],
 
   // Current Projects
@@ -131,17 +130,11 @@ export const DEVELOPER_INFO = {
     
   ],
 
-  // Project Statistics
+  // Project Statistics (only figures that can be checked against the codebase;
+  // model counts come from src/lib/model-catalog.ts)
   projectStats: {
     linesOfCode: "50,000+",
-    components: "200+",
     apiEndpoints: "25+",
-    testCoverage: "85%+",
-    lighthouseScore: "95+",
-    modelsIntegrated: 26,
-    countriesReached: "100+",
-    dailyUsers: "100+",
-    uptime: "99.9%"
   },
 
   // Development Philosophy
@@ -183,7 +176,7 @@ export const DEVELOPER_INFO = {
       role: "Founder & Lead Developer",
       company: "CODEEX-AI",
       duration: "2024 – Present",
-      description: "Founded and built SOHAM, a full-stack AI platform integrating 26+ models from providers like Groq, Google Gemini, Hugging Face, and OpenAI. Designed the multi-provider architecture, intelligent routing system, and developer API from scratch."
+      description: "Founded and built SOHAM, a full-stack AI platform integrating models from Groq, Cerebras, Google Gemini, Hugging Face and OpenRouter. Designed the multi-provider architecture, intelligent routing system, and developer API from scratch."
     },
     {
       role: "Full-Stack Developer",
@@ -220,7 +213,7 @@ export const DEVELOPER_INFO = {
     {
       year: "2024 Q2",
       milestone: "Launched Multi-Model Integration",
-      description: "Integrated 26+ AI models from Groq, Hugging Face, Google Gemini, and OpenAI using a custom multi-provider adapter system."
+      description: "Integrated models from Groq, Hugging Face and Google Gemini using a custom multi-provider adapter system."
     },
     {
       year: "2024 Q3",
@@ -241,11 +234,6 @@ export const DEVELOPER_INFO = {
       year: "2025 Q2",
       milestone: "Firebase Auth & Memory System",
       description: "Implemented full Firebase authentication, user profiles, and a persistent AI memory system using Firestore."
-    },
-    {
-      year: "2025 Q3",
-      milestone: "Achieved Global Reach",
-      description: "Platform reached users in 100+ countries with 100+  active users and 99.9% uptime."
     },
     {
       year: "2025 Q4",
@@ -328,7 +316,7 @@ export function getContextualDeveloperResponse(message: string): string {
   } else if (lowercaseMsg.includes('soham meaning') || lowercaseMsg.includes('what does soham mean') || lowercaseMsg.includes('meaning of soham')) {
     response = `**SOHAM** is both a product name and a Sanskrit mantra. In Sanskrit, **Soham (So Hum)** means **"${DEVELOPER_INFO.product.sanskritMeaning}"**. It points to the idea that the individual self is not separate from universal consciousness. Heoster adapted that depth into the product brand while also expanding SOHAM to mean **${DEVELOPER_INFO.product.expandedName}** in the AI context.`;
   } else if (lowercaseMsg.includes('stack') || lowercaseMsg.includes('tech') || lowercaseMsg.includes('built with')) {
-    response = `I was built using **Next.js, TypeScript, and Tailwind CSS**. My creator integrated **26+ AI models** (including GPT-4, Gemini, Claude) using a custom multi-provider architecture he designed from scratch.`;
+    response = `I was built using **Next.js, TypeScript, and Tailwind CSS**. My creator connected models from **Groq, Cerebras, Google Gemini, Hugging Face and OpenRouter** using a custom multi-provider architecture he designed from scratch.`;
   } else if (lowercaseMsg.includes('school') || lowercaseMsg.includes('study')) {
     response = `He studies at **${DEVELOPER_INFO.education.school}** in **${DEVELOPER_INFO.education.class}** (${DEVELOPER_INFO.education.stream} stream). Balancing full-stack AI development with school studies is one of his remarkable achievements!`;
   }

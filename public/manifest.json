@@ -1,7 +1,7 @@
 {
-  "name": "SOHAM — Free AI with 35+ Models",
+  "name": "SOHAM — Adaptive AI Workspace",
   "short_name": "SOHAM",
-  "description": "Free AI platform with 35+ models. Chat, image generation, voice, web search, PDF analysis. Built in India by CODEEX-AI.",
+  "description": "Adaptive AI workspace by CODEEX-AI. Chat with models from five providers, plus image generation, voice, web search and PDF analysis. Built in India.",
   "icons": [
     {
       "src": "/icons/icon-192x192.png",
@@ -41,7 +41,7 @@
       "sizes": "1536x1024",
       "type": "image/png",
       "form_factor": "wide",
-      "label": "SOHAM AI chat with 35+ models"
+      "label": "SOHAM AI chat with multiple models"
     },
     {
       "src": "/search.png",
