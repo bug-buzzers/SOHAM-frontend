@@ -14,7 +14,6 @@ import {
   Image as ImageIcon,
   Globe,
   Zap,
-  Users,
   HelpCircle,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -343,12 +342,6 @@ export default function DocsHomePage() {
               <Button variant="outline" className="gap-2">
                 <HelpCircle className="h-4 w-4" />
                 FAQ
-              </Button>
-            </Link>
-            <Link href="/community">
-              <Button variant="outline" className="gap-2">
-                <Users className="h-4 w-4" />
-                Community
               </Button>
             </Link>
           </div>

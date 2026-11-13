@@ -20,7 +20,6 @@ import {
   Server,
   Shuffle,
   SquareSlash,
-  Users,
   Zap,
   type LucideIcon,
 } from 'lucide-react';
@@ -115,13 +114,6 @@ const TOOLS = [
     description: 'Upload a photo of an equation to see it recognised and solved step by step.',
     href: '/visual-math',
     cta: 'Solve from an image',
-  },
-  {
-    icon: Users,
-    title: 'Community',
-    description: 'Share tips, ask questions, post feedback and suggest features with other SOHAM users.',
-    href: '/community',
-    cta: 'Visit the community',
   },
 ];
 
@@ -312,7 +304,7 @@ function ToolsSection() {
       title="Focused tools beside the chat"
       description="These live under Workspace in the chat sidebar. The PDF Analyzer and Visual Math open after you sign in."
     >
-      <div className="grid gap-5 md:grid-cols-3">
+      <div className="grid gap-5 md:grid-cols-2">
         {TOOLS.map((tool) => (
           <Card key={tool.href} className="flex flex-col rounded-3xl border-border/70">
             <CardHeader className="space-y-4">

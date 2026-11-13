@@ -9,7 +9,6 @@ const FOOTER_COLUMNS = [
       { label: 'AI Services', href: '/ai-services' },
       { label: 'PDF Analyzer', href: '/pdf-analyzer' },
       { label: 'Visual Math', href: '/visual-math' },
-      { label: 'Community', href: '/community' },
     ],
   },
   {

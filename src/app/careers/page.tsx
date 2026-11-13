@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { Mail, Users } from 'lucide-react';
+import { Mail } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { PageHeader } from '@/components/page-header';
@@ -21,8 +21,7 @@ export default function CareersPage() {
           <CardHeader>
             <CardTitle>Want to help?</CardTitle>
             <CardDescription>
-              If you&apos;d like to collaborate, test new features or share feedback, get in touch or join
-              the community.
+              If you&apos;d like to collaborate, test new features or share feedback, get in touch.
             </CardDescription>
           </CardHeader>
           <CardContent className="flex flex-col gap-3 sm:flex-row">
@@ -30,12 +29,6 @@ export default function CareersPage() {
               <Link href="/contact">
                 <Mail className="h-4 w-4" />
                 Contact us
-              </Link>
-            </Button>
-            <Button asChild variant="outline">
-              <Link href="/community">
-                <Users className="h-4 w-4" />
-                Visit the community
               </Link>
             </Button>
           </CardContent>

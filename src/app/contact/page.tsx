@@ -21,6 +21,7 @@ import {
   Star,
   ExternalLink,
   Phone,
+  FileText,
 } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -94,7 +95,7 @@ const contactChannels = [
     label: 'X (Twitter)',
     value: `@${DEVELOPER_INFO.social.Twitter}`,
     href: DEVELOPER_INFO.contact.twitter,
-    description: 'Quick questions, updates, and community chat.',
+    description: 'Quick questions and updates.',
     responseTime: 'Reply times vary',
     color: 'text-foreground',
     bg: 'bg-foreground/10',
@@ -216,12 +217,6 @@ export default function ContactPage() {
                   <Button size="lg" className="gap-2">
                     <Mail className="h-4 w-4" />
                     Email Us
-                  </Button>
-                </Link>
-                <Link href="/community">
-                  <Button size="lg" variant="outline" className="gap-2">
-                    <Users className="h-4 w-4" />
-                    Community
                   </Button>
                 </Link>
               </div>
@@ -412,7 +407,7 @@ export default function ContactPage() {
             {[
               { label: 'FAQ', href: '/faq', icon: HelpCircle, desc: 'Common questions answered' },
               { label: 'Documentation', href: '/documentation', icon: BookOpen, desc: 'Full feature guides' },
-              { label: 'Community', href: '/community', icon: Users, desc: 'Share & discuss with users' },
+              { label: 'Terms of Service', href: '/terms', icon: FileText, desc: 'The rules for using SOHAM' },
               { label: 'AI Chat', href: '/chat', icon: MessageSquare, desc: 'Start chatting now' },
               { label: 'AI Services', href: '/ai-services', icon: Zap, desc: 'All AI tools' },
               { label: 'Privacy Policy', href: '/privacy', icon: Shield, desc: 'How we protect your data' },

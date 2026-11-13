@@ -50,7 +50,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     url('/pricing',       0.75, 'monthly', MONTH),
     url('/blog',          0.70, 'weekly',  WEEK),
     url('/faq',           0.72, 'weekly',  WEEK),
-    url('/community',     0.70, 'daily',   TODAY),
 
     // ── Tier 3 — Support & legal ───────────────────────────────────────────
     url('/contact',       0.65, 'monthly', MONTH),

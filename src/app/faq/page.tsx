@@ -285,7 +285,7 @@ const sections = [
   },
   {
     id: 'community',
-    title: 'Community & Contributions',
+    title: 'Feedback & Contributions',
     icon: Users,
     color: 'text-pink-500',
     bg: 'bg-pink-500/10',
@@ -293,10 +293,6 @@ const sections = [
       {
         q: 'How can I contribute to SOHAM?',
         a: 'Visit our GitHub repository to open issues, suggest features, or submit pull requests. Community feedback directly shapes the product roadmap.',
-      },
-      {
-        q: 'Is there a community forum or discussion board?',
-        a: 'Yes! Visit the /community page to share posts, ask questions, and interact with other SOHAM users. Posts are stored publicly and help build a knowledge base for everyone.',
       },
       {
         q: 'How can I report a bug?',
@@ -490,7 +486,7 @@ export default function FAQPage() {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="grid gap-4 sm:grid-cols-3">
+            <div className="grid gap-4 sm:grid-cols-2">
               <div className="space-y-2">
                 <h4 className="font-semibold text-sm flex items-center gap-2">
                   <MessageSquare className="h-4 w-4 text-primary" />
@@ -513,19 +509,6 @@ export default function FAQPage() {
                 <Link href="/documentation">
                   <Button variant="outline" size="sm" className="gap-2">
                     Browse Docs
-                    <ArrowRight className="h-3.5 w-3.5" />
-                  </Button>
-                </Link>
-              </div>
-              <div className="space-y-2">
-                <h4 className="font-semibold text-sm flex items-center gap-2">
-                  <Users className="h-4 w-4 text-primary" />
-                  Community
-                </h4>
-                <p className="text-xs text-muted-foreground">Ask other SOHAM users for help.</p>
-                <Link href="/community">
-                  <Button variant="outline" size="sm" className="gap-2">
-                    Join Community
                     <ArrowRight className="h-3.5 w-3.5" />
                   </Button>
                 </Link>

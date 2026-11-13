@@ -471,12 +471,6 @@ export const structuredData = {
       {
         '@type': 'ListItem',
         position: 7,
-        name: 'Community',
-        item: 'https://soham-ai.vercel.app/community',
-      },
-      {
-        '@type': 'ListItem',
-        position: 8,
         name: 'Contact',
         item: 'https://soham-ai.vercel.app/contact',
       },
