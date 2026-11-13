@@ -30,9 +30,11 @@ interface ChatInputProps {
   onSendMessage: (message: string) => void;
   isLoading: boolean;
   userId?: string; // Add userId prop
+  /** Text to put in the message box for editing. Pass a new object each time. */
+  draft?: {text: string; id: number} | null;
 }
 
-export function ChatInput({onSendMessage, isLoading, userId = 'anonymous'}: ChatInputProps) {
+export function ChatInput({onSendMessage, isLoading, userId = 'anonymous', draft}: ChatInputProps) {
   const isMobile = useIsMobile();
   const {toast} = useToast();
   const form = useForm<ChatFormValues>({
@@ -49,6 +51,19 @@ export function ChatInput({onSendMessage, isLoading, userId = 'anonymous'}: Chat
   const [isAnalyzingImage, setIsAnalyzingImage] = useState(false);
   const recognitionRef = useRef<any>(null);
   const audioContextRef = useRef<AudioContext | null>(null);
+  const textareaRef = useRef<HTMLTextAreaElement | null>(null);
+
+  // Fill the box with a suggestion and put the cursor at the end.
+  useEffect(() => {
+    if (!draft) return;
+    form.setValue('message', draft.text, {shouldDirty: true, shouldValidate: true});
+    requestAnimationFrame(() => {
+      const el = textareaRef.current;
+      if (!el) return;
+      el.focus();
+      el.setSelectionRange(el.value.length, el.value.length);
+    });
+  }, [draft, form]);
 
   const playSound = () => {
     if (typeof window !== 'undefined' && !audioContextRef.current) {
@@ -311,6 +326,10 @@ export function ChatInput({onSendMessage, isLoading, userId = 'anonymous'}: Chat
                       onKeyDown={handleKeyDown}
                       disabled={isLoading || isVoiceChatActive || isAnalyzingImage}
                       {...field}
+                      ref={el => {
+                        field.ref(el);
+                        textareaRef.current = el;
+                      }}
                     />
                     <div className={cn(
                       'flex items-center justify-between gap-2 border-t px-2 pb-2 pt-2',

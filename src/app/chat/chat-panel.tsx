@@ -180,6 +180,13 @@ export function ChatPanel({
 
   const isLoading = isLoadingFromAI || isSpeaking;
 
+  // A suggestion the user wants to edit before sending. A new object each
+  // time, so picking the same suggestion twice still refills the box.
+  const [draft, setDraft] = useState<{text: string; id: number} | null>(null);
+  const handleEditPrompt = useCallback((text: string) => {
+    setDraft({text, id: Date.now()});
+  }, []);
+
   const getTimeGreeting = () => {
     const hour = new Date().getHours();
     if (hour < 12) return 'Good Morning';
@@ -437,14 +444,14 @@ export function ChatPanel({
       {/* ── Scrollable area (messages OR welcome screen) ── */}
       <div className="flex-1 min-h-0 overflow-y-auto overflow-x-hidden">
         {messages.length === 0 ? (
-          <div className="flex flex-col items-center justify-center px-4 py-6 md:py-12 min-h-full animate-in fade-in slide-in-from-bottom-4 duration-700">
-            <div className="mb-6 md:mb-10 flex flex-col items-center text-center w-full max-w-lg">
-              <div className="mb-5 md:mb-8 relative flex items-center justify-center">
+          <div className="flex flex-col items-center justify-center px-4 py-6 md:py-8 min-h-full animate-in fade-in slide-in-from-bottom-4 duration-700">
+            <div className="mb-6 md:mb-8 flex flex-col items-center text-center w-full max-w-lg">
+              <div className="mb-5 md:mb-6 relative flex items-center justify-center">
                 <div className="absolute inset-0 bg-primary/15 blur-[80px] rounded-full scale-150" />
                 <SohamLogo
                   size={120}
                   priority
-                  className="relative shadow-2xl opacity-90 transition-transform hover:scale-105 duration-500 md:!w-[180px] md:!h-[180px]"
+                  className="relative shadow-2xl opacity-90 transition-transform hover:scale-105 duration-500 md:!w-[136px] md:!h-[136px]"
                 />
               </div>
               <h2 className="text-2xl sm:text-4xl md:text-5xl font-extrabold tracking-tight mb-3 leading-tight">
@@ -456,7 +463,7 @@ export function ChatPanel({
               </p>
             </div>
 
-            <div className="mb-6 md:mb-10 w-full max-w-lg text-center px-2">
+            <div className="mb-6 md:mb-8 w-full max-w-lg text-center px-2">
               <div className="flex flex-wrap justify-center gap-x-4 gap-y-2 text-[10px] md:text-[11px] font-semibold text-muted-foreground uppercase tracking-[0.2em]">
                 <Link href="/about" className="hover:text-primary transition-colors">About</Link>
                 <Link href="/documentation" className="hover:text-primary transition-colors">Docs</Link>
@@ -467,7 +474,7 @@ export function ChatPanel({
             </div>
 
             <div className="w-full max-w-2xl px-0">
-              <ExamplePrompts onSendMessage={handleSendMessage} />
+              <ExamplePrompts onSendMessage={handleSendMessage} onEditPrompt={handleEditPrompt} />
             </div>
           </div>
         ) : (
@@ -523,7 +530,7 @@ export function ChatPanel({
           </div>
         )}
 
-        <ChatInput onSendMessage={handleSendMessage} isLoading={isLoading} userId={user?.uid} />
+        <ChatInput onSendMessage={handleSendMessage} isLoading={isLoading} userId={user?.uid} draft={draft} />
         <p className="px-1 pt-1.5 text-center text-[10px] text-muted-foreground">
           SOHAM by CODEEX-AI
         </p>
