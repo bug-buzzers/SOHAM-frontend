@@ -1,5 +1,6 @@
 import { MetadataRoute } from 'next';
 import {
+  ABOUT_LAST_UPDATED,
   DOCS_LAST_UPDATED,
   PRIVACY_LAST_UPDATED,
   TERMS_LAST_UPDATED,
@@ -8,8 +9,8 @@ import {
 
 const BASE = 'https://soham-ai.vercel.app';
 
-// Rolling dates for marketing pages; docs and legal pages use their real
-// "last updated" dates from src/lib/content-dates.ts.
+// Rolling dates for marketing pages; /about, docs and legal pages use their
+// real "last updated" dates from src/lib/content-dates.ts.
 const TODAY   = new Date().toISOString();
 const WEEK    = new Date(Date.now() - 7  * 86_400_000).toISOString();
 const MONTH   = new Date(Date.now() - 30 * 86_400_000).toISOString();
@@ -38,14 +39,14 @@ export default function sitemap(): MetadataRoute.Sitemap {
     url('/',              1.00, 'daily',   TODAY),
     url('/chat',          0.95, 'daily',   TODAY),
     url('/docs',          0.92, 'daily',   TODAY),
-    url('/about',         0.90, 'weekly',  WEEK),
+    url('/about',         0.90, 'weekly',  toSitemapDate(ABOUT_LAST_UPDATED)),
     url('/soham',         0.90, 'weekly',  WEEK),
 
     // ── Tier 2 — Marketing & discovery ────────────────────────────────────
     url('/features',      0.88, 'weekly',  WEEK),
     url('/models',        0.85, 'weekly',  WEEK),
     url('/integrations',  0.82, 'weekly',  WEEK),
-    url('/about',         0.80, 'monthly', MONTH),
+    url('/about',         0.80, 'monthly', toSitemapDate(ABOUT_LAST_UPDATED)),
     url('/soham',         0.80, 'monthly', MONTH),
     url('/pricing',       0.75, 'monthly', MONTH),
     url('/blog',          0.70, 'weekly',  WEEK),

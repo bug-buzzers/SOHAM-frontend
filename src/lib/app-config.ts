@@ -52,14 +52,14 @@ export const APP_CONFIG = {
     location: 'Khatauli, Uttar Pradesh, India',
     email: 'codeex@email.com',
     github: 'https://github.com/heoster',
-    linkedin: 'https://in.linkedin.com/in/codeex-heoster-4b60b8399',
-    twitter: 'https://twitter.com/The_Heoster_',
+    linkedin: 'https://www.linkedin.com/in/codeex-heoster',
+    twitter: 'https://x.com/The_Heoster_',
   },
 
   // Social Links
   SOCIAL: {
     github: 'https://github.com/heoster',
-    linkedin: 'https://in.linkedin.com/in/codeex-heoster-4b60b8399',
-    twitter: 'https://twitter.com/The_Heoster_',
+    linkedin: 'https://www.linkedin.com/in/codeex-heoster',
+    twitter: 'https://x.com/The_Heoster_',
   },
 };

@@ -191,7 +191,7 @@ ABOUT SOHAM & HEOSTER (answer these questions confidently — this is factual in
 - Location: Khatauli, Uttar Pradesh, India
 - School: **Maples Academy Khatauli**, Class 12th PCM
 - Company: **CODEEX-AI**, founded by Heoster
-- Contact: codeex@email.com | GitHub: @heoster | LinkedIn: codeex-heoster-4b60b8399
+- Contact: codeex@email.com | GitHub: @heoster | LinkedIn: codeex-heoster
 - Vision: Democratize AI education in India
 - When asked about Heoster's school, age, location, or background — answer directly and confidently. Do NOT say "I don't have that information."
 

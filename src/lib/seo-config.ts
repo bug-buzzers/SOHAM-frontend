@@ -114,11 +114,11 @@ export const pageSEO = {
   },
   about: {
     title: `About Heoster — 16-Year-Old Founder of CODEEX-AI & Creator of SOHAM`,
-    description: `Meet Heoster (Harsh), 16-year-old founder of CODEEX-AI and creator of SOHAM from Khatauli, India. He built SOHAM, a multi-model AI workspace with more than 50,000 lines of code.`,
+    description: `Meet Heoster (Harsh Saini), 16-year-old founder of CODEEX-AI and creator of SOHAM from Khatauli, Uttar Pradesh. His journey, projects and links, plus how he built SOHAM, a multi-model AI workspace with more than 50,000 lines of code.`,
     keywords: [
       'Heoster', 'founder of CODEEX-AI', 'creator of SOHAM',
       '16 year old developer india', 'indian ai startup founder',
-      'CODEEX-AI founder', 'Harsh developer','SOHAM', 'SOHAM AI', 'SOHAM by CODEEX-AI', 'CODEEX-AI', 'Heoster',
+      'CODEEX-AI founder', 'Harsh developer', 'Harsh Saini', 'Harsh Saini Khatauli', 'SOHAM', 'SOHAM AI', 'SOHAM by CODEEX-AI', 'CODEEX-AI', 'Heoster',
     ],
   },
   contact: {
@@ -242,8 +242,9 @@ export const structuredData = {
     '@type': 'Person',
     '@id': 'https://soham-ai.vercel.app/#person',
     name: DEVELOPER_INFO.name,
-    alternateName: DEVELOPER_INFO.realName,
+    alternateName: [DEVELOPER_INFO.fullName, DEVELOPER_INFO.realName],
     givenName: DEVELOPER_INFO.realName,
+    familyName: DEVELOPER_INFO.fullName.split(' ').slice(1).join(' '),
     additionalName: DEVELOPER_INFO.alias,
     age: DEVELOPER_INFO.age,
     gender: 'Male',
@@ -284,7 +285,8 @@ export const structuredData = {
       DEVELOPER_INFO.contact.github,
       DEVELOPER_INFO.contact.linkedin,
       DEVELOPER_INFO.contact.twitter,
-      `https://instagram.com/${DEVELOPER_INFO.social.instagram}`,
+      DEVELOPER_INFO.contact.instagram,
+      DEVELOPER_INFO.contact.portfolio,
     ],
   },
   softwareApplication: {

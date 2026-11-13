@@ -16,13 +16,17 @@ export const DEVELOPER_INFO = {
       "For the product, the name bridges spiritual depth and adaptive intelligence: a system designed to feel connected, aware, and responsive rather than mechanical.",
   },
 
-  // Personal Information
+  // Personal information. Checked on 2026-11-13 against Heoster's own public
+  // profiles: github.com/Heoster (profile and README), heoster.vercel.app,
+  // linkedin.com/in/codeex-heoster and instagram.com/codeex._.heoster.
   name: "Heoster",
   alias: "Heoster",
   realName: "Harsh",
+  fullName: "Harsh Saini",
   age: 16,
   location: {
     city: "Khatauli",
+    district: "Muzaffarnagar",
     state: "Uttar Pradesh",
     country: "India"
   },
@@ -46,69 +50,101 @@ export const DEVELOPER_INFO = {
   // Contact & Social
   contact: {
     email: "codeex@email.com",
-    linkedin: "https://in.linkedin.com/in/codeex-heoster-4b60b8399",
+    portfolio: "https://heoster.vercel.app",
+    github: "https://github.com/Heoster",
+    linkedin: "https://www.linkedin.com/in/codeex-heoster",
     linkedinVanity: "codeex-heoster",
-    github: "https://github.com/heoster",
-    twitter: "https://twitter.com/The_Heoster_"
+    twitter: "https://x.com/The_Heoster_",
+    instagram: "https://www.instagram.com/codeex._.heoster"
   },
 
   social: {
-    github: "heoster",
-    instagram: "heoster_official",
-    linkedin: "codeex-heoster-4b60b8399",
+    github: "Heoster",
+    instagram: "codeex._.heoster",
+    linkedin: "codeex-heoster",
     Twitter: "The_Heoster_"
   },
+
+  /** In Heoster's own words, from his GitHub profile README. */
+  quote: "Intelligence should be free, fast, and useful for everyone.",
 
   // Vision & Mission
   vision: "To democratize AI education in India and make advanced technology accessible to every student, regardless of their background or resources.",
 
-  mission: "Building the world's most comprehensive free AI platform to empower the next generation of innovators and creators.",
+  mission: "Make advanced AI tools accessible to everyone at zero cost.",
   founderStory:
-    "Heoster is a young founder-builder from Khatauli who is developing SOHAM as both a serious AI product and a human-centered mission to make advanced tools accessible to students and independent learners.",
+    "Heoster (Harsh Saini) is a student developer from Khatauli, Uttar Pradesh. He started coding in 2023, started CODEEX-AI in 2024 and builds SOHAM to make advanced AI tools free and useful for students and everyone else.",
   humanizedBio:
-    "Heoster (Harsh) is the founder of CODEEX-AI and the developer behind SOHAM. He combines student life, product design, full-stack engineering, and AI systems thinking while building in public from India.",
+    "Heoster is the online name of Harsh Saini, a 16-year-old full-stack developer and Class 12 student from Khatauli in Muzaffarnagar, Uttar Pradesh. He founded CODEEX-AI and builds SOHAM, along with tools for his school and his town.",
 
-  // Technical Skills
+  // Skills listed on his GitHub profile README
   skills: [
-    "React", "Next.js", "TypeScript", "JavaScript",
-    "Node.js", "Python", "Firebase", "Netlify",
-    "Tailwind CSS", "Framer Motion", "AI/ML Integration",
-    "API Development", "PWA Development", "Mobile-First Design",
-    "Performance Optimization", "SEO", "Accessibility",
-    "Git", "GitHub", "CI/CD", "Cloud Deployment"
+    "JavaScript", "TypeScript", "Python", "HTML & CSS",
+    "React", "Next.js", "Vite", "Tailwind CSS", "GSAP", "Three.js",
+    "Node.js", "Express", "Firebase", "MongoDB", "PostgreSQL",
+    "PWA Development", "SEO", "Git", "Docker", "Linux", "Vercel", "Netlify"
   ],
 
-  // AI Technologies
+  // AI work, limited to what SOHAM and his public projects use
   aiTechnologies: [
-    "Groq API Integration", "Hugging Face Models", "Google Gemini",
-    "ElevenLabs Voice Synthesis", "OpenAI GPT Models",
-    "Model Orchestration", "Prompt Engineering", "AI Routing",
-    "Streaming Responses", "Multi-Provider Architecture"
+    "LLM Integration", "Multi-Provider AI Routing", "Prompt Engineering",
+    "Streaming Responses", "Google Gemini API", "Groq API", "OpenRouter",
+    "LangChain", "Image Generation (FLUX)", "Local Models with Ollama"
   ],
 
-  // Key Achievements
+  // Key achievements. Each one can be checked in SOHAM or his public repos.
   achievements: [
     "Built SOHAM, a multi-model AI workspace, at age 16",
     "Connected models from several AI providers behind one chat with Auto mode",
-    "Integrated voice input, read-aloud replies and speech recognition",
-    "Built a PDF analyzer and an image math solver",
+    "Added live tools to the chat: web search, weather, news, cricket, translation and more",
+    "Added image generation, voice input and read-aloud replies",
+    "Built a PDF Analyzer and Visual Math, an image maths solver",
     "Shipped SOHAM as an installable Progressive Web App",
-    "Developed 'Six Souls' workflow for Smart Notes Pro",
-    "Built web search with live data sources",
-    "Developed mobile-first responsive design",
-    "Built the HTTP API and its documentation"
+    "Built ClassBoard, a free smartboard tool for classrooms",
+    "Built a donation portal for a temple being built in his area"
   ],
 
-  // Current Projects
-  currentProjects: [
-    "SOHAM Platform Development",
-    "Smart Notes Pro Enhancement",
-    "Mobile App Development",
-    "API Ecosystem Expansion",
-    "Educational Content Creation",
-    "Community Building",
-    "Performance Optimization"
-  ],
+  // Public projects, from github.com/Heoster and his profile README
+  projects: [
+    {
+      name: "SOHAM",
+      year: "2026",
+      description: "This app: multi-model AI chat with live tools, image generation, voice, a PDF Analyzer and Visual Math.",
+      url: "https://soham-ai.vercel.app",
+    },
+    {
+      name: "CODEEX AI",
+      year: "2025",
+      description: "His earlier AI chat app, with multiple chats, slash commands, web search, voice and a solver for photos of maths problems.",
+      url: "https://codeex-ai.vercel.app",
+      repo: "https://github.com/Heoster/CodeEx-AI-",
+    },
+    {
+      name: "ClassBoard",
+      year: "2026",
+      description: "A free smartboard tool for classrooms: present PDFs, draw and annotate in the browser, then export the result as a PDF.",
+      url: "https://heoster.github.io/ClassBoard-/",
+      repo: "https://github.com/Heoster/ClassBoard-",
+    },
+    {
+      name: "Sri Shakumbhari Devi Mandir portal",
+      year: "2026",
+      description: "A donation portal for a temple being built in Rampur, Khatauli, with a public donor list and a breakdown of what has been spent.",
+      url: "https://mandir-portal.vercel.app",
+    },
+    {
+      name: "JARVIS",
+      year: "2025",
+      description: "A personal AI assistant that runs on free tiers, with tools, long-term memory and study helpers.",
+      repo: "https://github.com/Heoster/jarvis",
+    },
+    {
+      name: "Codeex v5",
+      year: "2025",
+      description: "A desktop app for chatting with open-source AI models on your own computer through Ollama, with streaming replies and saved chats.",
+      repo: "https://github.com/Heoster/codeex-v5",
+    },
+  ] as Array<{ name: string; year: string; description: string; url?: string; repo?: string }>,
 
   // Support Network (Friends who help test and provide feedback)
   friends: [
@@ -130,120 +166,35 @@ export const DEVELOPER_INFO = {
     
   ],
 
-  // Project Statistics (only figures that can be checked against the codebase;
-  // model counts come from src/lib/model-catalog.ts)
+  // Project statistics. Only figures that can be checked against the code:
+  // about 65,000 non-blank lines across the frontend and backend, and 25
+  // frontend API routes (debug and test routes not counted).
   projectStats: {
     linesOfCode: "50,000+",
     apiEndpoints: "25+",
   },
 
-  // Development Philosophy
-  philosophy: [
-    "User-first design and experience",
-    "Performance and speed optimization",
-    "Accessibility and inclusive design",
-    "Open source and transparent development",
-    "Privacy protection and security",
-    "Continuous learning and improvement",
-    "Community-driven innovation",
-    "Democratizing technology access"
-  ],
-
-  // Future Goals
-  futureGoals: [
-    "Expand SOHAM to 1 million users",
-    "Launch native mobile applications",
-    "Create AI education curriculum for schools",
-    "Build developer ecosystem and marketplace",
-    "Establish SOHAM as leading AI platform in India",
-    "Mentor other young developers and entrepreneurs",
-    "Contribute to open source AI community",
-    "Advance AI accessibility and education globally"
-  ],
-
-  // Recognition & Awards
-  recognition: [
-    "Youngest AI platform founder in India",
-    "Featured in tech communities for innovation",
-    "Recognized for democratizing AI access",
-    "Praised for technical excellence at young age",
-    "Community leader in AI education"
-  ],
-
-  // Experience
-  experience: [
-    {
-      role: "Founder & Lead Developer",
-      company: "CODEEX-AI",
-      duration: "2024 – Present",
-      description: "Founded and built SOHAM, a full-stack AI platform integrating models from Google Gemini, Groq and OpenRouter. Designed the multi-provider architecture, intelligent routing system, and developer API from scratch."
-    },
-    {
-      role: "Full-Stack Developer",
-      company: "Self-Employed / Freelance",
-      duration: "2023 – Present",
-      description: "Developed web applications using React, Next.js, TypeScript, and Firebase. Focused on performance optimization, PWA development, and mobile-first design."
-    },
-    {
-      role: "AI/ML Integrations Engineer",
-      company: "CODEEX-AI",
-      duration: "2024 – Present",
-      description: "Designed and implemented adapters for multiple AI providers, built prompt engineering pipelines, streaming response handlers, and a trust-scoring fallback chain manager."
-    },
-    {
-      role: "Open Source Contributor",
-      company: "GitHub / Community",
-      duration: "2023 – Present",
-      description: "Contributed to open source projects and shared tools with the developer community. Actively building in public and mentoring peers."
-    }
-  ],
-
-  // Development Timeline
+  // Journey, from his portfolio (heoster.vercel.app), LinkedIn and GitHub
   timeline: [
     {
       year: "2023",
-      milestone: "Started Web Development",
-      description: "Began learning React, JavaScript, and web fundamentals. Built first personal projects and started contributing to open source."
+      milestone: "Started coding",
+      description: "Learned HTML, CSS and JavaScript."
     },
     {
-      year: "2024 Q1",
-      milestone: "Founded CODEEX-AI",
-      description: "Registered the AI startup and began planning the SOHAM platform architecture."
+      year: "2024",
+      milestone: "Started CODEEX-AI",
+      description: "Went deeper into JavaScript and began building his own projects under the CODEEX-AI name."
     },
     {
-      year: "2024 Q2",
-      milestone: "Launched Multi-Model Integration",
-      description: "Integrated models from Groq, Hugging Face and Google Gemini using a custom multi-provider adapter system."
-    },
-    {
-      year: "2024 Q3",
-      milestone: "Built Developer API & PWA",
-      description: "Launched the public API with 25+ endpoints, developer documentation, and Progressive Web App support with offline capabilities."
-    },
-    {
-      year: "2024 Q4",
-      milestone: "Voice & Multimodal Features",
-      description: "Integrated ElevenLabs voice synthesis, Groq TTS, speech recognition, and multimodal image handling into the platform."
-    },
-    {
-      year: "2025 Q1",
-      milestone: "Developed Smart Notes Pro",
-      description: "Created the revolutionary 'Six Souls' workflow for Smart Notes Pro, combining multiple AI agents for enhanced note-taking."
-    },
-    {
-      year: "2025 Q2",
-      milestone: "Firebase Auth & Memory System",
-      description: "Implemented full Firebase authentication, user profiles, and a persistent AI memory system using Firestore."
-    },
-    {
-      year: "2025 Q4",
-      milestone: "Intelligent Router v3",
-      description: "Shipped the v3.3 multi-model router with intelligent routing rules, fallback chain management, and rate limiting integration."
+      year: "2025",
+      milestone: "First AI apps",
+      description: "Built the CODEEX AI chat app and Codeex Focus, took on freelance web projects with React, Next.js, TypeScript and Firebase, and made JARVIS and Codeex v5."
     },
     {
       year: "2026",
-      milestone: "Continuous Innovation",
-      description: "Ongoing development — expanding the model ecosystem, mobile app, and AI education initiatives."
+      milestone: "SOHAM",
+      description: "Built SOHAM with its own backend, plus ClassBoard for classrooms and a donation portal for a local temple."
     }
   ]
 };
@@ -254,8 +205,8 @@ export const getDeveloperName = () => DEVELOPER_INFO.name;
 export const getDeveloperEmail = () => DEVELOPER_INFO.contact.email;
 export const getDeveloperLinkedIn = () => DEVELOPER_INFO.contact.linkedin;
 export const getDeveloperGitHub = () => `https://github.com/${DEVELOPER_INFO.social.github}`;
-export const getDeveloperInstagram = () => `https://instagram.com/${DEVELOPER_INFO.social.instagram}`;
-export const getDeveloperTwitter = () => `https://twitter.com/${DEVELOPER_INFO.social.Twitter}`;
+export const getDeveloperInstagram = () => DEVELOPER_INFO.contact.instagram;
+export const getDeveloperTwitter = () => DEVELOPER_INFO.contact.twitter;
 
 // Get formatted developer info for display
 export const getFormattedDeveloperInfo = () => ({
@@ -304,7 +255,7 @@ export function getContextualDeveloperResponse(message: string): string {
   const lowercaseMsg = message.toLowerCase();
 
   // Basic intro response
-  let response = `I was created by **${DEVELOPER_INFO.name}** (also known as **${DEVELOPER_INFO.realName}**), a ${DEVELOPER_INFO.age}-year-old developer from ${DEVELOPER_INFO.location.city}, India. He is the founder of **${DEVELOPER_INFO.company.name}** and currently studies ${DEVELOPER_INFO.education.class} ${DEVELOPER_INFO.education.stream} at ${DEVELOPER_INFO.education.school}.`;
+  let response = `I was created by **${DEVELOPER_INFO.name}** (**${DEVELOPER_INFO.fullName}**), a ${DEVELOPER_INFO.age}-year-old developer from ${DEVELOPER_INFO.location.city}, India. He is the founder of **${DEVELOPER_INFO.company.name}** and currently studies ${DEVELOPER_INFO.education.class} ${DEVELOPER_INFO.education.stream} at ${DEVELOPER_INFO.education.school}.`;
 
   // Customization based on specific questions
   if (lowercaseMsg.includes('age') || lowercaseMsg.includes('old')) {

@@ -9,6 +9,9 @@
 export const PRIVACY_LAST_UPDATED = '2026-11-13';
 export const TERMS_LAST_UPDATED = '2026-11-13';
 
+/** When the facts on /about were last checked against Heoster's public profiles. */
+export const ABOUT_LAST_UPDATED = '2026-11-13';
+
 /** Keyed by route. Every page under /documentation should have an entry. */
 export const DOCS_LAST_UPDATED: Record<string, string> = {
   '/documentation': '2026-11-13',
