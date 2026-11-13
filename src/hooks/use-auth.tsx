@@ -60,7 +60,10 @@ function ProtectedRouteInner({children}: {children: ReactNode}) {
   const searchParams = useSearchParams();
 
   useEffect(() => {
-    if (!loading || user) {
+    // Wait until Firebase has restored the session, then send signed-out
+    // visitors to the login page. It comes back here (query included) after
+    // sign-in.
+    if (loading || user) {
       return;
     }
 
