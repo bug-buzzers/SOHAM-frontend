@@ -314,7 +314,7 @@ export const structuredData = {
       'Voice input and read-aloud replies',
       'PDF analyzer: ask questions about an uploaded PDF',
       'Image math solver with step-by-step solutions',
-      'Slash commands: /solve, /search, /summarize',
+      'Slash commands for tools: /weather, /news, /search, /translate, /define and more',
       'Chat history stored in the browser, with export to JSON',
       'Installable Progressive Web App',
     ],

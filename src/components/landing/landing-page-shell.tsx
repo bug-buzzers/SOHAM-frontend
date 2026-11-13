@@ -45,6 +45,23 @@ import { cn } from '@/lib/utils';
 // Only describe behaviour that exists in this codebase. No usage numbers,
 // ratings, uptime, comparisons or "forever" promises.
 
+/** Slash commands the backend recognises (SOHAM-backend tools/agent-tools.ts). */
+const SLASH_COMMANDS = [
+  '/weather',
+  '/news',
+  '/sports',
+  '/finance',
+  '/search',
+  '/translate',
+  '/define',
+  '/grammar',
+  '/factcheck',
+  '/quiz',
+  '/recipe',
+  '/joke',
+  '/sentiment',
+];
+
 interface Feature {
   icon: LucideIcon;
   title: string;
@@ -95,8 +112,8 @@ const FEATURES: Feature[] = [
     icon: SquareSlash,
     title: 'Slash commands',
     description:
-      'Use /solve for step-by-step problem solving, /search for the web, and /summarize to condense long text.',
-    example: '/summarize <paste an article>',
+      'Start a message with a command to go straight to a tool, for example /weather Mumbai. Plain questions work too.',
+    tags: SLASH_COMMANDS,
   },
 ];
 
@@ -128,7 +145,7 @@ const STEPS = [
     icon: MessageSquare,
     title: 'Ask your way',
     description:
-      'Type, speak or upload. Start with /solve, /search or /summarize when you want a specific tool, and leave the model on Auto or choose one.',
+      'Type, speak or upload. Start with a slash command such as /search, /weather or /translate when you want a specific tool, and leave the model on Auto or choose one.',
   },
   {
     icon: History,
@@ -233,12 +250,11 @@ function FactsStrip({ modelStats }: { modelStats: LandingModelStats }) {
   const facts = [
     { value: modelStats.total, label: 'AI models', detail: 'in the chat model selector' },
     { value: modelStats.providers.length, label: 'providers', detail: 'from Groq to OpenRouter' },
-    { value: 3, label: 'slash commands', detail: '/solve, /search, /summarize' },
-    { value: 6, label: 'read-aloud voices', detail: 'for spoken replies' },
+    { value: SLASH_COMMANDS.length, label: 'slash commands', detail: '/weather, /news, /define and more' },
   ];
 
   return (
-    <ul aria-label="SOHAM at a glance" className="mt-4 grid grid-cols-2 gap-3 md:mt-5 md:grid-cols-4 md:gap-4">
+    <ul aria-label="SOHAM at a glance" className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-3 md:mt-5 md:gap-4">
       {facts.map((fact) => (
         <li key={fact.label} className="rounded-2xl border border-border/70 bg-card p-4 shadow-sm md:p-5">
           <p className="text-2xl font-bold tracking-tight md:text-3xl">{fact.value}</p>
@@ -281,7 +297,10 @@ function FeaturesSection() {
                   {feature.tags?.map((tag) => (
                     <li
                       key={tag}
-                      className="rounded-md border border-border/50 bg-background/50 px-2 py-1 text-xs font-medium"
+                      className={cn(
+                        'rounded-md border border-border/50 bg-background/50 px-2 py-1 text-xs font-medium',
+                        tag.startsWith('/') && 'font-mono'
+                      )}
                     >
                       {tag}
                     </li>

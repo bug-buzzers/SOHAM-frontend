@@ -122,7 +122,7 @@ function ExampleChatPreview() {
         <div className="space-y-4 px-4 py-5">
           <div className="flex justify-end">
             <div className="max-w-[85%] rounded-2xl rounded-tr-sm bg-primary px-4 py-2.5 text-sm text-primary-foreground shadow-sm">
-              <span className="font-mono">/solve</span> 2x² − 8x + 6 = 0
+              Solve step by step: 2x² − 8x + 6 = 0
             </div>
           </div>
 
