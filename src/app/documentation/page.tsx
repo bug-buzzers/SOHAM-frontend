@@ -7,8 +7,6 @@ import {
   FileText,
   MessageSquare,
   Search,
-  Settings2,
-  ShieldCheck,
   Sparkles,
   Calculator,
   Cpu,
@@ -16,15 +14,12 @@ import {
   Image as ImageIcon,
   Globe,
   Zap,
-  Brain,
-  Code2,
-  Users,
   HelpCircle,
-  Star,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { getEnabledModels, groupModels, PROVIDER_LABELS } from '@/lib/model-catalog';
 
 export const metadata: Metadata = {
   title: pageSEO.documentation.title,
@@ -40,75 +35,80 @@ export const metadata: Metadata = {
   },
 };
 
+// Provider names from models-config.json, e.g. "Google Gemini · OpenRouter · Groq".
+const PROVIDER_DETAIL = groupModels(getEnabledModels(), 'provider')
+  .map(({ key }) => PROVIDER_LABELS[key] ?? key)
+  .join(' · ');
+
 const coreGuides = [
   {
     title: 'AI Chat & Model Selection',
-    description: 'How to use 35+ AI models, what Auto mode does, how the smart fallback chain works, and when to switch models manually.',
+    description: 'How to use the model selector, what Auto mode does, how fallback works, and when to switch models manually.',
     href: '/documentation/chat',
     icon: MessageSquare,
     badge: 'Core',
-    detail: 'Groq · Cerebras · Gemini · HuggingFace · OpenRouter',
+    detail: PROVIDER_DETAIL,
   },
   {
     title: 'PDF Analyzer',
-    description: 'Upload PDFs up to 5MB. Ask questions, get summaries, extract key points. Powered by Gemini 2.5 Flash with 1M token context.',
+    description: 'Upload a PDF up to 5 MB and ask questions about it, such as a summary or the key points.',
     href: '/documentation/pdf-analysis',
     icon: FileText,
     badge: 'Core',
-    detail: 'Up to 5MB · Gemini 2.5 Flash · Q&A + Summary',
+    detail: 'Up to 5 MB · Questions and summaries',
   },
   {
     title: 'Image Math Solver',
-    description: 'Upload a photo of any equation — handwritten or printed. Get step-by-step solutions. Works with algebra, calculus, geometry.',
+    description: 'Upload a photo of an equation, handwritten or printed, to see it recognised and solved step by step.',
     href: '/documentation/math-solver',
     icon: Calculator,
     badge: 'Core',
-    detail: 'Photo upload · Step-by-step · All math types',
+    detail: 'Photo upload · Step-by-step',
   },
   {
     title: 'Web Search',
-    description: 'Auto-triggers on news, weather, sports, finance, and factual queries. DuckDuckGo + GNews + Open-Meteo + CricAPI + CoinGecko.',
+    description: 'Use /search, or ask about something recent, and SOHAM can search the web before answering. Sources include Tavily, Wikipedia and DuckDuckGo, plus GNews, Open-Meteo, CricAPI, CoinGecko and Alpha Vantage for news, weather, cricket and prices.',
     href: '/documentation/web-search',
     icon: Search,
     badge: 'Live Data',
-    detail: 'Auto-trigger · 6 data sources · Citations',
+    detail: '/search or automatic · Live data sources',
   },
   {
     title: 'Image Generation',
-    description: 'Free, unlimited image generation. Pollinations.ai FLUX (primary) + Cloudflare Workers AI + HuggingFace FLUX.1-schnell fallback.',
+    description: 'Describe an image in chat and SOHAM generates it with the FLUX model on Pollinations.ai. Images are saved at a public link so they can be shown in chat. Rate limits apply.',
     href: '/documentation/image-generation',
     icon: ImageIcon,
     badge: 'Creative',
-    detail: 'FLUX · Cloudflare · HuggingFace · ~5s · Free',
+    detail: 'FLUX · Pollinations.ai · Download in chat',
   },
   {
     title: 'Voice Features',
-    description: 'Speech-to-text via Groq Whisper V3 Turbo. Text-to-speech via Groq Orpheus TTS with 6 voices and vocal direction tags.',
-    href: '/documentation/voice',
+    description: 'Dictate messages with your browser\'s speech recognition, and have replies read aloud with your browser\'s built-in voices.',
+    href: '/documentation/settings',
     icon: Mic,
     badge: 'Voice',
-    detail: 'Whisper V3 Turbo · 6 voices · [cheerful] [whisper]',
+    detail: 'Browser speech · Read aloud',
   },
 ];
 
-const skillGuides = [
-  { title: 'Translation', desc: '50+ languages, auto source detection, formal/casual tone', href: '/documentation/commands', icon: Globe },
-  { title: 'Grammar Check', desc: 'Fix grammar, improve style, full rewrite mode', href: '/documentation/commands', icon: Sparkles },
-  { title: 'Quiz Generator', desc: 'MCQ, True/False, Flashcards — up to 20 questions', href: '/documentation/commands', icon: Brain },
-  { title: 'Sentiment Analysis', desc: 'Positive/negative/neutral, emotion breakdown, tone', href: '/documentation/commands', icon: Star },
-  { title: 'Fact-Check', desc: 'Web search + AI verdict with confidence score', href: '/documentation/commands', icon: ShieldCheck },
-  { title: 'Dictionary', desc: 'Definitions, IPA, synonyms, antonyms, etymology', href: '/documentation/commands', icon: BookOpen },
+const askExamples = [
+  { title: 'Translate', prompt: 'Translate this paragraph into Hindi', icon: Globe },
+  { title: 'Fix grammar', prompt: 'Check the grammar of this email and suggest fixes', icon: Sparkles },
+  { title: 'Practice quiz', prompt: 'Make a 5-question quiz on photosynthesis', icon: HelpCircle },
+  { title: 'Explain a word', prompt: 'What does "ephemeral" mean? Give two example sentences', icon: BookOpen },
+  { title: 'Summarize', prompt: '/summarize followed by the text you want condensed', icon: FileText },
+  { title: 'Solve step by step', prompt: '/solve 3x + 5 = 20', icon: Calculator },
 ];
 
 const operationsGuides = [
   {
     title: 'Quick Start',
-    description: 'From landing page to first AI response in under 60 seconds. No signup required for basic use.',
+    description: 'Sign in with Google or email and send your first message.',
     href: '/documentation/quick-start',
   },
   {
     title: 'Slash Commands',
-    description: '/solve /summarize /search /news /weather /translate /grammar /quiz /recipe /joke /define /factcheck — all 16 commands.',
+    description: '/solve, /search and /summarize: what each command does and when to use it.',
     href: '/documentation/commands',
   },
   {
@@ -118,7 +118,7 @@ const operationsGuides = [
   },
   {
     title: 'Security & Privacy',
-    description: 'Local chat storage, Firebase auth, no data selling, GDPR compliance, open source MIT License.',
+    description: 'What is saved in your browser and on SOHAM\'s server, how sign-in works, and what is sent to AI providers.',
     href: '/documentation/security',
   },
   {
@@ -128,18 +128,24 @@ const operationsGuides = [
   },
   {
     title: 'API Reference',
-    description: '25+ endpoints: /api/chat, /api/ai/*, /api/image/*, /api/voice/*, /api/memory/*.',
+    description: 'The HTTP endpoints behind SOHAM: chat, AI tools, image generation, voice and web search.',
     href: '/documentation/api-reference',
   },
 ];
 
-const modelProviders = [
-  { name: 'Groq', models: 'Llama 4 Scout 17B, GPT-OSS 120B, Qwen3 32B, Llama 3.1 8B Instant', color: 'text-orange-400', bg: 'bg-orange-400/10' },
-  { name: 'Cerebras', models: 'Qwen 3 235B, GPT-OSS 120B, GLM 4.7, Llama 3.1 8B', color: 'text-blue-400', bg: 'bg-blue-400/10' },
-  { name: 'Google', models: 'Gemini 2.5 Pro, Gemini 2.5 Flash, Imagen 3, Veo 2', color: 'text-green-400', bg: 'bg-green-400/10' },
-  { name: 'HuggingFace', models: 'DeepSeek R1 70B, Llama 3.3 70B, Qwen 2.5 72B, Qwen 2.5 7B', color: 'text-yellow-400', bg: 'bg-yellow-400/10' },
-  { name: 'OpenRouter', models: 'NVIDIA Nemotron 120B, Arcee Trinity 400B, MiniMax M2.5, Gemma 3 27B', color: 'text-purple-400', bg: 'bg-purple-400/10' },
-];
+const PROVIDER_STYLES: Record<string, { color: string; bg: string }> = {
+  google: { color: 'text-green-400', bg: 'bg-green-400/10' },
+  openrouter: { color: 'text-purple-400', bg: 'bg-purple-400/10' },
+  groq: { color: 'text-orange-400', bg: 'bg-orange-400/10' },
+};
+
+// Built from models-config.json, the same list the chat model selector shows.
+const enabledModels = getEnabledModels();
+const modelProviders = groupModels(enabledModels, 'provider').map(({ key, models }) => ({
+  name: PROVIDER_LABELS[key] ?? key,
+  models: models.map((model) => model.shortName).join(', '),
+  ...(PROVIDER_STYLES[key] ?? { color: 'text-primary', bg: 'bg-primary/10' }),
+}));
 
 export default function DocsHomePage() {
   return (
@@ -156,8 +162,8 @@ export default function DocsHomePage() {
             Everything you need to use SOHAM
           </h1>
           <p className="max-w-3xl text-lg text-muted-foreground">
-            35+ AI models, real-time web search, free image generation, voice both ways, PDF analysis,
-            and 13 specialized skills. All free. All documented here.
+            {enabledModels.length} AI models, web search, image generation, voice input and read-aloud,
+            PDF analysis and an image math solver, and how to use each of them.
           </p>
         </div>
         <div className="flex flex-wrap gap-3">
@@ -183,10 +189,10 @@ export default function DocsHomePage() {
       {/* ── Stats ── */}
       <section className="grid grid-cols-2 gap-3 sm:grid-cols-4">
         {[
-          { label: 'AI Models', value: '35+', icon: Cpu },
-          { label: 'Specialized Skills', value: '13', icon: Brain },
-          { label: 'Slash Commands', value: '16', icon: Zap },
-          { label: 'Price', value: '$0', icon: Star },
+          { label: 'AI Models', value: String(enabledModels.length), icon: Cpu },
+          { label: 'Providers', value: String(modelProviders.length), icon: Globe },
+          { label: 'Slash Commands', value: '3', icon: Zap },
+          { label: 'PDF Size Limit', value: '5 MB', icon: FileText },
         ].map((s) => (
           <Card key={s.label} className="text-center">
             <CardContent className="p-4">
@@ -203,10 +209,10 @@ export default function DocsHomePage() {
         <div>
           <h2 className="text-2xl font-bold flex items-center gap-2">
             <Cpu className="h-6 w-6 text-primary" />
-            35+ AI Models — 5 Providers
+            {enabledModels.length} AI Models — {modelProviders.length} Providers
           </h2>
           <p className="text-sm text-muted-foreground mt-1">
-            Auto mode picks the best model for every query. Or choose manually from the model selector.
+            Leave the selector on Auto and SOHAM chooses a model for each request, or pick one yourself.
           </p>
         </div>
         <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
@@ -223,8 +229,8 @@ export default function DocsHomePage() {
               Auto Mode
             </div>
             <p className="text-xs text-muted-foreground leading-relaxed">
-              Intent detector classifies your query into 13 types and routes to the best model automatically.
-              Coding → DeepSeek. Long docs → Gemini. Speed → Groq.
+              Auto (Smart Routing) looks at what you ask and chooses a model for it. Each reply shows which
+              model answered, and you can switch manually at any time.
             </p>
           </div>
         </div>
@@ -264,50 +270,27 @@ export default function DocsHomePage() {
         </div>
       </section>
 
-      {/* ── Specialized Skills ── */}
+      {/* ── Things to ask ── */}
       <section className="space-y-4">
         <div>
           <h2 className="text-2xl font-bold flex items-center gap-2">
-            <Brain className="h-6 w-6 text-primary" />
-            13 Specialized AI Skills
+            <MessageSquare className="h-6 w-6 text-primary" />
+            Things you can ask
           </h2>
           <p className="text-sm text-muted-foreground mt-1">
-            Dedicated AI pipelines for specific tasks — not just general prompting.
-            Trigger naturally in conversation or use slash commands.
+            SOHAM is a general assistant, so plain requests work. A few examples to try in chat:
           </p>
         </div>
         <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-          {skillGuides.map((s) => (
-            <Link key={s.title} href={s.href}>
+          {askExamples.map((example) => (
+            <Link key={example.title} href="/chat">
               <div className="flex items-start gap-3 rounded-xl border bg-card p-4 transition-all hover:border-primary/40 hover:bg-card/80 h-full">
                 <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-primary/10">
-                  <s.icon className="h-4 w-4 text-primary" />
+                  <example.icon className="h-4 w-4 text-primary" />
                 </div>
                 <div>
-                  <p className="text-sm font-semibold">{s.title}</p>
-                  <p className="text-xs text-muted-foreground mt-0.5">{s.desc}</p>
-                </div>
-              </div>
-            </Link>
-          ))}
-          {/* Extra skills */}
-          {[
-            { title: 'Recipe Generator', desc: 'Full recipes with ingredients, steps, nutrition' },
-            { title: 'Joke & Fun', desc: 'Jokes, puns, roasts, riddles, fun facts' },
-            { title: 'Text Classification', desc: 'Auto or custom categories, multi-label support' },
-            { title: 'Solve (Math/Code)', desc: 'Step-by-step math and code solutions via /solve' },
-            { title: 'Summarize', desc: 'Condense any text to key points via /summarize' },
-            { title: 'Fact-Check', desc: 'Web search + AI verdict with confidence score' },
-            { title: 'Image Solver', desc: 'Solve equations from uploaded photos' },
-          ].slice(0, 7).map((s) => (
-            <Link key={s.title} href="/documentation/commands">
-              <div className="flex items-start gap-3 rounded-xl border bg-card p-4 transition-all hover:border-primary/40 hover:bg-card/80 h-full">
-                <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-primary/10">
-                  <Sparkles className="h-4 w-4 text-primary" />
-                </div>
-                <div>
-                  <p className="text-sm font-semibold">{s.title}</p>
-                  <p className="text-xs text-muted-foreground mt-0.5">{s.desc}</p>
+                  <p className="text-sm font-semibold">{example.title}</p>
+                  <p className="text-xs text-muted-foreground mt-0.5">{example.prompt}</p>
                 </div>
               </div>
             </Link>
@@ -344,7 +327,8 @@ export default function DocsHomePage() {
           <div className="space-y-2">
             <h2 className="text-2xl font-bold">Ready to start?</h2>
             <p className="text-sm text-muted-foreground max-w-lg">
-              No signup required for basic use. Create a free account to save chat history and sync settings across devices.
+              Sign in with Google or email to start chatting. Your chat list and settings are saved in this browser,
+              and SOHAM&apos;s server keeps a memory of your chats so it can pick up context later.
             </p>
           </div>
           <div className="flex flex-wrap gap-3">
@@ -358,12 +342,6 @@ export default function DocsHomePage() {
               <Button variant="outline" className="gap-2">
                 <HelpCircle className="h-4 w-4" />
                 FAQ
-              </Button>
-            </Link>
-            <Link href="/community">
-              <Button variant="outline" className="gap-2">
-                <Users className="h-4 w-4" />
-                Community
               </Button>
             </Link>
           </div>

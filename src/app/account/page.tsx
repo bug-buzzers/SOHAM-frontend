@@ -34,7 +34,6 @@ import {
   Loader2,
   Sparkles,
   Image,
-  Video,
   Search,
   Mic,
   Volume2,
@@ -43,7 +42,6 @@ import {
   Settings as SettingsIcon,
   Palette,
   Users,
-  ArrowRight,
 } from 'lucide-react';
 import Link from 'next/link';
 import { toast } from 'sonner';
@@ -105,49 +103,43 @@ export default function AccountPage() {
     {
       icon: Sparkles,
       title: 'Multi-Model AI',
-      description: 'Access Groq, Google Gemini, Cerebras, and HuggingFace models',
+      description: 'Google Gemini, OpenRouter and Groq models, or Auto mode',
       status: 'active',
     },
     {
       icon: Image,
       title: 'Image Generation',
-      description: 'SOHAM pipeline with HuggingFace FLUX.1-schnell',
-      status: 'active',
-    },
-    {
-      icon: Video,
-      title: 'Video Generation',
-      description: 'Google Veo 3.1 for AI video creation',
+      description: 'FLUX images generated through Pollinations.ai',
       status: 'active',
     },
     {
       icon: Search,
       title: 'Web Search',
-      description: 'Real-time web search',
-      status: 'planned',
+      description: 'Looks up current information on the web',
+      status: 'active',
     },
     {
       icon: Mic,
-      title: 'Speech-to-Text',
-      description: 'Groq Whisper V3 Turbo',
+      title: 'Voice Input',
+      description: 'Uses your browser\'s speech recognition',
       status: 'active',
     },
     {
       icon: Volume2,
-      title: 'Text-to-Speech',
-      description: 'Groq Orpheus TTS with 6 voices',
+      title: 'Read Aloud',
+      description: 'Uses your browser\'s built-in voices',
       status: 'active',
     },
     {
       icon: MessageSquare,
       title: 'Smart Intent Detection',
-      description: 'Automatic routing',
+      description: 'Sends each message to chat, web search or image generation',
       status: 'active',
     },
     {
       icon: Zap,
       title: 'Memory System',
-      description: 'Context-aware conversations',
+      description: 'Saves chat history and facts from your chats to your account',
       status: 'beta',
     }
   ];
@@ -360,30 +352,6 @@ export default function AccountPage() {
             </CardContent>
           </Card>
 
-          {/* Community Banner */}
-          <Link href="/community">
-            <Card className="mb-8 border-primary/30 bg-gradient-to-r from-primary/10 via-primary/5 to-transparent hover:border-primary/60 hover:shadow-md transition-all cursor-pointer group">
-              <CardContent className="pt-5 pb-5">
-                <div className="flex items-center justify-between gap-4">
-                  <div className="flex items-center gap-4">
-                    <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-primary/15 text-2xl">
-                      🌐
-                    </div>
-                    <div>
-                      <h3 className="font-semibold text-base group-hover:text-primary transition-colors">
-                        SOHAM Community
-                      </h3>
-                      <p className="text-sm text-muted-foreground">
-                        Share tips, ask questions, and connect with other users
-                      </p>
-                    </div>
-                  </div>
-                  <ArrowRight className="h-5 w-5 text-muted-foreground group-hover:text-primary group-hover:translate-x-1 transition-all shrink-0" />
-                </div>
-              </CardContent>
-            </Card>
-          </Link>
-
           <Tabs defaultValue="profile" className="space-y-6">
             <TabsList className="grid w-full grid-cols-4">
               <TabsTrigger value="profile">
@@ -561,7 +529,7 @@ export default function AccountPage() {
                       </SelectContent>
                     </Select>
                     <p className="text-xs text-muted-foreground">
-                      Powered by Groq Orpheus TTS
+                      Read-aloud uses your browser&apos;s built-in voices. A preset applies only if your browser has a voice with that name.
                     </p>
                   </div>
                 </CardContent>

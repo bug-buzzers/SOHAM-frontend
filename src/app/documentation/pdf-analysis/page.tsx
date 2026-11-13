@@ -74,10 +74,10 @@ export default function PDFAnalysisPage() {
             description="Select and upload your PDF file"
             icon={Upload}
             details={[
-              'Drag & drop or click to browse',
-              'Supports files up to 10MB',
-              'Automatic text extraction',
-              'Secure processing'
+              'Choose a PDF from your device',
+              'Files up to 5 MB',
+              'Sent over HTTPS',
+              'Not saved by SOHAM'
             ]}
           />
           <StepCard
@@ -89,19 +89,19 @@ export default function PDFAnalysisPage() {
               'Natural language queries',
               'Specific information requests',
               'Summary and analysis questions',
-              'Multiple questions supported'
+              'Ask follow-up questions one at a time'
             ]}
           />
           <StepCard
             step={3}
             title="Get AI Insights"
-            description="Receive detailed answers with citations"
+            description="Receive answers based on the document"
             icon={Brain}
             details={[
-              'Contextual understanding',
-              'Page number references',
-              'Relevant quotes included',
-              'Comprehensive analysis'
+              'Answers drawn from the PDF',
+              'Ask about specific sections or pages',
+              'Ask for quotes or lists if you need them',
+              'Check important details against the original'
             ]}
           />
         </div>
@@ -266,7 +266,7 @@ export default function PDFAnalysisPage() {
                   Supported Features
                 </h4>
                 <ul className="text-sm space-y-1 text-green-600 dark:text-green-400">
-                  <li>• PDF files up to 10MB</li>
+                  <li>• PDF files up to 5 MB</li>
                   <li>• Text-based PDFs (searchable)</li>
                   <li>• Multi-page documents</li>
                   <li>• Multiple languages</li>
@@ -283,11 +283,11 @@ export default function PDFAnalysisPage() {
                   Current Limitations
                 </h4>
                 <ul className="text-sm space-y-1 text-orange-600 dark:text-orange-400">
-                  <li>• Scanned PDFs (image-only) not supported</li>
+                  <li>• Scanned (image-only) PDFs may not work well</li>
                   <li>• Password-protected files not supported</li>
                   <li>• Complex graphics and charts limited</li>
-                  <li>• Very large files (&gt;10MB) not accepted</li>
-                  <li>• Handwritten text not recognized</li>
+                  <li>• Files over 5 MB are not accepted</li>
+                  <li>• Handwritten text may not be recognised</li>
                 </ul>
               </div>
             </div>
@@ -319,21 +319,21 @@ export default function PDFAnalysisPage() {
             <div className="space-y-3">
               <h4 className="font-semibold text-green-600">✅ Security Measures</h4>
               <ul className="text-sm space-y-1">
-                <li>• Secure file upload and processing</li>
-                <li>• Documents processed in memory only</li>
-                <li>• No permanent storage of your files</li>
-                <li>• Encrypted data transmission</li>
-                <li>• Automatic cleanup after processing</li>
+                <li>• The PDF is uploaded over HTTPS</li>
+                <li>• It goes to SOHAM&apos;s server only for your request</li>
+                <li>• SOHAM doesn&apos;t keep a copy of the file</li>
+                <li>• An AI model provider reads it to answer you</li>
+                <li>• Provider terms apply, so avoid sensitive documents</li>
               </ul>
             </div>
             <div className="space-y-3">
               <h4 className="font-semibold text-blue-600">🛡️ Privacy Protection</h4>
               <ul className="text-sm space-y-1">
-                <li>• Files are not saved or stored</li>
-                <li>• Content is not used for training</li>
-                <li>• Processing happens in real-time</li>
-                <li>• No sharing with third parties</li>
-                <li>• GDPR and privacy compliant</li>
+                <li>• SOHAM doesn&apos;t save uploaded PDFs</li>
+                <li>• SOHAM doesn&apos;t train models on your files</li>
+                <li>• Processing happens when you ask</li>
+                <li>• The PDF is sent to an AI provider to answer you</li>
+                <li>• Details are in the Privacy Policy</li>
               </ul>
             </div>
           </div>
@@ -363,12 +363,12 @@ export default function PDFAnalysisPage() {
             <WorkflowStep
               step={3}
               action="Ask: 'What methodology was used?'"
-              result="Detailed explanation of research methods with page references"
+              result="Explanation of the research methods described in the paper"
             />
             <WorkflowStep
               step={4}
               action="Ask: 'What are the key findings?'"
-              result="Summary of main results with supporting data and quotes"
+              result="Summary of the main results and the data behind them"
             />
             <WorkflowStep
               step={5}

@@ -5,6 +5,7 @@ import { ArrowLeft, FileText, Shield, AlertCircle, Scale, UserCheck } from 'luci
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Alert, AlertDescription } from '@/components/ui/alert';
+import { TERMS_LAST_UPDATED, formatContentDate } from '@/lib/content-dates';
 
 export const metadata: Metadata = {
   title: pageSEO.terms.title,
@@ -40,7 +41,9 @@ export default function TermsPage() {
             </div>
             <div>
               <h1 className="text-4xl font-bold">Terms of Service</h1>
-              <p className="text-muted-foreground mt-1">Last updated: February 21, 2026</p>
+              <p className="text-muted-foreground mt-1">
+                Last updated: <time dateTime={TERMS_LAST_UPDATED}>{formatContentDate(TERMS_LAST_UPDATED)}</time>
+              </p>
             </div>
           </div>
 
@@ -104,15 +107,16 @@ export default function TermsPage() {
               </p>
               <ul className="list-disc list-inside space-y-2 ml-4">
                 <li>AI-powered chat and conversation</li>
-                <li>Code generation and analysis</li>
-                <li>Mathematical problem solving</li>
+                <li>Help with writing, explaining and debugging code</li>
+                <li>Mathematical problem solving, including from photos of equations</li>
                 <li>PDF document analysis</li>
-                <li>Smart note-taking and organization</li>
-                <li>Web search integration</li>
-                <li>Text-to-speech capabilities</li>
+                <li>Image generation and image analysis</li>
+                <li>Web search with live data</li>
+                <li>Voice input and read-aloud, using your browser&apos;s speech features</li>
+                <li>A public community board</li>
               </ul>
               <p>
-                We provide access to 35+ AI models from multiple providers including Groq, Google, Hugging Face, and Cerebras. Services are provided "as is" and may be modified or discontinued at any time.
+                We provide access to AI models from Google (Gemini), OpenRouter and Groq, and generate images through Pollinations.ai. The models and providers available can change. Services are provided "as is" and may be modified or discontinued at any time.
               </p>
             </CardContent>
           </Card>
@@ -189,6 +193,9 @@ export default function TermsPage() {
                 <p>
                   You retain ownership of any content you submit to SOHAM. By submitting content, you grant us a worldwide, non-exclusive, royalty-free license to use, store, and process your content solely to provide and improve our services.
                 </p>
+                <p className="mt-2">
+                  This includes saving your chats as memory for your account and, as described in our Privacy Policy, adding some questions, corrections and suggestions to a knowledge base that SOHAM uses when answering other people. Community posts and the links to images you generate are public.
+                </p>
               </div>
               <div>
                 <h4 className="font-semibold mb-2">AI-Generated Content</h4>
@@ -228,7 +235,7 @@ export default function TermsPage() {
               <div>
                 <h4 className="font-semibold mb-2">Third-Party Models</h4>
                 <p>
-                  AI models provided through our platform are subject to their respective providers' terms and licenses. We integrate models from Groq, Google, Hugging Face, and Cerebras.
+                  AI models and services provided through our platform are subject to their respective providers' terms and licenses. We currently use models from Google (Gemini), OpenRouter and Groq, and Pollinations.ai for image generation.
                 </p>
               </div>
             </CardContent>
@@ -246,9 +253,10 @@ export default function TermsPage() {
               <div>
                 <h4 className="font-semibold mb-2">Data Collection</h4>
                 <ul className="list-disc list-inside space-y-1 ml-4">
-                  <li>We collect information you provide during registration and use</li>
-                  <li>We may collect usage data to improve our services</li>
-                  <li>We use Firebase for authentication and data storage</li>
+                  <li>We collect information you provide during registration and use, including your messages</li>
+                  <li>When you are signed in, SOHAM&apos;s server saves your chat history and memories from your chats to personalise replies</li>
+                  <li>We use Firebase Authentication for accounts, and Supabase and Upstash to store chat history, memories, community posts and generated images</li>
+                  <li>We collect usage data through Google Analytics</li>
                 </ul>
               </div>
               <p>
@@ -303,7 +311,7 @@ export default function TermsPage() {
               <div>
                 <h4 className="font-semibold mb-2">By You</h4>
                 <p>
-                  You may terminate your account at any time through the user management page. Upon termination, your access to the service will cease.
+                  You may delete your account at any time on the Account settings page. Upon termination, your access to the service will cease. Deleting your account does not delete the data SOHAM&apos;s server has saved about you; our Privacy Policy explains how to ask us to delete it.
                 </p>
               </div>
               <div>

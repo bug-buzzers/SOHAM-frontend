@@ -21,6 +21,7 @@ import {
   Star,
   ExternalLink,
   Phone,
+  FileText,
 } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -63,7 +64,7 @@ const contactChannels = [
     value: DEVELOPER_INFO.contact.email,
     href: `mailto:${DEVELOPER_INFO.contact.email}`,
     description: 'Best for detailed questions, bug reports, and partnerships.',
-    responseTime: 'Usually within 24 hours',
+    responseTime: 'Reply times vary',
     color: 'text-blue-500',
     bg: 'bg-blue-500/10',
   },
@@ -73,7 +74,7 @@ const contactChannels = [
     value: `@${DEVELOPER_INFO.social.github}`,
     href: DEVELOPER_INFO.contact.github,
     description: 'Open issues, contribute code, or browse the source.',
-    responseTime: 'Monitored daily',
+    responseTime: 'Public issue tracker',
     color: 'text-foreground',
     bg: 'bg-foreground/10',
     external: true,
@@ -84,7 +85,7 @@ const contactChannels = [
     value: 'Heoster / CODEEX-AI',
     href: DEVELOPER_INFO.contact.linkedin,
     description: 'Professional inquiries, collaborations, and networking.',
-    responseTime: 'Usually within 48 hours',
+    responseTime: 'Reply times vary',
     color: 'text-sky-500',
     bg: 'bg-sky-500/10',
     external: true,
@@ -94,8 +95,8 @@ const contactChannels = [
     label: 'X (Twitter)',
     value: `@${DEVELOPER_INFO.social.Twitter}`,
     href: DEVELOPER_INFO.contact.twitter,
-    description: 'Quick questions, updates, and community chat.',
-    responseTime: 'Fastest response',
+    description: 'Quick questions and updates.',
+    responseTime: 'Reply times vary',
     color: 'text-foreground',
     bg: 'bg-foreground/10',
     external: true,
@@ -148,12 +149,12 @@ const supportTopics = [
 ];
 
 const faqHighlights = [
-  { q: 'Is SOHAM completely free?', a: 'Yes — all 35+ models, voice, PDF analysis, and image generation are free forever. No credit card, no subscription.' },
+  { q: 'Is SOHAM completely free?', a: 'Yes. There is nothing to pay for today: no subscriptions, no credits and no credit card. Usage limits apply because SOHAM relies on third-party AI providers.' },
   { q: 'How do I install SOHAM on my phone?', a: 'Android: Chrome → menu → "Add to Home screen". iOS: Safari → share → "Add to Home Screen". Works as a full PWA.' },
-  { q: 'Which AI model should I use?', a: 'Use Auto mode — it picks the best model for your query automatically. For coding, DeepSeek is best. For speed, Groq Llama.' },
-  { q: 'Does SOHAM store my conversations?', a: 'Conversations are stored locally in your browser only. We do not log or monitor your chats on our servers.' },
+  { q: 'Which AI model should I use?', a: 'Start with Auto mode, which chooses a model for each request and tries another if one fails. To pick one yourself, Gemini 3.6 Flash is a good all-rounder and Gemini 3.5 Flash-Lite is quick.' },
+  { q: 'Does SOHAM store my conversations?', a: 'Yes. Your chat list is saved in your browser, and SOHAM\'s server also saves your messages, and facts it picks up from them, linked to your account. Each message is sent to an AI provider to generate the reply. See the Privacy Policy for details.' },
   { q: 'How do I report a bug or request a feature?', a: 'Use the contact form below or email us directly. Include as much detail as possible for bug reports.' },
-  { q: 'Can I use SOHAM for commercial projects?', a: 'Yes, SOHAM is free to use for personal and commercial projects. See our Terms of Service for full details.' },
+  { q: 'Can I use SOHAM for commercial projects?', a: 'The Terms of Service explain how SOHAM may be used. If you are planning commercial use, please contact us first.' },
 ];
 
 export default function ContactPage() {
@@ -202,14 +203,14 @@ export default function ContactPage() {
             <div className="space-y-4">
               <Badge variant="outline" className="gap-2 text-sm">
                 <MessageSquare className="h-3.5 w-3.5 text-primary" />
-                We respond to every message
+                Built by one developer
               </Badge>
               <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight">
                 Get in Touch with <span className="text-primary">SOHAM</span>
               </h1>
               <p className="text-lg text-muted-foreground leading-relaxed">
                 Whether you have a question, found a bug, want to collaborate, or just want to say hi —
-                we&apos;re here. SOHAM is built by one developer who genuinely reads every message.
+                we&apos;re here. SOHAM is built by one developer, so your message goes straight to him.
               </p>
               <div className="flex flex-wrap gap-3 pt-2">
                 <Link href={`mailto:${DEVELOPER_INFO.contact.email}`}>
@@ -218,20 +219,14 @@ export default function ContactPage() {
                     Email Us
                   </Button>
                 </Link>
-                <Link href="/community">
-                  <Button size="lg" variant="outline" className="gap-2">
-                    <Users className="h-4 w-4" />
-                    Community
-                  </Button>
-                </Link>
               </div>
             </div>
             <div className="grid grid-cols-2 gap-3">
               {[
-                { label: 'Response Time', value: '< 24h', icon: Clock },
-                { label: 'Support Channels', value: '4+', icon: MessageSquare },
+                { label: 'Reply time', value: 'Varies', icon: Clock },
+                { label: 'Support channels', value: '4', icon: MessageSquare },
                 { label: 'Languages', value: 'EN / HI', icon: MapPin },
-                { label: 'Availability', value: '24/7', icon: Zap },
+                { label: 'Built by', value: 'One developer', icon: Zap },
               ].map((stat) => (
                 <div key={stat.label} className="rounded-2xl border bg-background/80 p-4 text-center">
                   <stat.icon className="h-5 w-5 text-primary mx-auto mb-2" />
@@ -370,10 +365,6 @@ export default function ContactPage() {
                 CODEEX-AI was founded in {DEVELOPER_INFO.company.founded} with the mission to make advanced AI
                 tools accessible to every student and developer, regardless of background or resources.
               </p>
-              <p>
-                The platform currently serves users in <strong className="text-foreground">100+ countries</strong> with{' '}
-                <strong className="text-foreground">99.9% uptime</strong>.
-              </p>
               <Link href="/about">
                 <Button variant="outline" size="sm" className="mt-2 gap-2">
                   Learn more about Heoster
@@ -387,15 +378,15 @@ export default function ContactPage() {
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Clock className="h-5 w-5 text-primary" />
-                Response Times & Availability
+                Which Channel to Use
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
               {[
-                { channel: 'Email', time: 'Within 24 hours', note: 'Detailed support' },
-                { channel: 'X (Twitter)', time: 'Within a few hours', note: 'Quick questions' },
-                { channel: 'LinkedIn', time: 'Within 48 hours', note: 'Professional inquiries' },
-                { channel: 'GitHub Issues', time: 'Within 24 hours', note: 'Bug reports & PRs' },
+                { channel: 'Email', time: 'Detailed', note: 'Questions, bug reports and partnerships' },
+                { channel: 'X (Twitter)', time: 'Quick', note: 'Short questions and updates' },
+                { channel: 'LinkedIn', time: 'Professional', note: 'Collaborations and professional inquiries' },
+                { channel: 'GitHub Issues', time: 'Bugs & code', note: 'Bug reports and code discussion' },
               ].map((row) => (
                 <div key={row.channel} className="flex items-center justify-between rounded-xl border bg-muted/30 px-4 py-2.5">
                   <div>
@@ -416,7 +407,7 @@ export default function ContactPage() {
             {[
               { label: 'FAQ', href: '/faq', icon: HelpCircle, desc: 'Common questions answered' },
               { label: 'Documentation', href: '/documentation', icon: BookOpen, desc: 'Full feature guides' },
-              { label: 'Community', href: '/community', icon: Users, desc: 'Share & discuss with users' },
+              { label: 'Terms of Service', href: '/terms', icon: FileText, desc: 'The rules for using SOHAM' },
               { label: 'AI Chat', href: '/chat', icon: MessageSquare, desc: 'Start chatting now' },
               { label: 'AI Services', href: '/ai-services', icon: Zap, desc: 'All AI tools' },
               { label: 'Privacy Policy', href: '/privacy', icon: Shield, desc: 'How we protect your data' },

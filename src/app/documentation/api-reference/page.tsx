@@ -41,10 +41,10 @@ function CopyButton({ text }: { text: string }) {
 
 const appUrls = [
   { label: 'Chat',          path: APP_CONFIG.FEATURES.chat,         desc: 'Main AI chat interface' },
-  { label: 'AI Services',   path: APP_CONFIG.FEATURES.aiServices,   desc: 'Image generation & AI tools' },
-  { label: 'Visual Math',   path: APP_CONFIG.FEATURES.mathSolver,   desc: 'Math problem solver with visual output' },
+  { label: 'AI Services',   path: APP_CONFIG.FEATURES.aiServices,   desc: 'Dashboard for the PDF Analyzer, Visual Math and chat' },
+  { label: 'Visual Math',   path: APP_CONFIG.FEATURES.mathSolver,   desc: 'Solve maths problems from a photo or image' },
   { label: 'PDF Analyzer',  path: APP_CONFIG.FEATURES.pdfAnalyzer,  desc: 'Upload and query PDF documents' },
-  { label: 'Account',       path: APP_CONFIG.FEATURES.memoryDashboard, desc: 'Memory dashboard & user settings' },
+  { label: 'Account',       path: APP_CONFIG.FEATURES.memoryDashboard, desc: 'Your account details and settings' },
 ];
 
 const docUrls = [
@@ -62,7 +62,7 @@ const apiEndpoints = [
     method: 'POST',
     path: '/api/chat-direct',
     icon: MessageSquare,
-    desc: 'Send a message and receive an AI response. Supports model selection, tone, and conversation history.',
+    desc: 'Send a message (up to 10,000 characters) and receive the reply as JSON. Supports model selection, tone, and conversation history.',
     body: `{
   "message": "Explain recursion",
   "history": [],
@@ -77,28 +77,29 @@ const apiEndpoints = [
     method: 'POST',
     path: '/api/ai/pdf-analyzer',
     icon: FileText,
-    desc: 'Analyze a PDF file with a natural language query. Send as multipart/form-data.',
-    body: `FormData:
-  file: <PDF file, max 5MB>
-  query: "Summarize the key findings"`,
+    desc: 'Ask a question about a PDF (up to 5 MB). Send JSON with the PDF encoded as a base64 data URI.',
+    body: `{
+  "pdfDataUri": "data:application/pdf;base64,<...>",
+  "question": "Summarize the key findings"
+}`,
   },
   {
     method: 'POST',
     path: '/api/ai/image-solver',
     icon: ImageIcon,
-    desc: 'Analyze an image and answer questions about it.',
+    desc: 'Solve a maths problem shown in an image. Send JSON with the image encoded as a base64 data URI.',
     body: `{
-  "imageBase64": "<base64 encoded image>",
-  "query": "What is shown in this image?"
+  "imageDataUri": "data:image/png;base64,<...>",
+  "problemType": "math"
 }`,
   },
   {
     method: 'POST',
     path: '/api/ai/search',
     icon: Search,
-    desc: 'Perform a web search via DuckDuckGo and return summarised results.',
+    desc: 'Search the web and get an AI-written answer with numbered sources (Tavily when configured, with Wikipedia and DuckDuckGo as fallbacks).',
     body: `{
-  "query": "latest AI news 2025"
+  "query": "latest AI news"
 }`,
   },
 ];
@@ -188,8 +189,9 @@ export default function ApiReferencePage() {
       <div className="space-y-4">
         <h2 className="text-2xl font-bold">API Endpoints</h2>
         <p className="text-sm text-muted-foreground">
-          These are the internal API routes used by the SOHAM frontend. They can also be called
-          directly for integration purposes.
+          These are internal API routes used by the SOHAM web app, not a supported public API. They can
+          change without notice, requests from other websites are blocked by the browser (CORS), and
+          per-IP rate limits apply.
         </p>
         <div className="space-y-4">
           {apiEndpoints.map(({ method, path, icon: Icon, desc, body }) => {
@@ -246,21 +248,22 @@ export default function ApiReferencePage() {
             <CardHeader className="pb-3">
               <CardTitle className="flex items-center gap-2 text-base">
                 <Code2 className="h-4 w-4 text-primary" />
-                Iframe Embed
+                Link to a Tool
               </CardTitle>
-              <CardDescription>Embed SOHAM chat in your site</CardDescription>
+              <CardDescription>Send people straight to a SOHAM tool</CardDescription>
             </CardHeader>
             <CardContent className="space-y-3">
-              <pre className="rounded-lg bg-muted px-4 py-3 text-xs font-mono overflow-x-auto whitespace-pre-wrap">{`<iframe
-  src="${base}/chat"
-  width="400"
-  height="600"
-  frameborder="0"
-/>`}</pre>
-              <CopyButton text={`<iframe src="${base}/chat" width="400" height="600" frameborder="0" />`} />
+              <pre className="rounded-lg bg-muted px-4 py-3 text-xs font-mono overflow-x-auto">{`<a href="${base}/visual-math">
+  Solve a maths problem
+</a>`}</pre>
+              <CopyButton text={`<a href="${base}/visual-math">Solve a maths problem</a>`} />
             </CardContent>
           </Card>
         </div>
+        <p className="text-sm text-muted-foreground">
+          SOHAM can&apos;t be embedded in an iframe on other sites: its pages send headers that block
+          framing. Link to it instead.
+        </p>
       </div>
 
       {/* Note */}
@@ -268,8 +271,8 @@ export default function ApiReferencePage() {
         <CardContent className="pt-6">
           <p className="text-sm text-muted-foreground">
             <strong className="text-foreground">Note:</strong> There is no public API key system
-            currently. Direct API integration is via the web app endpoints above. SOHAM is
-            open-source — see the{' '}
+            currently. Direct API integration is via the web app endpoints above. An earlier
+            version of SOHAM is public on GitHub — see the{' '}
             <a
               href={APP_CONFIG.DEVELOPER.github}
               target="_blank"

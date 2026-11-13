@@ -123,8 +123,8 @@ export function SEOHead({
       {/* Additional Meta Tags for AI/Tech */}
       <meta name="application-name" content="SOHAM" />
       <meta name="apple-mobile-web-app-title" content="SOHAM" />
-      <meta name="theme-color" content="#020817" />
-      <meta name="msapplication-TileColor" content="#020817" />
+      <meta name="theme-color" content="#0e1425" />
+      <meta name="msapplication-TileColor" content="#0e1425" />
       
       {/* Schema.org for Google */}
       <meta itemProp="name" content={String(seoTitle)} />

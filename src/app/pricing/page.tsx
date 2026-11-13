@@ -1,98 +1,100 @@
-'use client';
-
-import { ArrowLeft, CheckCircle } from 'lucide-react';
 import Link from 'next/link';
-import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Switch } from '@/components/ui/switch';
-import { Label } from '@/components/ui/label';
+import { ArrowRight, CheckCircle2, Info } from 'lucide-react';
 import { PageHeader } from '@/components/page-header';
-import { useState } from 'react';
+import { Button } from '@/components/ui/button';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import { getEnabledModels, groupModels } from '@/lib/model-catalog';
+
+// Counts come from models-config.json, the same list the chat model selector shows.
+const models = getEnabledModels();
+const providerCount = groupModels(models, 'provider').length;
+
+const included = [
+  `Chat with ${models.length} models from ${providerCount} providers, or let Auto mode choose`,
+  'Web search with /search and live data sources',
+  'Image generation in chat',
+  'Voice input and read-aloud replies',
+  'PDF Analyzer for files up to 5 MB',
+  'Visual Math: solve an equation from a photo',
+  'Chat history saved in your browser, with JSON export',
+  'Installable on phone and desktop (PWA)',
+];
+
+const goodToKnow = [
+  'A free account is required to chat (Google, or email and password).',
+  'Rate limits apply, for example 30 chat requests per minute.',
+  'SOHAM relies on third-party AI providers, so a model can be temporarily unavailable when its provider is busy or out of quota.',
+];
 
 export default function PricingPage() {
-  const [isAnnual, setIsAnnual] = useState(false);
-
   return (
     <div className="min-h-screen bg-background text-foreground">
-      <PageHeader 
-        backLink="/" 
-        backText="Back to Home" 
-        title="Pricing"
-      />
-      <main className="container mx-auto max-w-5xl px-4 py-8 md:px-6 md:py-12">
-        <div className="space-y-8">
-          <div className="space-y-4 text-center">
-            <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">Flexible Plans for Teams of All Sizes</h2>
-            <p className="text-lg text-muted-foreground">
-              Choose the plan that&apos;s right for you. All plans come with a 365-day free trial.
-            </p>
-            <div className="flex items-center justify-center space-x-2 pt-4">
-                <Label htmlFor="billing-cycle">Monthly</Label>
-                <Switch id="billing-cycle" checked={isAnnual} onCheckedChange={setIsAnnual} aria-label="Toggle billing cycle" />
-                <Label htmlFor="billing-cycle">Annual (Save 100%)</Label>
-            </div>
-          </div>
+      <PageHeader backLink="/" backText="Back to Home" title="Pricing" />
+      <main className="container mx-auto max-w-4xl px-4 py-8 md:px-6 md:py-12">
+        <div className="space-y-3 text-center">
+          <p className="text-xs font-semibold uppercase tracking-wider text-primary">Pricing</p>
+          <h1 className="text-3xl font-bold tracking-tight md:text-4xl">SOHAM is free to use</h1>
+          <p className="mx-auto max-w-2xl text-muted-foreground">
+            There are no paid plans, subscriptions or credits today. Everything below is included with a
+            free account.
+          </p>
+        </div>
 
-          <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
-            {/* Free Plan */}
-            <Card className="flex flex-col">
-                <CardHeader>
-                    <CardTitle>Free</CardTitle>
-                    <CardDescription>For individuals and small projects getting started.</CardDescription>
-                    <div className="text-4xl font-bold">FREE<span className="text-base font-normal text-muted-foreground">/month</span></div>
-                </CardHeader>
-                <CardContent className="flex-1 space-y-4">
-                    <ul className="space-y-2 text-sm">
-                        <li className="flex items-center gap-2"><CheckCircle className="h-5 w-5 text-primary" /> 1 User</li>
-                        <li className="flex items-center gap-2"><CheckCircle className="h-5 w-5 text-primary" /> 1,000 API Calls/mo</li>
-                        <li className="flex items-center gap-2"><CheckCircle className="h-5 w-5 text-primary" /> Community Support</li>
-                    </ul>
-                </CardContent>
-                <CardFooter>
-                    <Button variant="secondary" className="w-full">Get Started</Button>
-                </CardFooter>
-            </Card>
+        <div className="mt-10 grid gap-5 md:grid-cols-[minmax(0,1.2fr)_minmax(0,0.8fr)]">
+          <Card className="flex flex-col rounded-3xl border-primary/40 shadow-sm">
+            <CardHeader>
+              <CardTitle className="text-2xl">Free</CardTitle>
+              <CardDescription>Everything SOHAM offers today.</CardDescription>
+            </CardHeader>
+            <CardContent className="flex-1">
+              <ul className="space-y-3 text-sm">
+                {included.map((item) => (
+                  <li key={item} className="flex items-start gap-2">
+                    <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
+                    {item}
+                  </li>
+                ))}
+              </ul>
+            </CardContent>
+            <CardFooter>
+              <Button asChild size="lg" className="w-full justify-between">
+                <Link href="/chat">
+                  Start chatting
+                  <ArrowRight className="h-4 w-4" />
+                </Link>
+              </Button>
+            </CardFooter>
+          </Card>
 
-            {/* Pro Plan */}
-            <Card className="border-primary shadow-lg flex flex-col">
-                <CardHeader>
-                    <CardTitle>Pro</CardTitle>
-                    <CardDescription>For growing teams that need more power and support.</CardDescription>
-                     <div className="text-4xl font-bold">FREE<span className="text-base font-normal text-muted-foreground">/month</span></div>
-                </CardHeader>
-                <CardContent className="flex-1 space-y-4">
-                    <ul className="space-y-2 text-sm">
-                        <li className="flex items-center gap-2"><CheckCircle className="h-5 w-5 text-primary" /> 5 Users</li>
-                        <li className="flex items-center gap-2"><CheckCircle className="h-5 w-5 text-primary" /> 100,000 API Calls/mo</li>
-                        <li className="flex items-center gap-2"><CheckCircle className="h-5 w-5 text-primary" /> Fine-tuning capabilities</li>
-                        <li className="flex items-center gap-2"><CheckCircle className="h-5 w-5 text-primary" /> Email Support</li>
-                    </ul>
-                </CardContent>
-                <CardFooter>
-                    <Button className="w-full">Choose Pro</Button>
-                </CardFooter>
-            </Card>
-
-            {/* Enterprise Plan */}
-             <Card className="flex flex-col">
-                <CardHeader>
-                    <CardTitle>Enterprise</CardTitle>
-                    <CardDescription>For large organizations with custom needs and security requirements.</CardDescription>
-                     <div className="text-4xl font-bold">Custom</div>
-                </CardHeader>
-                <CardContent className="flex-1 space-y-4">
-                    <ul className="space-y-2 text-sm">
-                        <li className="flex items-center gap-2"><CheckCircle className="h-5 w-5 text-primary" /> Unlimited Users</li>
-                        <li className="flex items-center gap-2"><CheckCircle className="h-5 w-5 text-primary" /> Custom API Rate Limits</li>
-                        <li className="flex items-center gap-2"><CheckCircle className="h-5 w-5 text-primary" /> SSO & Advanced Security</li>
-                        <li className="flex items-center gap-2"><CheckCircle className="h-5 w-5 text-primary" /> Dedicated Support</li>
-                    </ul>
-                </CardContent>
-                <CardFooter>
-                    <Button variant="secondary" className="w-full">Contact Sales</Button>
-                </CardFooter>
-            </Card>
-          </div>
+          <Card className="flex flex-col rounded-3xl border-border/70">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2 text-lg">
+                <Info className="h-5 w-5 text-primary" />
+                Good to know
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="flex-1">
+              <ul className="space-y-3 text-sm text-muted-foreground">
+                {goodToKnow.map((item) => (
+                  <li key={item} className="leading-6">
+                    {item}
+                  </li>
+                ))}
+              </ul>
+            </CardContent>
+            <CardFooter>
+              <Button asChild variant="outline" className="w-full">
+                <Link href="/faq">Read the FAQ</Link>
+              </Button>
+            </CardFooter>
+          </Card>
         </div>
       </main>
     </div>

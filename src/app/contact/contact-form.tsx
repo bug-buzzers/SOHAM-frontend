@@ -170,7 +170,7 @@ export function ContactForm() {
           <p className="text-center text-xs text-muted-foreground">
             By submitting, you agree to our{' '}
             <a href="/privacy" className="underline hover:text-foreground">Privacy Policy</a>.
-            We never share your email.
+            We don't sell or rent your email address.
           </p>
         </form>
       </CardContent>

@@ -146,7 +146,7 @@ export default function MathSolverDocsPage() {
           <ExampleCard
             title="Solve Quadratic Equation"
             input="x² + 5x + 6 = 0"
-            description="Get factored form, solutions, and graphical representation"
+            description="Get the factored form and both solutions, with each step explained"
           />
           <ExampleCard
             title="Calculate Derivative"
@@ -196,14 +196,14 @@ export default function MathSolverDocsPage() {
             example="/solve x² + 3x - 4 = 0"
           />
           <CommandCard
-            command="/graph"
-            description="Generate graphs for mathematical functions"
-            example="/graph y = x² + 2x - 3"
+            command="/define"
+            description="Get the meaning of a maths term, with examples"
+            example="/define derivative"
           />
           <CommandCard
-            command="/simplify"
-            description="Simplify mathematical expressions"
-            example="/simplify (x² - 4)/(x - 2)"
+            command="/quiz"
+            description="Practise with a short quiz on a topic"
+            example="/quiz quadratic equations"
           />
         </div>
       </div>
@@ -359,7 +359,7 @@ function TipCard({
         <ul className="space-y-2">
           {tips.map((tip, index) => (
             <li key={index} className="flex items-start gap-2 text-sm">
-              <Zap className="h-4 w-4 text-gray-600 mt-0.5 shrink-0" />
+              <Zap className="h-4 w-4 text-muted-foreground mt-0.5 shrink-0" />
               {tip}
             </li>
           ))}

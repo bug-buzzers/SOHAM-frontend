@@ -1,6 +1,6 @@
 'use client';
 
-import {useState, useEffect, useRef} from 'react';
+import {useState, useRef, useMemo, useEffect, useCallback} from 'react';
 import Link from 'next/link';
 import {
   SidebarProvider,
@@ -46,7 +46,6 @@ import {
   LayoutGrid,
   Boxes,
   LayoutDashboard,
-  Users,
 } from 'lucide-react';
 import {Edit2, Download, User} from 'lucide-react';
 import {QuickSettingsPopover, SettingsDialog} from '../settings-dialog';
@@ -55,8 +54,11 @@ import {getAuth, signOut} from 'firebase/auth';
 import {Avatar, AvatarFallback, AvatarImage} from '@/components/ui/avatar';
 import {useChatHistory} from '@/hooks/use-chat-history';
 import {useLocalStorage} from '@/hooks/use-local-storage';
+import {isValidModelId} from '@/lib/settings-storage';
 import { InstallPWAButton } from '../install-pwa-button';
 import { SohamLogo } from '@/components/soham-logo';
+import { SohamLoader } from '@/components/soham-loader';
+import {PROMPT_PARAM, PROMPT_PARAM_MAX_LENGTH} from '@/lib/quick-suggestions';
 
 const defaultSettings: Settings = {
   model: 'auto',
@@ -66,6 +68,19 @@ const defaultSettings: Settings = {
   enableSpeech: false,
   voice: 'troy',
 };
+
+/**
+ * Reads a prompt handed over in the URL (/chat?prompt=...) and removes it
+ * from the address bar, so reloading the page doesn't bring it back.
+ */
+function takePromptFromUrl(): string | null {
+  const url = new URL(window.location.href);
+  const value = url.searchParams.get(PROMPT_PARAM);
+  if (value === null) return null;
+  url.searchParams.delete(PROMPT_PARAM);
+  window.history.replaceState(null, '', `${url.pathname}${url.search}${url.hash}`);
+  return value.trim().slice(0, PROMPT_PARAM_MAX_LENGTH) || null;
+}
 
 // Must be rendered inside SidebarProvider to access useSidebar
 function MobileChatsButton() {
@@ -88,6 +103,7 @@ export function ChatLayout() {
     activeChat,
     activeChatId,
     setActiveChatId,
+    isLoaded,
     activeChatMessages,
     createNewChat,
     deleteAllUserChats,
@@ -100,11 +116,35 @@ export function ChatLayout() {
   } = useChatHistory();
 
   // Persist settings to localStorage
-  const [settings, setSettings] = useLocalStorage<Settings>(
+  const [storedSettings, setSettings] = useLocalStorage<Settings>(
     user?.uid ? `${user.uid}_settings` : 'guest_settings',
     defaultSettings
   );
+  // A saved model can disappear when the model list changes. Fall back to Auto
+  // so the picker shows a real option and requests never name a missing model.
+  const settings = useMemo<Settings>(
+    () =>
+      isValidModelId(storedSettings.model)
+        ? storedSettings
+        : {...storedSettings, model: 'auto'},
+    [storedSettings]
+  );
   const [isClearHistoryAlertOpen, setIsClearHistoryAlertOpen] = useState(false);
+
+  // ── Prompt handed over from the home page ─────────────────────────────────
+  // It goes into the message box of an empty chat (an existing empty chat is
+  // reused) and is never sent automatically.
+  const [handoffPrompt, setHandoffPrompt] = useState<string | null>(null);
+  useEffect(() => {
+    const prompt = takePromptFromUrl();
+    if (prompt) setHandoffPrompt(prompt);
+  }, []);
+  useEffect(() => {
+    if (handoffPrompt && isLoaded) createNewChat();
+  }, [handoffPrompt, isLoaded, createNewChat]);
+  const clearHandoffPrompt = useCallback(() => setHandoffPrompt(null), []);
+  const handoffDraft =
+    handoffPrompt && isLoaded && activeChat && activeChatMessages.length === 0 ? handoffPrompt : null;
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
 
   // ── Rename dialog state ────────────────────────────────────────────────────
@@ -118,14 +158,6 @@ export function ChatLayout() {
   const [deleteChatId, setDeleteChatId] = useState<string | null>(null);
 
   const auth = getAuth();
-
-  // Auto-create new chat when user logs in or app restarts
-  useEffect(() => {
-    if (user && chats.length === 0) {
-      console.log('[ChatLayout] Auto-creating new chat for user');
-      createNewChat();
-    }
-  }, [user, chats.length, createNewChat]);
 
   const handleSignOut = async () => {
     await signOut(auth);
@@ -217,14 +249,6 @@ export function ChatLayout() {
                   <Link href="/account" className="gap-3">
                     <User className="h-4 w-4" />
                     <span>Account</span>
-                  </Link>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-              <SidebarMenuItem>
-                <SidebarMenuButton asChild className="h-9">
-                  <Link href="/community" className="gap-3">
-                    <Users className="h-4 w-4" />
-                    <span>Community</span>
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
@@ -383,7 +407,11 @@ export function ChatLayout() {
          * so the ChatPanel's input bar is never hidden behind it.
          */}
         <main className="flex-1 min-h-0 flex flex-col overflow-hidden pb-[64px] md:pb-0">
-          {activeChat ? (
+          {!isLoaded ? (
+            <div className="flex flex-1 items-center justify-center">
+              <SohamLoader variant="inline" label="Loading chats…" />
+            </div>
+          ) : activeChat ? (
             <ChatPanel
               key={activeChat.id}
               chat={activeChat}
@@ -392,6 +420,8 @@ export function ChatLayout() {
               addMessage={addMessage}
               updateMessage={updateMessage}
               finalizeMessage={finalizeMessage}
+              initialDraft={handoffDraft}
+              onInitialDraftUsed={clearHandoffPrompt}
             />
           ) : (
             <div className="flex flex-1 items-center justify-center px-4">
@@ -438,14 +468,6 @@ export function ChatLayout() {
           >
             <Boxes className="h-5 w-5" />
             <span className="text-[10px] font-medium">Services</span>
-          </Link>
-
-          <Link
-            href="/community"
-            className="flex flex-col items-center gap-0.5 rounded-xl px-3 py-2 text-muted-foreground transition-colors active:bg-accent touch-manipulation"
-          >
-            <Users className="h-5 w-5" />
-            <span className="text-[10px] font-medium">Community</span>
           </Link>
 
           <button

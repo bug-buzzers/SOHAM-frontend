@@ -301,55 +301,55 @@ function LoginPageInner() {
 
   return (
     <>
-      <div className="min-h-screen w-full bg-[#05070b] text-slate-100">
-        <div className="pointer-events-none fixed inset-0 -z-10 bg-[radial-gradient(circle_at_18%_20%,rgba(56,189,248,0.18),transparent_42%),radial-gradient(circle_at_82%_16%,rgba(251,146,60,0.2),transparent_40%),radial-gradient(circle_at_50%_100%,rgba(163,230,53,0.13),transparent_45%)]" />
+      <div className="relative isolate min-h-screen w-full bg-background text-foreground">
+        <div aria-hidden className="pointer-events-none fixed inset-0 -z-10 bg-[radial-gradient(circle_at_18%_20%,rgba(56,189,248,0.10),transparent_42%),radial-gradient(circle_at_82%_16%,rgba(251,146,60,0.10),transparent_40%),radial-gradient(circle_at_50%_100%,rgba(163,230,53,0.06),transparent_45%)]" />
         <div className="mx-auto flex min-h-screen w-full max-w-6xl items-center justify-center px-4 py-10 sm:px-6">
           <div className="grid w-full grid-cols-1 gap-8 md:grid-cols-2">
-            <div className="hidden flex-col justify-between rounded-3xl border border-white/10 bg-white/5 p-8 md:flex">
+            <div className="hidden flex-col justify-between rounded-3xl border border-border/70 bg-card p-8 shadow-sm md:flex">
               <div>
                 <div className="flex items-center gap-3">
                   <Image src="/FINALSOHAM.png" alt="SOHAM logo" width={44} height={44} />
                   <div>
-                    <p className="text-xs uppercase tracking-[0.2em] text-slate-400">SOHAM</p>
-                    <p className="text-sm text-slate-300">by CODEEX-AI</p>
+                    <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">SOHAM</p>
+                    <p className="text-sm text-foreground/80">by CODEEX-AI</p>
                   </div>
                 </div>
 
-                <h2 className="mt-8 font-[family:var(--font-space-grotesk)] text-3xl font-semibold text-white">
+                <h2 className="mt-8 font-[family:var(--font-space-grotesk)] text-3xl font-semibold text-foreground">
                   Professional access to your AI workspace
                 </h2>
-                <p className="mt-3 text-sm leading-relaxed text-slate-300">
-                  Sign in to resume conversations, manage multi-device memory, and run tool-driven workflows in a
-                  serverless-ready environment.
+                <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
+                  Sign in to pick up your conversations in this browser and use chat, web search, voice, image
+                  generation and the PDF analyzer in one place.
                 </p>
               </div>
 
               <div className="mt-8 space-y-4">
-                <div className="flex items-center gap-3 rounded-2xl border border-white/10 bg-black/30 p-4">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/10 text-slate-100">
+                <div className="flex items-center gap-3 rounded-2xl border border-border/70 bg-background/60 p-4">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10 text-primary">
                     <Shield size={18} />
                   </div>
                   <div>
-                    <p className="text-sm font-medium text-white">Secure sign-in</p>
-                    <p className="text-xs text-slate-400">Firebase authentication with safe fallbacks.</p>
+                    <p className="text-sm font-medium text-foreground">Secure sign-in</p>
+                    <p className="text-xs text-muted-foreground">Firebase authentication with safe fallbacks.</p>
                   </div>
                 </div>
-                <div className="flex items-center gap-3 rounded-2xl border border-white/10 bg-black/30 p-4">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/10 text-slate-100">
+                <div className="flex items-center gap-3 rounded-2xl border border-border/70 bg-background/60 p-4">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10 text-primary">
                     <Sparkles size={18} />
                   </div>
                   <div>
-                    <p className="text-sm font-medium text-white">Unified agent stack</p>
-                    <p className="text-xs text-slate-400">Tools, memory, and model routing in one flow.</p>
+                    <p className="text-sm font-medium text-foreground">One workspace</p>
+                    <p className="text-xs text-muted-foreground">Pick a model or let Auto routing choose one for you.</p>
                   </div>
                 </div>
-                <div className="flex items-center gap-3 rounded-2xl border border-white/10 bg-black/30 p-4">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/10 text-slate-100">
+                <div className="flex items-center gap-3 rounded-2xl border border-border/70 bg-background/60 p-4">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10 text-primary">
                     <Zap size={18} />
                   </div>
                   <div>
-                    <p className="text-sm font-medium text-white">Fast onboarding</p>
-                    <p className="text-xs text-slate-400">Create an account in seconds and start chatting.</p>
+                    <p className="text-sm font-medium text-foreground">Fast onboarding</p>
+                    <p className="text-xs text-muted-foreground">Create an account in seconds and start chatting.</p>
                   </div>
                 </div>
               </div>
@@ -359,15 +359,15 @@ function LoginPageInner() {
               </div>
             </div>
 
-            <div className="mx-auto w-full max-w-md rounded-3xl border border-white/10 bg-white/5 p-6 shadow-xl backdrop-blur-md sm:p-8">
+            <div className="mx-auto w-full max-w-md rounded-3xl border border-border/70 bg-card p-6 shadow-xl sm:p-8">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white/10">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-primary/10 text-primary">
                     <MessageSquare size={20} />
                   </div>
                   <div>
-                    <p className="text-xs uppercase tracking-[0.18em] text-slate-400">Access</p>
-                    <h1 className="text-xl font-semibold text-white">
+                    <p className="text-xs uppercase tracking-[0.18em] text-muted-foreground">Access</p>
+                    <h1 className="text-xl font-semibold text-foreground">
                       {authMode === 'signin' ? 'Sign in to SOHAM' : 'Create your SOHAM account'}
                     </h1>
                   </div>
@@ -375,12 +375,12 @@ function LoginPageInner() {
                 <Image src="/FINALSOHAM.png" alt="SOHAM logo" width={34} height={34} />
               </div>
 
-              <div className="mt-6 flex rounded-full border border-white/10 bg-black/30 p-1 text-xs">
+              <div className="mt-6 flex rounded-full border border-border/70 bg-background/60 p-1 text-xs">
                 <button
                   type="button"
                   onClick={() => setAuthMode('signin')}
                   className={`flex-1 rounded-full px-3 py-2 text-center transition ${
-                    authMode === 'signin' ? 'bg-white text-slate-950' : 'text-slate-300'
+                    authMode === 'signin' ? 'bg-foreground text-background shadow-sm' : 'text-muted-foreground hover:text-foreground'
                   }`}
                 >
                   Sign In
@@ -389,7 +389,7 @@ function LoginPageInner() {
                   type="button"
                   onClick={() => setAuthMode('signup')}
                   className={`flex-1 rounded-full px-3 py-2 text-center transition ${
-                    authMode === 'signup' ? 'bg-white text-slate-950' : 'text-slate-300'
+                    authMode === 'signup' ? 'bg-foreground text-background shadow-sm' : 'text-muted-foreground hover:text-foreground'
                   }`}
                 >
                   Sign Up
@@ -400,7 +400,7 @@ function LoginPageInner() {
                 <Button
                   onClick={handleGoogleSignIn}
                   variant="outline"
-                  className="w-full border-white/15 bg-white/5 py-3 text-slate-100 hover:bg-white/10"
+                  className="w-full bg-background/60 py-3 hover:bg-muted hover:text-foreground"
                   disabled={isRedirecting}
                 >
                   <GoogleIcon className="mr-3 h-5 w-5" />
@@ -421,7 +421,7 @@ function LoginPageInner() {
                         handleAuthError(error);
                       }
                     }}
-                    className="text-xs text-slate-400 hover:text-slate-100 underline"
+                    className="text-xs text-muted-foreground hover:text-foreground underline"
                     disabled={isRedirecting}
                   >
                     Having trouble with pop-ups? Try redirect sign-in
@@ -430,16 +430,16 @@ function LoginPageInner() {
 
                 <div className="relative">
                   <div className="absolute inset-0 flex items-center">
-                    <span className="w-full border-t border-white/10" />
+                    <span className="w-full border-t border-border/70" />
                   </div>
                   <div className="relative flex justify-center text-xs uppercase">
-                    <span className="bg-[#0b0f15] px-3 text-slate-400">Or use your email</span>
+                    <span className="bg-card px-3 text-muted-foreground">Or use your email</span>
                   </div>
                 </div>
 
                 <form onSubmit={handleEmailSubmit} className="space-y-4">
                   <div className="grid gap-2">
-                    <Label htmlFor="email" className="text-slate-200">Email</Label>
+                    <Label htmlFor="email">Email</Label>
                     <Input
                       id="email"
                       type="email"
@@ -447,12 +447,11 @@ function LoginPageInner() {
                       value={email}
                       onChange={e => setEmail(e.target.value)}
                       required
-                      className="border-white/15 bg-black/30 text-slate-100 placeholder:text-slate-500"
                     />
                   </div>
 
                   <div className="relative grid gap-2">
-                    <Label htmlFor="password" className="text-slate-200">Password</Label>
+                    <Label htmlFor="password">Password</Label>
                     <Input
                       id="password"
                       type={isPasswordVisible ? 'text' : 'password'}
@@ -460,41 +459,40 @@ function LoginPageInner() {
                       value={password}
                       onChange={e => setPassword(e.target.value)}
                       required
-                      className="border-white/15 bg-black/30 text-slate-100 placeholder:text-slate-500"
                     />
                     <Button
                       type="button"
                       variant="ghost"
                       size="icon"
-                      className="absolute right-1 top-7 h-7 w-7 text-slate-400 hover:text-slate-100"
+                      className="absolute right-1 top-7 h-7 w-7 text-muted-foreground hover:text-foreground"
                       onClick={() => setIsPasswordVisible(!isPasswordVisible)}
                     >
                       {isPasswordVisible ? <EyeOff size={16} /> : <Eye size={16} />}
                     </Button>
                   </div>
 
-                  {error && <p className="whitespace-pre-wrap text-sm text-rose-300">{error}</p>}
+                  {error && <p className="whitespace-pre-wrap text-sm text-destructive">{error}</p>}
 
-                  <Button type="submit" className="w-full bg-white py-2 text-slate-950 hover:bg-slate-200">
+                  <Button type="submit" className="w-full bg-foreground py-2 text-background hover:bg-foreground/90">
                     {authMode === 'signin' ? 'Sign In' : 'Create Account'}
                   </Button>
                 </form>
 
                 <div className="text-center text-sm">
-                  <Link href="/forgot-password" className="text-slate-400 hover:text-white">
+                  <Link href="/forgot-password" className="text-muted-foreground hover:text-foreground">
                     Forgot your password?
                   </Link>
                 </div>
               </div>
 
-              <div className="mt-6 text-center text-xs text-slate-400">
+              <div className="mt-6 text-center text-xs text-muted-foreground">
                 By continuing, you agree to our{' '}
-                <Link href="/privacy" className="underline hover:text-white" target="_blank" rel="noopener noreferrer">
+                <Link href="/privacy" className="underline hover:text-foreground" target="_blank" rel="noopener noreferrer">
                   Privacy Policy
                 </Link>
                 .
               </div>
-              <p className="mt-2 text-center text-xs text-slate-500">SOHAM (Self Organising Hyper Adaptive Machine) by CODEEX-AI.</p>
+              <p className="mt-2 text-center text-xs text-muted-foreground/80">SOHAM (Self Organising Hyper Adaptive Machine) by CODEEX-AI.</p>
             </div>
           </div>
         </div>

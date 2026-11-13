@@ -13,11 +13,9 @@ export const APP_CONFIG = {
   // Feature Routes
   FEATURES: {
     chat: '/chat',
-    smartNotes: '/ai-services',
     mathSolver: '/visual-math',
     pdfAnalyzer: '/pdf-analyzer',
     imageGenerator: '/ai-services',
-    jarvisMode: '/chat',
     memoryDashboard: '/account',
     aiServices: '/ai-services',
   },
@@ -29,7 +27,6 @@ export const APP_CONFIG = {
     aiModels: '/documentation/ai-models',
     commands: '/documentation/commands',
     chat: '/documentation/chat',
-    smartNotes: '/documentation/smart-notes',
     mathSolver: '/documentation/math-solver',
     pdfAnalysis: '/documentation/pdf-analysis',
     webSearch: '/documentation/web-search',
@@ -40,7 +37,6 @@ export const APP_CONFIG = {
   // Share URLs (for embedding)
   SHARE_URLS: {
     chat: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://soham-ai.vercel.app'}/chat`,
-    smartNotes: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://soham-ai.vercel.app'}/ai-services`,
     mathSolver: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://soham-ai.vercel.app'}/visual-math`,
   },
 
@@ -56,14 +52,14 @@ export const APP_CONFIG = {
     location: 'Khatauli, Uttar Pradesh, India',
     email: 'codeex@email.com',
     github: 'https://github.com/heoster',
-    linkedin: 'https://in.linkedin.com/in/codeex-heoster-4b60b8399',
-    twitter: 'https://twitter.com/The_Heoster_',
+    linkedin: 'https://www.linkedin.com/in/codeex-heoster',
+    twitter: 'https://x.com/The_Heoster_',
   },
 
   // Social Links
   SOCIAL: {
     github: 'https://github.com/heoster',
-    linkedin: 'https://in.linkedin.com/in/codeex-heoster-4b60b8399',
-    twitter: 'https://twitter.com/The_Heoster_',
+    linkedin: 'https://www.linkedin.com/in/codeex-heoster',
+    twitter: 'https://x.com/The_Heoster_',
   },
 };

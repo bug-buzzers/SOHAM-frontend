@@ -49,7 +49,7 @@ const commands = [
     bg: 'bg-green-500/10',
     badge: 'Web Search',
     badgeVariant: 'secondary' as const,
-    description: 'Trigger a live DuckDuckGo web search and get summarised, up-to-date results.',
+    description: 'Run a live web search first, then get an answer written from the current results.',
     syntax: '/search <query>',
     examples: [
       { input: '/search latest Next.js 15 features', output: 'Live results: React 19, Turbopack stable, improved caching...' },
@@ -59,9 +59,9 @@ const commands = [
     ],
     tips: [
       'SOHAM also auto-triggers search for time-sensitive questions — /search forces it',
-      'Combine with follow-ups: "/search X" then "now summarize the third result"',
+      'Ask follow-up questions about the answer in the same chat',
       'Use for current events, prices, scores, or anything that changes frequently',
-      'Quotes work: /search "exact phrase" site:github.com',
+      'Keep the query short and specific: names, places and dates help',
     ],
     whenToUse: 'Use /search when you need real-time or recent information that the AI model may not have in its training data.',
   },
@@ -73,7 +73,7 @@ const commands = [
     badge: 'Text Condensation',
     badgeVariant: 'secondary' as const,
     description: 'Condense long text, articles, or pasted content into clear, structured summaries.',
-    syntax: '/summarize <text or URL>',
+    syntax: '/summarize <text>',
     examples: [
       { input: '/summarize [paste 2000-word article]', output: '5-bullet executive summary with key takeaways' },
       { input: '/summarize in 3 sentences: [research abstract]', output: 'Concise 3-sentence distillation' },
@@ -117,6 +117,22 @@ const scenarios = [
   },
 ];
 
+// Explicit tool shortcuts recognised by the backend (tools/agent-tools.ts).
+const toolShortcuts = [
+  { cmd: '/news', desc: 'Latest news on a topic' },
+  { cmd: '/weather', desc: 'Current weather for a place' },
+  { cmd: '/sports', desc: 'Cricket scores and match updates' },
+  { cmd: '/finance', desc: 'Stock and crypto prices, and currency rates' },
+  { cmd: '/translate', desc: 'Translate text into another language' },
+  { cmd: '/grammar', desc: 'Check and correct grammar' },
+  { cmd: '/define', desc: 'Meaning of a word, with examples' },
+  { cmd: '/quiz', desc: 'A practice quiz on a topic' },
+  { cmd: '/recipe', desc: 'A recipe for a dish' },
+  { cmd: '/factcheck', desc: 'Check whether a claim is true' },
+  { cmd: '/sentiment', desc: 'The tone or sentiment of a text' },
+  { cmd: '/joke', desc: 'A joke or riddle about a topic' },
+];
+
 export default function CommandsPage() {
   return (
     <div className="space-y-10">
@@ -125,7 +141,7 @@ export default function CommandsPage() {
         <div className="inline-flex items-center gap-2 rounded-full border bg-muted px-4 py-2 text-sm">
           <Terminal className="h-4 w-4 text-primary" />
           <span className="font-medium">Slash Commands</span>
-          <Badge variant="secondary" className="text-xs">3 commands</Badge>
+          <Badge variant="secondary" className="text-xs">3 commands + shortcuts</Badge>
         </div>
         <h1 className="text-4xl font-bold tracking-tight">Slash Commands Reference</h1>
         <p className="text-xl text-muted-foreground max-w-2xl">
@@ -233,6 +249,29 @@ export default function CommandsPage() {
         </div>
       ))}
 
+      {/* Tool shortcuts */}
+      <div className="space-y-4">
+        <h2 className="text-2xl font-bold">More Shortcuts</h2>
+        <p className="text-muted-foreground text-sm">
+          These shortcuts tell SOHAM which tool to run before it answers. Put the shortcut at the start of
+          the message, followed by what you want, for example <code className="font-semibold text-foreground">/weather Delhi</code>.
+        </p>
+        <Card>
+          <CardContent className="pt-6">
+            <dl className="grid gap-x-6 gap-y-3 sm:grid-cols-2">
+              {toolShortcuts.map(({ cmd, desc }) => (
+                <div key={cmd} className="flex items-start gap-3">
+                  <dt>
+                    <code className="rounded bg-muted px-1.5 py-0.5 text-xs font-semibold text-foreground">{cmd}</code>
+                  </dt>
+                  <dd className="text-sm text-muted-foreground">{desc}</dd>
+                </div>
+              ))}
+            </dl>
+          </CardContent>
+        </Card>
+      </div>
+
       {/* Real-world scenarios */}
       <div className="space-y-4">
         <h2 className="text-2xl font-bold">Real-World Scenarios</h2>
@@ -277,8 +316,8 @@ export default function CommandsPage() {
             auto-routing picks the wrong mode.
           </p>
           <p>
-            Think of slash commands as <strong className="text-foreground">overrides</strong> — they
-            guarantee a specific behaviour regardless of how the message reads.
+            Think of slash commands as <strong className="text-foreground">overrides</strong>: they tell
+            SOHAM which mode to use, however the rest of the message is worded.
           </p>
         </CardContent>
       </Card>

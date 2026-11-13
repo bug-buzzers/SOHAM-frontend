@@ -110,7 +110,10 @@ function VoiceSettingsCard({
               <SelectItem value="daniel">Daniel</SelectItem>
             </SelectContent>
           </Select>
-          <p className="text-xs text-muted-foreground">Groq Orpheus TTS voice selection.</p>
+          <p className="text-xs text-muted-foreground">
+            Replies are read aloud with your browser&apos;s built-in voices. A preset is used only if
+            your browser has a voice with the same name.
+          </p>
         </div>
       </CardContent>
     </Card>

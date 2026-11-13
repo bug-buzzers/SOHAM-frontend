@@ -1,9 +1,28 @@
 import type { Metadata } from 'next';
-import { pageSEO } from '@/lib/seo-config';
+import type { ReactNode } from 'react';
 import Link from 'next/link';
-import { ArrowLeft, Shield, Eye, Lock, Database, Users, Bell, Globe } from 'lucide-react';
+import type { LucideIcon } from 'lucide-react';
+import {
+  ArrowLeft,
+  Bell,
+  Brain,
+  Clock,
+  Cookie,
+  Database,
+  Eye,
+  Globe,
+  HardDrive,
+  Lock,
+  Mail,
+  Share2,
+  Shield,
+  UserCheck,
+  Users,
+} from 'lucide-react';
+import { pageSEO } from '@/lib/seo-config';
+import { PRIVACY_LAST_UPDATED, formatContentDate } from '@/lib/content-dates';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 
 export const metadata: Metadata = {
@@ -21,6 +40,73 @@ export const metadata: Metadata = {
   },
 };
 
+const LAST_UPDATED = formatContentDate(PRIVACY_LAST_UPDATED);
+const CONTACT_EMAIL = 'codeex@email.com';
+
+const SECTIONS = [
+  { id: 'introduction', title: 'Introduction' },
+  { id: 'information', title: 'Information We Collect' },
+  { id: 'memory', title: 'Memory and the Shared Knowledge Base' },
+  { id: 'usage', title: 'How We Use Your Information' },
+  { id: 'storage', title: 'Where Your Information Is Stored' },
+  { id: 'third-party', title: 'Service Providers' },
+  { id: 'sharing', title: 'When Information Is Shared or Public' },
+  { id: 'retention', title: 'How Long We Keep Information' },
+  { id: 'rights', title: 'Your Choices and Rights' },
+  { id: 'cookies', title: 'Cookies and Browser Storage' },
+  { id: 'google-api', title: 'Google API Services and User Data' },
+  { id: 'children', title: "Children's Privacy" },
+  { id: 'international', title: 'International Users' },
+  { id: 'security', title: 'Security' },
+  { id: 'changes', title: 'Changes to This Policy' },
+  { id: 'contact', title: 'Contact Us' },
+] as const;
+
+type SectionId = (typeof SECTIONS)[number]['id'];
+
+function heading(id: SectionId): string {
+  const index = SECTIONS.findIndex((section) => section.id === id);
+  return `${index + 1}. ${SECTIONS[index].title}`;
+}
+
+function Section({ id, icon: Icon, children }: { id: SectionId; icon: LucideIcon; children: ReactNode }) {
+  return (
+    <Card id={id} className="scroll-mt-20">
+      <CardHeader>
+        <div className="flex items-center gap-2">
+          <Icon className="h-5 w-5 text-primary" aria-hidden="true" />
+          <CardTitle>{heading(id)}</CardTitle>
+        </div>
+      </CardHeader>
+      <CardContent className="space-y-4 text-sm leading-relaxed">{children}</CardContent>
+    </Card>
+  );
+}
+
+function Subheading({ children }: { children: ReactNode }) {
+  return <h3 className="font-semibold mb-2">{children}</h3>;
+}
+
+function Bullets({ children }: { children: ReactNode }) {
+  return <ul className="list-disc space-y-1.5 pl-5">{children}</ul>;
+}
+
+function ExternalLink({ href, children }: { href: string; children: ReactNode }) {
+  return (
+    <a href={href} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">
+      {children}
+    </a>
+  );
+}
+
+function EmailLink() {
+  return (
+    <a href={`mailto:${CONTACT_EMAIL}`} className="text-primary hover:underline">
+      {CONTACT_EMAIL}
+    </a>
+  );
+}
+
 export default function PrivacyPage() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-background to-muted/20">
@@ -33,24 +119,60 @@ export default function PrivacyPage() {
               Back to Home
             </Button>
           </Link>
-          
+
           <div className="flex items-center gap-3 mb-4">
             <div className="p-3 rounded-lg bg-primary/10">
               <Shield className="h-8 w-8 text-primary" />
             </div>
             <div>
               <h1 className="text-4xl font-bold">Privacy Policy</h1>
-              <p className="text-muted-foreground mt-1">Last updated: February 28, 2026</p>
+              <p className="text-muted-foreground mt-1">
+                Last updated: <time dateTime={PRIVACY_LAST_UPDATED}>{LAST_UPDATED}</time>
+              </p>
             </div>
           </div>
 
           <Alert className="mt-4">
             <Eye className="h-4 w-4" />
             <AlertDescription>
-              Your privacy is important to us. This policy explains how we collect, use, and protect your personal information.
+              This policy explains what SOHAM collects, where it is stored, who it is shared with and how
+              you can delete it. It describes how SOHAM works today, including the memory that SOHAM&apos;s
+              server keeps for signed-in users.
             </AlertDescription>
           </Alert>
         </div>
+
+        {/* Short version */}
+        <Card className="mb-8 border-primary/30">
+          <CardHeader>
+            <CardTitle className="text-lg">The short version</CardTitle>
+          </CardHeader>
+          <CardContent className="text-sm leading-relaxed">
+            <Bullets>
+              <li>You need an account to chat. Sign-in is handled by Firebase Authentication, a Google service.</li>
+              <li>
+                Your chat list is saved in your browser. When you are signed in, SOHAM&apos;s server also saves
+                your messages and the replies, facts it picks up from your chats, and a profile built from
+                them, so the assistant can remember context across sessions and devices.
+              </li>
+              <li>
+                To answer you, your messages are sent to AI model providers (Google Gemini, OpenRouter and
+                Groq) and, for some questions, to search and live-data services.
+              </li>
+              <li>
+                Some questions and answers, and messages that look like corrections or suggestions, can be
+                added to a knowledge base that SOHAM uses when answering everyone. These entries are not
+                linked to your account.
+              </li>
+              <li>Images you generate are stored at public links. Community posts are public.</li>
+              <li>We use Google Analytics. We don&apos;t sell your personal information and we don&apos;t show ads.</li>
+              <li>
+                You can delete chats in the app and delete your account in Account settings. To delete what
+                SOHAM&apos;s server has saved, email <EmailLink />.
+              </li>
+            </Bullets>
+          </CardContent>
+        </Card>
 
         {/* Quick Navigation */}
         <Card className="mb-8">
@@ -58,734 +180,541 @@ export default function PrivacyPage() {
             <CardTitle className="text-lg">Quick Navigation</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-              <a href="#introduction" className="text-sm text-primary hover:underline">1. Introduction</a>
-              <a href="#information" className="text-sm text-primary hover:underline">2. Information We Collect</a>
-              <a href="#usage" className="text-sm text-primary hover:underline">3. How We Use Your Information</a>
-              <a href="#sharing" className="text-sm text-primary hover:underline">4. Information Sharing</a>
-              <a href="#third-party" className="text-sm text-primary hover:underline">5. Third-Party Services</a>
-              <a href="#security" className="text-sm text-primary hover:underline">6. Data Security</a>
-              <a href="#retention" className="text-sm text-primary hover:underline">7. Data Retention</a>
-              <a href="#rights" className="text-sm text-primary hover:underline">8. Your Rights</a>
-              <a href="#cookies" className="text-sm text-primary hover:underline">9. Cookies & Tracking</a>
-              <a href="#google-api" className="text-sm text-primary hover:underline">10. Google API Services & User Data</a>
-              <a href="#children" className="text-sm text-primary hover:underline">11. Children's Privacy</a>
-              <a href="#international" className="text-sm text-primary hover:underline">12. International Users</a>
-              <a href="#changes" className="text-sm text-primary hover:underline">13. Policy Changes</a>
-            </div>
+            <nav aria-label="Privacy policy sections" className="grid grid-cols-1 md:grid-cols-2 gap-2">
+              {SECTIONS.map((section) => (
+                <a key={section.id} href={`#${section.id}`} className="text-sm text-primary hover:underline">
+                  {heading(section.id)}
+                </a>
+              ))}
+            </nav>
           </CardContent>
         </Card>
 
-        {/* Privacy Content */}
         <div className="space-y-8">
-          {/* Section 1 */}
-          <Card id="introduction">
-            <CardHeader>
-              <div className="flex items-center gap-2">
-                <Shield className="h-5 w-5 text-primary" />
-                <CardTitle>1. Introduction</CardTitle>
-              </div>
-            </CardHeader>
-            <CardContent className="space-y-4 text-sm">
+          <Section id="introduction" icon={Shield}>
+            <p>
+              This Privacy Policy explains what information SOHAM collects, how it is used, who it is shared
+              with and the choices you have. It applies to the SOHAM website and app at soham-ai.vercel.app,
+              including the version you can install on your device.
+            </p>
+            <p>
+              SOHAM is built and run by Heoster (Harsh) under the CODEEX-AI name, from Khatauli, Uttar Pradesh,
+              India. In this policy, &quot;SOHAM&quot;, &quot;we&quot; and &quot;us&quot; mean that operator.
+            </p>
+            <p>By using SOHAM you agree to this policy. If you don&apos;t agree, please don&apos;t use SOHAM.</p>
+          </Section>
+
+          <Section id="information" icon={Database}>
+            <div>
+              <Subheading>Account information</Subheading>
+              <p>When you create an account or sign in, Firebase Authentication (a Google service) processes:</p>
+              <Bullets>
+                <li>your email address;</li>
+                <li>your display name and, if you sign in with Google, your profile photo;</li>
+                <li>the user ID that Firebase gives your account;</li>
+                <li>your password, if you sign up with email and password. Firebase handles it and we never receive it.</li>
+              </Bullets>
+            </div>
+
+            <div>
+              <Subheading>What you send in chat</Subheading>
+              <p>Each time you send a message, SOHAM&apos;s server receives:</p>
+              <Bullets>
+                <li>your message and the recent messages in that conversation;</li>
+                <li>your tone, technical level and model settings;</li>
+                <li>your user ID, if you are signed in.</li>
+              </Bullets>
+              <p className="mt-2">
+                Section 3 explains what the server keeps from these messages.
+              </p>
+            </div>
+
+            <div>
+              <Subheading>Images, files and voice</Subheading>
+              <Bullets>
+                <li>
+                  <strong>Images you add in chat</strong> (upload or camera) are uploaded to our website server,
+                  which schedules them for deletion after about an hour, and sent to Google Gemini for analysis.
+                  What Gemini recognises in the image becomes part of your message.
+                </li>
+                <li>
+                  <strong>PDFs</strong> you upload to the PDF Analyzer (up to 5 MB) are sent with your question to
+                  SOHAM&apos;s server and to an AI model provider. We don&apos;t keep a copy.
+                </li>
+                <li>
+                  <strong>Images you generate</strong> are saved in a public storage bucket (Supabase Storage) so
+                  they can be shown in chat. Anyone who has the link can open them. Your prompt is sent to the
+                  image generation service.
+                </li>
+                <li>
+                  <strong>Voice input</strong> uses your browser&apos;s speech recognition. Depending on your
+                  browser, the browser maker may process the audio; Chrome, for example, sends it to Google. If
+                  you use <em>Record audio</em>, the clip is sent to SOHAM&apos;s server for transcription and is
+                  not stored.
+                </li>
+                <li>
+                  <strong>Read aloud</strong> uses your browser&apos;s built-in voices. Some browsers use online
+                  voices, in which case the browser maker processes the text being read.
+                </li>
+              </Bullets>
+            </div>
+
+            <div>
+              <Subheading>Community board, contact form and emails</Subheading>
+              <Bullets>
+                <li>
+                  <strong>Community posts are public.</strong> A post includes the name you enter (or
+                  &quot;Anonymous&quot;), the text and tags you write, your profile photo if your account has one,
+                  and your user ID. Reports you send about posts are saved too.
+                </li>
+                <li>
+                  <strong>Contact form:</strong> your name, email address, subject and message are sent to us by
+                  email through EmailJS.
+                </li>
+                <li>
+                  <strong>Welcome email:</strong> when you create an account, we send a welcome email through
+                  EmailJS, which receives your email address and display name.
+                </li>
+              </Bullets>
+            </div>
+
+            <div>
+              <Subheading>Technical and usage information</Subheading>
+              <Bullets>
+                <li>
+                  <strong>IP address:</strong> used to apply rate limits. Our hosting providers also record it in
+                  server request logs, with the time and the page or API path requested.
+                </li>
+                <li>
+                  <strong>Server logs:</strong> SOHAM&apos;s servers log errors and some processing steps. These logs
+                  can include your user ID and short snippets of message text.
+                </li>
+                <li>
+                  <strong>Google Analytics:</strong> the pages you visit, your approximate location (worked out
+                  from your IP address), your device and browser, and how you reached the site. It uses cookies.
+                </li>
+              </Bullets>
+            </div>
+          </Section>
+
+          <Section id="memory" icon={Brain}>
+            <div>
+              <Subheading>Memory linked to your account</Subheading>
               <p>
-                Welcome to SOHAM. We are committed to protecting your privacy and ensuring the security of your personal information. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our platform.
+                When you are signed in, SOHAM&apos;s server saves the following, linked to your user ID, and uses it
+                as context when it answers you, on any device:
               </p>
+              <Bullets>
+                <li><strong>Chat history:</strong> a copy of each message you send and each reply.</li>
+                <li>
+                  <strong>Memories:</strong> facts and preferences that SOHAM picks out of your conversations, such
+                  as your name, interests or details about your work. They are extracted automatically, by an AI
+                  model or by simple rules.
+                </li>
+                <li>
+                  <strong>Profile:</strong> a summary built from those memories. It can include your name, age,
+                  location, language, time zone, occupation, likes, dislikes and preferred response style, but
+                  only if they come up in your chats.
+                </li>
+                <li>
+                  <strong>Searchable copies:</strong> embeddings (numeric representations) of your messages and
+                  the replies, used to find relevant past context. Google&apos;s embedding service may be used to
+                  create them.
+                </li>
+              </Bullets>
+              <p className="mt-2">
+                The chat list you see in the sidebar is separate: it is stored in your browser and is not synced
+                between devices.
+              </p>
+            </div>
+
+            <div>
+              <Subheading>Shared knowledge base</Subheading>
+              <p>To answer common questions faster, SOHAM&apos;s server can also save, without your user ID:</p>
+              <Bullets>
+                <li>
+                  the text of a question that looks factual (up to 200 characters) together with the start of the
+                  reply;
+                </li>
+                <li>messages that look like a correction or a suggestion (up to a few hundred characters);</li>
+                <li>results from search and live-data tools, such as news, weather and prices.</li>
+              </Bullets>
+              <p className="mt-2">
+                These entries can be used as background context when SOHAM answers other people. Please
+                don&apos;t include personal details in a message if you don&apos;t want them to end up there.
+              </p>
+            </div>
+          </Section>
+
+          <Section id="usage" icon={Bell}>
+            <p>We use the information above to:</p>
+            <Bullets>
+              <li>sign you in and keep your account working;</li>
+              <li>answer your messages and run tools such as web search, image generation, image analysis and PDF analysis;</li>
+              <li>personalise replies with your settings and the memory described in Section 3;</li>
+              <li>keep SOHAM available and secure, for example with rate limits, and find and fix errors;</li>
+              <li>understand how the site is used, in aggregate, through Google Analytics;</li>
+              <li>send the welcome email and reply when you contact us;</li>
+              <li>meet legal obligations and enforce our Terms of Service.</li>
+            </Bullets>
+            <p>
+              We don&apos;t sell your personal information, we don&apos;t use it for advertising and we don&apos;t train
+              AI models on it ourselves. The providers in Section 6 handle what they receive under their own terms.
+            </p>
+          </Section>
+
+          <Section id="storage" icon={HardDrive}>
+            <div>
+              <Subheading>On your device</Subheading>
+              <Bullets>
+                <li>your chats and messages, and your settings (browser IndexedDB);</li>
+                <li>your sign-in session (kept by Firebase in your browser);</li>
+                <li>your theme and your community votes (browser local storage);</li>
+                <li>app pages, static files and recently viewed generated images (service worker cache).</li>
+              </Bullets>
+            </div>
+            <div>
+              <Subheading>On servers we use</Subheading>
+              <Bullets>
+                <li>account records: Firebase Authentication (Google);</li>
+                <li>chat history, memories, profiles, community posts and reports: a Supabase database;</li>
+                <li>generated images: Supabase Storage, at public links;</li>
+                <li>searchable copies of messages and the shared knowledge base: Upstash Vector;</li>
+                <li>images uploaded in chat, temporarily: our website server (hosted on Vercel);</li>
+                <li>request and error logs: our hosting providers, Vercel and Render.</li>
+              </Bullets>
+            </div>
+          </Section>
+
+          <Section id="third-party" icon={Globe}>
+            <p>These services receive information so that SOHAM can work:</p>
+
+            <div>
+              <Subheading>Hosting, accounts and storage</Subheading>
+              <Bullets>
+                <li>
+                  <strong>Firebase Authentication (Google):</strong> sign-in and account records.{' '}
+                  <ExternalLink href="https://firebase.google.com/support/privacy">Firebase privacy</ExternalLink>
+                </li>
+                <li>
+                  <strong>Vercel:</strong> hosts the website and its API routes.{' '}
+                  <ExternalLink href="https://vercel.com/legal/privacy-policy">Vercel privacy</ExternalLink>
+                </li>
+                <li>
+                  <strong>Render:</strong> hosts SOHAM&apos;s backend server, which handles chat, memory, search and
+                  image generation. <ExternalLink href="https://render.com/privacy">Render privacy</ExternalLink>
+                </li>
+                <li>
+                  <strong>Supabase:</strong> database and file storage (see Section 5).{' '}
+                  <ExternalLink href="https://supabase.com/privacy">Supabase privacy</ExternalLink>
+                </li>
+                <li><strong>Upstash:</strong> vector database for searchable copies of messages and the shared knowledge base.</li>
+              </Bullets>
+            </div>
+
+            <div>
+              <Subheading>AI models</Subheading>
+              <Bullets>
+                <li>
+                  <strong>Google (Gemini API):</strong> chat replies, image analysis, PDF analysis and embeddings.{' '}
+                  <ExternalLink href="https://ai.google.dev/gemini-api/terms">Gemini API terms</ExternalLink>
+                </li>
+                <li>
+                  <strong>OpenRouter:</strong> passes some requests to free models run by other companies, which
+                  then receive the request.{' '}
+                  <ExternalLink href="https://openrouter.ai/privacy">OpenRouter privacy</ExternalLink>
+                </li>
+                <li>
+                  <strong>Groq:</strong> runs the GPT-OSS and Qwen models when Groq is switched on for SOHAM.{' '}
+                  <ExternalLink href="https://groq.com/privacy-policy">Groq privacy</ExternalLink>
+                </li>
+                <li>
+                  <strong>Image generation:</strong> Pollinations.ai receives your image prompt. Cloudflare Workers AI
+                  is used instead only if it is switched on for SOHAM.
+                </li>
+              </Bullets>
+              <p className="mt-2">
+                SOHAM uses free tiers of these services. Some free tiers let the provider keep what it receives and
+                use it to improve its products, and providers that OpenRouter routes to may log requests. Please
+                check their terms, and avoid sending sensitive information.
+              </p>
+            </div>
+
+            <div>
+              <Subheading>Search and live data</Subheading>
               <p>
-                SOHAM is developed and maintained by Heoster (Harsh), located in Khatauli, Uttar Pradesh, India. By using our services, you agree to the collection and use of information in accordance with this policy.
+                When a question needs current information, search terms taken from your message (not your account
+                details) are sent to services such as Tavily, Firecrawl, You.com, Wikipedia, DuckDuckGo, GNews,
+                Open-Meteo, CricAPI, CoinGecko, Alpha Vantage, Binance and ExchangeRate-API.
               </p>
+            </div>
+
+            <div>
+              <Subheading>Email and analytics</Subheading>
+              <Bullets>
+                <li>
+                  <strong>EmailJS:</strong> welcome emails and the contact form.{' '}
+                  <ExternalLink href="https://www.emailjs.com/legal/privacy-policy/">EmailJS privacy</ExternalLink>
+                </li>
+                <li>
+                  <strong>Google Analytics:</strong> usage statistics.{' '}
+                  <ExternalLink href="https://policies.google.com/technologies/partner-sites">
+                    How Google uses this data
+                  </ExternalLink>
+                </li>
+              </Bullets>
+            </div>
+          </Section>
+
+          <Section id="sharing" icon={Share2}>
+            <p>We don&apos;t sell, trade or rent your personal information. Information is shared or made public only:</p>
+            <Bullets>
+              <li>with the service providers in Section 6, so that SOHAM can work;</li>
+              <li>when you publish it yourself, as with community posts and the links to images you generate;</li>
+              <li>as entries in the shared knowledge base described in Section 3, without your user ID;</li>
+              <li>when you ask us to, or agree to it;</li>
+              <li>
+                when the law requires it, or to protect the rights, property or safety of SOHAM, its users or
+                others;
+              </li>
+              <li>to a new owner, if SOHAM is ever sold or merged. This policy would continue to apply to your information.</li>
+            </Bullets>
+          </Section>
+
+          <Section id="retention" icon={Clock}>
+            <Bullets>
+              <li>
+                <strong>Chats in your browser:</strong> until you delete them in the chat sidebar, use{' '}
+                <em>Clear</em>, or clear this site&apos;s data in your browser.
+              </li>
+              <li>
+                <strong>Chat history, memories, profile and searchable copies on the server:</strong> kept until
+                you ask us to delete them. There is no automatic expiry at the moment, and deleting your account does
+                not remove them by itself.
+              </li>
+              <li>
+                <strong>Shared knowledge base:</strong> question-and-answer entries are treated as expired after 7
+                days and tool results after a few hours, but they can stay in storage until removed. Corrections and
+                suggestions don&apos;t expire.
+              </li>
+              <li><strong>Generated images:</strong> kept in storage until they are removed.</li>
+              <li><strong>Images uploaded in chat:</strong> scheduled for deletion about an hour after upload.</li>
+              <li><strong>Community posts and reports:</strong> until you or we delete them.</li>
+              <li>
+                <strong>Account:</strong> until you delete it in Account settings. Firebase deletes your sign-in
+                record when you do.
+              </li>
+              <li>
+                <strong>Emails:</strong> contact messages and welcome emails stay in our inbox and in EmailJS for as
+                long as we need them.
+              </li>
+              <li>
+                <strong>Logs and analytics:</strong> kept by our hosting providers and Google Analytics for their
+                retention periods.
+              </li>
+            </Bullets>
+          </Section>
+
+          <Section id="rights" icon={UserCheck}>
+            <Bullets>
+              <li><strong>See or change your account details:</strong> in Account settings.</li>
+              <li>
+                <strong>Delete chats:</strong> delete a chat from the chat sidebar, or use <em>Clear</em> to delete
+                every chat stored in this browser.
+              </li>
+              <li><strong>Export a chat:</strong> download any chat as a JSON file from the chat sidebar.</li>
+              <li>
+                <strong>Delete your account:</strong> Account settings → Delete Account. This deletes your Firebase
+                sign-in record.
+              </li>
+              <li>
+                <strong>Get or delete server-side data:</strong> email <EmailLink /> from the address on your
+                account. We will send you, or delete, the chat history, memories, profile, searchable copies and
+                community posts linked to your user ID. Knowledge base entries are not linked to you, so tell us the
+                text and we will look for it.
+              </li>
+              <li>
+                <strong>Analytics:</strong> block cookies for this site, or use the{' '}
+                <ExternalLink href="https://tools.google.com/dlpage/gaoptout">
+                  Google Analytics opt-out browser add-on
+                </ExternalLink>
+                .
+              </li>
+              <li>
+                <strong>Withdraw consent:</strong> stop using SOHAM at any time and ask us to delete your data.
+              </li>
+            </Bullets>
+            <p>
+              Depending on where you live, laws such as India&apos;s Digital Personal Data Protection Act 2023, the
+              GDPR in the EU and UK, or the CCPA in California may give you rights to access, correct, delete or
+              port your personal data, to object to some uses of it, and to complain to a data protection
+              authority. Email us to use any of these rights.
+            </p>
+          </Section>
+
+          <Section id="cookies" icon={Cookie}>
+            <Bullets>
+              <li><strong>Google Analytics cookies</strong> (named _ga and _ga_ followed by an ID): usage statistics.</li>
+              <li><strong>Firebase Authentication:</strong> keeps you signed in, using your browser&apos;s storage.</li>
+              <li><strong>IndexedDB:</strong> your chats, messages, settings and whether you dismissed the install prompt.</li>
+              <li><strong>Local storage:</strong> your theme choice and your likes and votes on the community board.</li>
+              <li>
+                <strong>Service worker cache:</strong> app pages, static files and recently viewed generated images,
+                so the app loads faster and can show an offline page.
+              </li>
+            </Bullets>
+            <p>
+              SOHAM doesn&apos;t use advertising cookies. You can clear all of this in your browser settings. Signing
+              out does not delete the chats saved in your browser.
+            </p>
+          </Section>
+
+          <Section id="google-api" icon={Lock}>
+            <Alert className="mb-2">
+              <Bell className="h-4 w-4" />
+              <AlertDescription>
+                SOHAM&apos;s use and transfer of information received from Google APIs adheres to the{' '}
+                <ExternalLink href="https://developers.google.com/terms/api-services-user-data-policy">
+                  Google API Services User Data Policy
+                </ExternalLink>
+                , including the Limited Use requirements.
+              </AlertDescription>
+            </Alert>
+
+            <div>
+              <Subheading>What Google data we access</Subheading>
               <p>
-                If you do not agree with the terms of this Privacy Policy, please do not access or use our services.
+                When you sign in with Google, Firebase Authentication asks Google for basic sign-in information
+                only (the openid, email and profile scopes): your email address, name and profile photo.
               </p>
-            </CardContent>
-          </Card>
+              <p className="mt-2 text-muted-foreground">
+                SOHAM does not access your Gmail, Google Drive, Calendar, Contacts or any other Google service.
+              </p>
+            </div>
 
-          {/* Section 2 */}
-          <Card id="information">
-            <CardHeader>
-              <div className="flex items-center gap-2">
-                <Database className="h-5 w-5 text-primary" />
-                <CardTitle>2. Information We Collect</CardTitle>
-              </div>
-            </CardHeader>
-            <CardContent className="space-y-4 text-sm">
-              <div>
-                <h4 className="font-semibold mb-2">Personal Information</h4>
-                <p>When you register for an account, we collect:</p>
-                <ul className="list-disc list-inside space-y-1 ml-4 mt-2">
-                  <li>Email address</li>
-                  <li>Display name (optional)</li>
-                  <li>Password (encrypted and never stored in plain text)</li>
-                  <li>Profile information you choose to provide</li>
-                </ul>
-              </div>
-              
-              <div>
-                <h4 className="font-semibold mb-2">Usage Data</h4>
-                <p>We automatically collect certain information when you use our services:</p>
-                <ul className="list-disc list-inside space-y-1 ml-4 mt-2">
-                  <li>Chat conversations and AI interactions</li>
-                  <li>Model preferences and settings</li>
-                  <li>Feature usage patterns (chat, math solver, PDF analyzer, etc.)</li>
-                  <li>Device information (browser type, operating system)</li>
-                  <li>IP address and general location data</li>
-                  <li>Session duration and timestamps</li>
-                </ul>
-              </div>
+            <div>
+              <Subheading>How we use it</Subheading>
+              <Bullets>
+                <li>to create your SOHAM account and sign you in;</li>
+                <li>to show your name and photo in the app;</li>
+                <li>to fill in the author name on community posts, which you can change before posting;</li>
+                <li>to send the welcome email.</li>
+              </Bullets>
+              <p className="mt-2">
+                We don&apos;t use Google user data for advertising, we don&apos;t sell it, and we don&apos;t send it to
+                AI model providers or use it to train AI models.
+              </p>
+            </div>
 
-              <div>
-                <h4 className="font-semibold mb-2">Content Data</h4>
-                <p>We process content you provide to our services:</p>
-                <ul className="list-disc list-inside space-y-1 ml-4 mt-2">
-                  <li>Text prompts and messages sent to AI models</li>
-                  <li>Files uploaded for analysis (PDFs, images)</li>
-                  <li>Smart notes and saved content</li>
-                  <li>Math problems and solutions</li>
-                  <li>Web search queries</li>
-                </ul>
-              </div>
+            <div>
+              <Subheading>Who receives it</Subheading>
+              <Bullets>
+                <li>Firebase (Google), which handles sign-in;</li>
+                <li>EmailJS, which receives your email address and name to send the welcome email;</li>
+                <li>everyone who reads the community board, if you publish a post (your photo and the name you choose);</li>
+                <li>authorities, only if the law requires it.</li>
+              </Bullets>
+            </div>
 
-              <div>
-                <h4 className="font-semibold mb-2">Technical Data</h4>
-                <ul className="list-disc list-inside space-y-1 ml-4">
-                  <li>Cookies and similar tracking technologies</li>
-                  <li>Log files and error reports</li>
-                  <li>Performance metrics and analytics</li>
-                  <li>API usage statistics</li>
-                </ul>
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Section 3 */}
-          <Card id="usage">
-            <CardHeader>
-              <CardTitle>3. How We Use Your Information</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4 text-sm">
-              <p>We use the collected information for the following purposes:</p>
-              
-              <div>
-                <h4 className="font-semibold mb-2">Service Delivery</h4>
-                <ul className="list-disc list-inside space-y-1 ml-4">
-                  <li>Provide access to 35+ AI models and features</li>
-                  <li>Process your requests and generate AI responses</li>
-                  <li>Enable chat, math solving, PDF analysis, and other features</li>
-                  <li>Maintain your account and preferences</li>
-                  <li>Provide text-to-speech and voice features</li>
-                </ul>
-              </div>
-
-              <div>
-                <h4 className="font-semibold mb-2">Service Improvement</h4>
-                <ul className="list-disc list-inside space-y-1 ml-4">
-                  <li>Analyze usage patterns to improve our platform</li>
-                  <li>Optimize AI model performance and accuracy</li>
-                  <li>Develop new features and capabilities</li>
-                  <li>Fix bugs and technical issues</li>
-                  <li>Enhance user experience and interface</li>
-                </ul>
-              </div>
-
-              <div>
-                <h4 className="font-semibold mb-2">Communication</h4>
-                <ul className="list-disc list-inside space-y-1 ml-4">
-                  <li>Send welcome emails and account notifications</li>
-                  <li>Provide customer support and respond to inquiries</li>
-                  <li>Send important updates about service changes</li>
-                  <li>Notify you of new features (with your consent)</li>
-                </ul>
-              </div>
-
-              <div>
-                <h4 className="font-semibold mb-2">Security & Compliance</h4>
-                <ul className="list-disc list-inside space-y-1 ml-4">
-                  <li>Detect and prevent fraud and abuse</li>
-                  <li>Ensure platform security and integrity</li>
-                  <li>Comply with legal obligations</li>
-                  <li>Enforce our Terms of Service</li>
-                </ul>
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Section 4 */}
-          <Card id="sharing">
-            <CardHeader>
-              <div className="flex items-center gap-2">
-                <Users className="h-5 w-5 text-primary" />
-                <CardTitle>4. Information Sharing</CardTitle>
-              </div>
-            </CardHeader>
-            <CardContent className="space-y-4 text-sm">
+            <div>
+              <Subheading>Storage, retention and deletion</Subheading>
               <p>
-                We do not sell, trade, or rent your personal information to third parties. We may share your information only in the following circumstances:
+                Google user data travels over HTTPS and is stored by Firebase while your account exists. Deleting
+                your account in Account settings deletes your Firebase sign-in record. Community posts keep the
+                name and photo link until the post is deleted; email us to remove them. You can also revoke
+                SOHAM&apos;s access at any time in your{' '}
+                <ExternalLink href="https://myaccount.google.com/permissions">Google Account permissions</ExternalLink>.
               </p>
+            </div>
 
-              <div>
-                <h4 className="font-semibold mb-2">With Your Consent</h4>
-                <p>We will share your information when you explicitly authorize us to do so.</p>
-              </div>
+            <p className="font-semibold">
+              SOHAM is an independent service and is not affiliated with, endorsed by or sponsored by Google. Your
+              use of Google Sign-In is also subject to{' '}
+              <ExternalLink href="https://policies.google.com/privacy">Google&apos;s Privacy Policy</ExternalLink> and{' '}
+              <ExternalLink href="https://policies.google.com/terms">Google&apos;s Terms of Service</ExternalLink>.
+            </p>
+          </Section>
 
-              <div>
-                <h4 className="font-semibold mb-2">Service Providers</h4>
-                <p>We share information with trusted third-party service providers who assist us in operating our platform (see Section 5 for details).</p>
-              </div>
+          <Section id="children" icon={Users}>
+            <p>
+              SOHAM is intended for people aged 13 and over. We don&apos;t knowingly collect personal information
+              from children under 13. If you are under 18, you should have permission from a parent or guardian
+              before using SOHAM.
+            </p>
+            <p>
+              If you believe a child under 13 has given us personal information, contact us at <EmailLink /> and we
+              will delete it.
+            </p>
+          </Section>
 
-              <div>
-                <h4 className="font-semibold mb-2">Legal Requirements</h4>
-                <p>We may disclose your information if required by law or in response to:</p>
-                <ul className="list-disc list-inside space-y-1 ml-4 mt-2">
-                  <li>Valid legal processes (court orders, subpoenas)</li>
-                  <li>Government or regulatory requests</li>
-                  <li>Protection of our rights and property</li>
-                  <li>Prevention of fraud or illegal activities</li>
-                  <li>Protection of user safety</li>
-                </ul>
-              </div>
+          <Section id="international" icon={Globe}>
+            <p>
+              SOHAM is run from India. The providers listed in Section 6 process information in the United States
+              and other countries. By using SOHAM, you understand that your information may be processed outside
+              your country, where data protection laws can differ.
+            </p>
+          </Section>
 
-              <div>
-                <h4 className="font-semibold mb-2">Business Transfers</h4>
-                <p>
-                  In the event of a merger, acquisition, or sale of assets, your information may be transferred to the acquiring entity. We will notify you of any such change.
-                </p>
-              </div>
+          <Section id="security" icon={Lock}>
+            <Bullets>
+              <li>Connections to SOHAM use HTTPS.</li>
+              <li>API keys for AI providers are kept on our servers and are never sent to your browser.</li>
+              <li>Rate limits reduce abuse of the service.</li>
+            </Bullets>
+            <Alert className="mt-2">
+              <AlertDescription>
+                No service can be completely secure, and we can&apos;t guarantee the security of your information.
+                Please don&apos;t share passwords, financial details, health information or other sensitive data in
+                chat.
+              </AlertDescription>
+            </Alert>
+          </Section>
 
-              <div>
-                <h4 className="font-semibold mb-2">Aggregated Data</h4>
-                <p>
-                  We may share anonymized, aggregated data that does not identify you personally for research, analytics, or marketing purposes.
-                </p>
-              </div>
-            </CardContent>
-          </Card>
+          <Section id="changes" icon={Bell}>
+            <p>
+              We will update this policy when SOHAM&apos;s features or data practices change. When we do, we will
+              change the &quot;Last updated&quot; date at the top of this page and, for significant changes, post a
+              notice in the app. If you keep using SOHAM after a change, the updated policy applies.
+            </p>
+          </Section>
 
-          {/* Section 5 */}
-          <Card id="third-party">
-            <CardHeader>
-              <div className="flex items-center gap-2">
-                <Globe className="h-5 w-5 text-primary" />
-                <CardTitle>5. Third-Party Services</CardTitle>
-              </div>
-            </CardHeader>
-            <CardContent className="space-y-4 text-sm">
-              <p>SOHAM integrates with the following third-party services:</p>
+          <Section id="contact" icon={Mail}>
+            <p>
+              If you have a question about this policy or want to use your rights, contact us:
+            </p>
+            <div className="space-y-1">
+              <p><strong>Developer:</strong> Heoster (Harsh)</p>
+              <p><strong>Email:</strong> <EmailLink /></p>
+              <p><strong>Location:</strong> Khatauli, Uttar Pradesh, India</p>
+            </div>
+            <div className="flex flex-wrap gap-2 pt-2">
+              <Link href="/contact">
+                <Button variant="outline" size="sm">Contact Form</Button>
+              </Link>
+              <Link href="/terms">
+                <Button variant="outline" size="sm">Terms of Service</Button>
+              </Link>
+              <Link href="/account-settings">
+                <Button variant="outline" size="sm">Account Settings</Button>
+              </Link>
+            </div>
+          </Section>
 
-              <div>
-                <h4 className="font-semibold mb-2">Firebase (Google)</h4>
-                <ul className="list-disc list-inside space-y-1 ml-4">
-                  <li>Authentication and user management</li>
-                  <li>Cloud database (Firestore)</li>
-                  <li>Data storage and synchronization</li>
-                  <li>Privacy Policy: <a href="https://firebase.google.com/support/privacy" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">Firebase Privacy</a></li>
-                </ul>
-              </div>
-
-              <div>
-                <h4 className="font-semibold mb-2">AI Model Providers</h4>
-                <ul className="list-disc list-inside space-y-1 ml-4">
-                  <li><strong>Groq:</strong> Fast AI inference for multiple models</li>
-                  <li><strong>Google AI:</strong> Gemini models and services</li>
-                  <li><strong>Hugging Face:</strong> Open-source AI models</li>
-                  <li><strong>Cerebras:</strong> Ultra-fast inference for Llama, Qwen, and other models</li>
-                </ul>
-                <p className="mt-2">
-                  Your prompts and content are sent to these providers to generate responses. Each provider has their own privacy policies and data handling practices.
-                </p>
-              </div>
-
-              <div>
-                <h4 className="font-semibold mb-2">EmailJS</h4>
-                <ul className="list-disc list-inside space-y-1 ml-4">
-                  <li>Email delivery for contact forms and notifications</li>
-                  <li>Privacy Policy: <a href="https://www.emailjs.com/legal/privacy-policy/" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">EmailJS Privacy</a></li>
-                </ul>
-              </div>
-
-              <div>
-                <h4 className="font-semibold mb-2">Edge TTS (Microsoft)</h4>
-                <ul className="list-disc list-inside space-y-1 ml-4">
-                  <li>Text-to-speech conversion</li>
-                  <li>Voice synthesis for AI responses</li>
-                </ul>
-              </div>
-
-              <Alert className="mt-4">
-                <Bell className="h-4 w-4" />
-                <AlertDescription>
-                  We recommend reviewing the privacy policies of these third-party services to understand how they handle your data.
-                </AlertDescription>
-              </Alert>
-            </CardContent>
-          </Card>
-
-          {/* Section 6 */}
-          <Card id="security">
-            <CardHeader>
-              <div className="flex items-center gap-2">
-                <Lock className="h-5 w-5 text-primary" />
-                <CardTitle>6. Data Security</CardTitle>
-              </div>
-            </CardHeader>
-            <CardContent className="space-y-4 text-sm">
-              <p>
-                We implement industry-standard security measures to protect your personal information:
-              </p>
-
-              <div>
-                <h4 className="font-semibold mb-2">Technical Safeguards</h4>
-                <ul className="list-disc list-inside space-y-1 ml-4">
-                  <li>HTTPS encryption for all data transmission</li>
-                  <li>Encrypted password storage using Firebase Authentication</li>
-                  <li>Secure API key management</li>
-                  <li>Regular security audits and updates</li>
-                  <li>Firewall and intrusion detection systems</li>
-                </ul>
-              </div>
-
-              <div>
-                <h4 className="font-semibold mb-2">Administrative Safeguards</h4>
-                <ul className="list-disc list-inside space-y-1 ml-4">
-                  <li>Limited access to personal data</li>
-                  <li>Employee confidentiality agreements</li>
-                  <li>Regular security training</li>
-                  <li>Incident response procedures</li>
-                </ul>
-              </div>
-
-              <div>
-                <h4 className="font-semibold mb-2">Physical Safeguards</h4>
-                <ul className="list-disc list-inside space-y-1 ml-4">
-                  <li>Secure cloud infrastructure (Firebase, Netlify)</li>
-                  <li>Data center security measures</li>
-                  <li>Backup and disaster recovery systems</li>
-                </ul>
-              </div>
-
-              <Alert className="mt-4">
-                <AlertDescription>
-                  While we strive to protect your information, no method of transmission over the internet or electronic storage is 100% secure. We cannot guarantee absolute security.
-                </AlertDescription>
-              </Alert>
-            </CardContent>
-          </Card>
-
-          {/* Section 7 */}
-          <Card id="retention">
-            <CardHeader>
-              <CardTitle>7. Data Retention</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4 text-sm">
-              <p>
-                We retain your personal information for as long as necessary to provide our services and fulfill the purposes outlined in this Privacy Policy.
-              </p>
-
-              <div>
-                <h4 className="font-semibold mb-2">Account Data</h4>
-                <p>
-                  Your account information is retained until you delete your account. You can delete your account at any time through the User Management page.
-                </p>
-              </div>
-
-              <div>
-                <h4 className="font-semibold mb-2">Chat History</h4>
-                <p>
-                  Chat conversations are stored to provide service continuity. You can clear your chat history at any time.
-                </p>
-              </div>
-
-              <div>
-                <h4 className="font-semibold mb-2">Usage Data</h4>
-                <p>
-                  Anonymized usage data may be retained for analytics and service improvement purposes.
-                </p>
-              </div>
-
-              <div>
-                <h4 className="font-semibold mb-2">Legal Requirements</h4>
-                <p>
-                  We may retain certain information as required by law or for legitimate business purposes (e.g., fraud prevention, dispute resolution).
-                </p>
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Section 8 */}
-          <Card id="rights">
-            <CardHeader>
-              <CardTitle>8. Your Rights</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4 text-sm">
-              <p>You have the following rights regarding your personal information:</p>
-
-              <div>
-                <h4 className="font-semibold mb-2">Access</h4>
-                <p>
-                  You can access your personal information through your account settings and user management page.
-                </p>
-              </div>
-
-              <div>
-                <h4 className="font-semibold mb-2">Correction</h4>
-                <p>
-                  You can update or correct your personal information at any time through your account settings.
-                </p>
-              </div>
-
-              <div>
-                <h4 className="font-semibold mb-2">Deletion</h4>
-                <p>
-                  You can request deletion of your account and personal data through the User Management page. Note that some information may be retained as required by law.
-                </p>
-              </div>
-
-              <div>
-                <h4 className="font-semibold mb-2">Data Portability</h4>
-                <p>
-                  You can export your data (chat history, notes) using our export features.
-                </p>
-              </div>
-
-              <div>
-                <h4 className="font-semibold mb-2">Opt-Out</h4>
-                <p>
-                  You can opt out of non-essential communications through your account settings.
-                </p>
-              </div>
-
-              <div>
-                <h4 className="font-semibold mb-2">Withdraw Consent</h4>
-                <p>
-                  Where we rely on your consent to process data, you can withdraw consent at any time.
-                </p>
-              </div>
-
-              <p className="mt-4">
-                To exercise these rights, please contact us at{' '}
-                <a href="mailto:codeex@email.com" className="text-primary hover:underline">
-                  codeex@email.com
-                </a>
-              </p>
-            </CardContent>
-          </Card>
-
-          {/* Section 9 */}
-          <Card id="cookies">
-            <CardHeader>
-              <CardTitle>9. Cookies & Tracking Technologies</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4 text-sm">
-              <p>
-                We use cookies and similar tracking technologies to enhance your experience:
-              </p>
-
-              <div>
-                <h4 className="font-semibold mb-2">Essential Cookies</h4>
-                <p>Required for authentication, security, and basic functionality.</p>
-              </div>
-
-              <div>
-                <h4 className="font-semibold mb-2">Preference Cookies</h4>
-                <p>Store your settings and preferences (theme, model selection, language).</p>
-              </div>
-
-              <div>
-                <h4 className="font-semibold mb-2">Analytics Cookies</h4>
-                <p>Help us understand how users interact with our platform to improve services.</p>
-              </div>
-
-              <div>
-                <h4 className="font-semibold mb-2">Local Storage</h4>
-                <p>
-                  We use browser local storage to save your preferences and provide offline functionality for our PWA (Progressive Web App).
-                </p>
-              </div>
-
-              <p className="mt-4">
-                You can control cookies through your browser settings. Note that disabling cookies may affect functionality.
-              </p>
-            </CardContent>
-          </Card>
-
-          {/* Section 10 - Google API Services */}
-          <Card id="google-api">
-            <CardHeader>
-              <div className="flex items-center gap-2">
-                <Shield className="h-5 w-5 text-primary" />
-                <CardTitle>10. Google API Services & User Data Policy</CardTitle>
-              </div>
-            </CardHeader>
-            <CardContent className="space-y-4 text-sm">
-              <Alert className="mb-4">
-                <Bell className="h-4 w-4" />
-                <AlertDescription>
-                  SOHAM uses Google API Services, including Google Sign-In for authentication. This section explains how we handle Google user data in compliance with{' '}
-                  <a href="https://developers.google.com/terms/api-services-user-data-policy" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline font-semibold">
-                    Google API Services User Data Policy
-                  </a>.
-                </AlertDescription>
-              </Alert>
-
-              <div>
-                <h4 className="font-semibold mb-2">What Google Data We Access</h4>
-                <p>When you sign in with Google, we request access to:</p>
-                <ul className="list-disc list-inside space-y-1 ml-4 mt-2">
-                  <li><strong>Email address</strong> - To create and identify your account</li>
-                  <li><strong>Basic profile information</strong> - Your name and profile picture (optional)</li>
-                  <li><strong>OpenID</strong> - To authenticate your identity</li>
-                </ul>
-                <p className="mt-2 text-muted-foreground">
-                  We do NOT access your Gmail, Google Drive, Calendar, Contacts, or any other Google services beyond basic authentication.
-                </p>
-              </div>
-
-              <div>
-                <h4 className="font-semibold mb-2">How We Use Google User Data</h4>
-                <p>We use Google user data exclusively for:</p>
-                <ul className="list-disc list-inside space-y-1 ml-4 mt-2">
-                  <li><strong>Authentication</strong> - To verify your identity and create your SOHAM account</li>
-                  <li><strong>Account Management</strong> - To maintain your user profile and preferences</li>
-                  <li><strong>Communication</strong> - To send you important account-related notifications (with your consent)</li>
-                </ul>
-                <p className="mt-2 font-semibold text-primary">
-                  We do NOT use Google user data for advertising, analytics, or any purpose beyond authentication and account management.
-                </p>
-              </div>
-
-              <div>
-                <h4 className="font-semibold mb-2">Limited Use Requirements</h4>
-                <p>SOHAM's use of information received from Google APIs adheres to the{' '}
-                  <a href="https://developers.google.com/terms/api-services-user-data-policy#additional_requirements_for_specific_api_scopes" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">
-                    Google API Services User Data Policy
-                  </a>, including the Limited Use requirements:</p>
-                <ul className="list-disc list-inside space-y-1 ml-4 mt-2">
-                  <li>We only use Google user data to provide and improve user-facing features</li>
-                  <li>We do NOT transfer Google user data to third parties (except as required for authentication)</li>
-                  <li>We do NOT use Google user data for serving advertisements</li>
-                  <li>We do NOT allow humans to read Google user data (except for security purposes or with explicit user consent)</li>
-                  <li>We do NOT use Google user data to determine creditworthiness or for lending purposes</li>
-                </ul>
-              </div>
-
-              <div>
-                <h4 className="font-semibold mb-2">Data Storage & Security</h4>
-                <p>Google user data is:</p>
-                <ul className="list-disc list-inside space-y-1 ml-4 mt-2">
-                  <li><strong>Encrypted in transit</strong> - All data transmission uses HTTPS/TLS encryption</li>
-                  <li><strong>Encrypted at rest</strong> - Stored securely in Firebase with encryption</li>
-                  <li><strong>Access-controlled</strong> - Only authorized systems can access user data</li>
-                  <li><strong>Regularly audited</strong> - We conduct security reviews and updates</li>
-                </ul>
-              </div>
-
-              <div>
-                <h4 className="font-semibold mb-2">Data Retention</h4>
-                <p>We retain Google user data only as long as necessary:</p>
-                <ul className="list-disc list-inside space-y-1 ml-4 mt-2">
-                  <li>Your email and profile information are stored while your account is active</li>
-                  <li>You can delete your account at any time through Account Settings</li>
-                  <li>Upon account deletion, your Google user data is permanently removed within 30 days</li>
-                  <li>Some data may be retained longer if required by law or for security purposes</li>
-                </ul>
-              </div>
-
-              <div>
-                <h4 className="font-semibold mb-2">No Data Selling or Sharing</h4>
-                <p className="font-semibold text-primary">
-                  We do NOT sell, rent, or share your Google user data with third parties for their marketing or advertising purposes.
-                </p>
-                <p className="mt-2">
-                  Google user data is only shared with:
-                </p>
-                <ul className="list-disc list-inside space-y-1 ml-4 mt-2">
-                  <li><strong>Firebase/Google Cloud</strong> - For authentication and secure storage (Google's own services)</li>
-                  <li><strong>You</strong> - You can access and export your data at any time</li>
-                  <li><strong>Legal authorities</strong> - Only if required by law</li>
-                </ul>
-              </div>
-
-              <div>
-                <h4 className="font-semibold mb-2">Your Control Over Google Data</h4>
-                <p>You have full control over your Google user data:</p>
-                <ul className="list-disc list-inside space-y-1 ml-4 mt-2">
-                  <li><strong>Revoke Access</strong> - You can revoke SOHAM's access to your Google account at any time through{' '}
-                    <a href="https://myaccount.google.com/permissions" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">
-                      Google Account Permissions
-                    </a>
-                  </li>
-                  <li><strong>Delete Account</strong> - Delete your SOHAM account and all associated data through Account Settings</li>
-                  <li><strong>Export Data</strong> - Export your data using our data export features</li>
-                  <li><strong>Update Information</strong> - Update your profile information at any time</li>
-                </ul>
-              </div>
-
-              <div>
-                <h4 className="font-semibold mb-2">Independent Service</h4>
-                <p className="font-semibold">
-                  SOHAM is an independent service and is NOT affiliated with, endorsed by, or sponsored by Google.
-                </p>
-                <p className="mt-2">
-                  We use Google Sign-In solely as an authentication method for user convenience. Your use of Google Sign-In is also subject to{' '}
-                  <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">
-                    Google's Privacy Policy
-                  </a>{' '}
-                  and{' '}
-                  <a href="https://policies.google.com/terms" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">
-                    Google's Terms of Service
-                  </a>.
-                </p>
-              </div>
-
-              <div>
-                <h4 className="font-semibold mb-2">Compliance & Transparency</h4>
-                <p>SOHAM is committed to:</p>
-                <ul className="list-disc list-inside space-y-1 ml-4 mt-2">
-                  <li>Full compliance with Google API Services User Data Policy</li>
-                  <li>Transparent communication about data usage</li>
-                  <li>Regular security assessments and updates</li>
-                  <li>Prompt notification of any policy changes</li>
-                  <li>Respect for user privacy and data rights</li>
-                </ul>
-              </div>
-
-              <Alert className="mt-4 bg-primary/5 border-primary/20">
-                <Shield className="h-4 w-4" />
-                <AlertDescription>
-                  <strong>Summary:</strong> We use Google Sign-In only for authentication. We access only your email and basic profile. We do NOT access Gmail, Drive, or other Google services. We do NOT sell or share your Google data. You can revoke access or delete your account anytime.
-                </AlertDescription>
-              </Alert>
-            </CardContent>
-          </Card>
-
-          {/* Section 11 */}
-          <Card id="children">
-            <CardHeader>
-              <CardTitle>10. Children's Privacy</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4 text-sm">
-              <p>
-                SOHAM is intended for users aged 13 and above. We do not knowingly collect personal information from children under 13.
-              </p>
-              <p>
-                If you are under 18, you should have parental or guardian consent before using our services.
-              </p>
-              <p>
-                If we become aware that we have collected personal information from a child under 13 without parental consent, we will take steps to delete that information promptly.
-              </p>
-              <p>
-                Parents or guardians who believe their child has provided personal information to us can contact us at{' '}
-                <a href="mailto:codeex@email.com" className="text-primary hover:underline">
-                  codeex@email.com
-                </a>
-              </p>
-            </CardContent>
-          </Card>
-
-          {/* Section 12 */}
-          <Card id="international">
-            <CardHeader>
-              <CardTitle>12. International Users</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4 text-sm">
-              <p>
-                SOHAM is operated from India. If you are accessing our services from outside India, please be aware that your information may be transferred to, stored, and processed in India and other countries where our service providers operate.
-              </p>
-              <p>
-                By using our services, you consent to the transfer of your information to countries outside your country of residence, which may have different data protection laws.
-              </p>
-              <div>
-                <h4 className="font-semibold mb-2">European Users (GDPR)</h4>
-                <p>
-                  If you are in the European Economic Area (EEA), you have additional rights under GDPR, including the right to lodge a complaint with a supervisory authority.
-                </p>
-              </div>
-              <div>
-                <h4 className="font-semibold mb-2">California Users (CCPA)</h4>
-                <p>
-                  California residents have specific rights under the California Consumer Privacy Act (CCPA), including the right to know what personal information is collected and the right to opt-out of sale (note: we do not sell personal information).
-                </p>
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Section 13 */}
-          <Card id="changes">
-            <CardHeader>
-              <CardTitle>13. Changes to This Privacy Policy</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4 text-sm">
-              <p>
-                We may update this Privacy Policy from time to time to reflect changes in our practices, technology, legal requirements, or other factors.
-              </p>
-              <p>
-                When we make changes, we will:
-              </p>
-              <ul className="list-disc list-inside space-y-1 ml-4">
-                <li>Update the "Last updated" date at the top of this page</li>
-                <li>Post a notice on our platform for significant changes</li>
-                <li>Send email notifications to registered users (for material changes)</li>
-              </ul>
-              <p>
-                Your continued use of SOHAM after changes are posted constitutes your acceptance of the updated Privacy Policy.
-              </p>
-              <p>
-                We encourage you to review this Privacy Policy periodically to stay informed about how we protect your information.
-              </p>
-            </CardContent>
-          </Card>
-
-          {/* Contact Section */}
-          <Card>
-            <CardHeader>
-              <CardTitle>14. Contact Us</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4 text-sm">
-              <p>
-                If you have any questions, concerns, or requests regarding this Privacy Policy or our data practices, please contact us:
-              </p>
-              <div className="space-y-2 mt-4">
-                <p><strong>Developer:</strong> Heoster (Harsh)</p>
-                <p><strong>Email:</strong>{' '}
-                  <a href="mailto:codeex@email.com" className="text-primary hover:underline">
-                    codeex@email.com
-                  </a>
-                </p>
-                <p><strong>Location:</strong> Khatauli, Uttar Pradesh, India</p>
-              </div>
-              <div className="flex gap-4 mt-6">
-                <Link href="/contact">
-                  <Button variant="outline" size="sm">
-                    Contact Form
-                  </Button>
-                </Link>
-                <Link href="/terms">
-                  <Button variant="outline" size="sm">
-                    Terms of Service
-                  </Button>
-                </Link>
-                <Link href="/account">
-                  <Button variant="outline" size="sm">
-                    Manage Your Data
-                  </Button>
-                </Link>
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Data Protection Summary */}
-          <Card className="bg-primary/5 border-primary/20">
+          {/* Summary */}
+          <Card className="border-primary/30 bg-primary/5">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Shield className="h-5 w-5 text-primary" />
-                Data Protection Summary
+                Summary
               </CardTitle>
             </CardHeader>
-            <CardContent className="text-sm space-y-2">
-              <p>✓ We do not sell your personal information</p>
-              <p>✓ Your data is encrypted in transit and at rest</p>
-              <p>✓ You can delete your account and data at any time</p>
-              <p>✓ We use trusted third-party services (Firebase, Groq, Google, Cerebras)</p>
-              <p>✓ We comply with applicable data protection laws</p>
-              <p>✓ You have full control over your data and privacy settings</p>
+            <CardContent className="space-y-2 text-sm">
+              <p>✓ We don&apos;t sell your personal information or show ads</p>
+              <p>✓ Your chat list is saved in your browser; when you&apos;re signed in, SOHAM&apos;s server also saves your chats and memories</p>
+              <p>✓ Messages are sent to AI providers (Google Gemini, OpenRouter, Groq) to generate replies</p>
+              <p>✓ Some questions and corrections can be added to a shared knowledge base, without your user ID</p>
+              <p>✓ Generated images and community posts are public</p>
+              <p>✓ You can delete chats and your account in the app, and ask us to delete server-side data</p>
             </CardContent>
           </Card>
         </div>
@@ -793,15 +722,7 @@ export default function PrivacyPage() {
         {/* Footer */}
         <div className="mt-12 pt-8 border-t text-center text-sm text-muted-foreground">
           <p>© 2026 SOHAM. All rights reserved.</p>
-          <p className="mt-2">
-            This Privacy Policy is effective as of February 28, 2026 and will remain in effect except with respect to any changes in its provisions in the future.
-          </p>
-          <p className="mt-2">
-            This policy complies with{' '}
-            <a href="https://developers.google.com/terms/api-services-user-data-policy" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">
-              Google API Services User Data Policy
-            </a>.
-          </p>
+          <p className="mt-2">This Privacy Policy is effective as of {LAST_UPDATED}.</p>
         </div>
       </div>
     </div>

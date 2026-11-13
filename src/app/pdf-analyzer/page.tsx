@@ -14,6 +14,10 @@ import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { ProtectedRoute } from '@/hooks/use-auth';
 
+// Must match the limit enforced in src/ai/flows/enhanced-pdf-analyzer.ts.
+const MAX_PDF_SIZE_MB = 5;
+const MAX_PDF_SIZE_BYTES = MAX_PDF_SIZE_MB * 1024 * 1024;
+
 export default function PdfAnalyzerPage() {
   const [pdfFile, setPdfFile] = useState<File | null>(null);
   const [question, setQuestion] = useState('Summarize this document in 5 key points.');
@@ -24,7 +28,10 @@ export default function PdfAnalyzerPage() {
 
   const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
-    if (file && file.type === 'application/pdf') {
+    if (file && file.type === 'application/pdf' && file.size > MAX_PDF_SIZE_BYTES) {
+      setError(`This PDF is ${(file.size / (1024 * 1024)).toFixed(1)} MB. The limit is ${MAX_PDF_SIZE_MB} MB.`);
+      setPdfFile(null);
+    } else if (file && file.type === 'application/pdf') {
       setPdfFile(file);
       setAnalysis(null);
       setError(null);
@@ -109,7 +116,7 @@ export default function PdfAnalyzerPage() {
                 ) : (
                     <>
                         <p className="mt-2">Click to upload a PDF</p>
-                        <p className="text-xs text-muted-foreground">Max 20MB</p>
+                        <p className="text-xs text-muted-foreground">Max {MAX_PDF_SIZE_MB} MB</p>
                     </>
                 )}
               </div>

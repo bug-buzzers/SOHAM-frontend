@@ -3,7 +3,55 @@
 import React from 'react';
 import {Card, CardContent, CardDescription, CardHeader, CardTitle} from '@/components/ui/card';
 import {Badge} from '@/components/ui/badge';
-import {Cpu, Code, MessageSquare, Image, Zap, Settings, CheckCircle, Sparkles} from 'lucide-react';
+import {Cpu, Code, MessageSquare, Image, Settings, CheckCircle, Sparkles} from 'lucide-react';
+import {
+  CATEGORY_LABELS,
+  formatContextWindow,
+  getEnabledModels,
+  groupModels,
+  PROVIDER_LABELS,
+  formatProviderList,
+} from '@/lib/model-catalog';
+
+// Built from models-config.json, the same list the chat model selector shows.
+const ENABLED_MODELS = getEnabledModels();
+
+const CATEGORY_STYLES: Record<string, {icon: React.ElementType; color: string; description: string}> = {
+  general: {icon: Sparkles, color: 'text-blue-500', description: 'Versatile models for everyday questions and general tasks'},
+  coding: {icon: Code, color: 'text-green-500', description: 'Models suited to code generation, debugging and multi-step reasoning'},
+  conversation: {icon: MessageSquare, color: 'text-orange-500', description: 'Lightweight models for quick conversational replies'},
+  multimodal: {icon: Image, color: 'text-pink-500', description: 'Models that can work with images as well as text'},
+};
+
+const PROVIDER_DETAILS: Record<string, {desc: string; features: string[]}> = {
+  google: {desc: 'Gemini models on Google\'s free tier', features: ['About 1M token context', 'Free tier']},
+  openrouter: {
+    desc: 'A free router that picks one of OpenRouter\'s free models for each request',
+    features: ['Free tier', 'Model can vary per request'],
+  },
+  groq: {
+    desc: 'Open-weight GPT-OSS and Qwen models. They answer only when Groq is switched on for SOHAM.',
+    features: ['Fast inference', 'Reasoning and code'],
+  },
+};
+
+const modelCategories = groupModels(ENABLED_MODELS, 'category').map(({key, models}) => ({
+  key,
+  title: CATEGORY_LABELS[key] ?? key,
+  ...(CATEGORY_STYLES[key] ?? CATEGORY_STYLES.general),
+  models: models.map((model) => ({
+    name: model.name,
+    provider: model.providerLabel,
+    desc: model.description,
+    features: [`${formatContextWindow(model.contextWindow)} context`],
+  })),
+}));
+
+const providerSummaries = groupModels(ENABLED_MODELS, 'provider').map(({key, models}) => ({
+  name: PROVIDER_LABELS[key] ?? key,
+  models: models.length,
+  ...(PROVIDER_DETAILS[key] ?? {desc: '', features: []}),
+}));
 
 export default function AIModelsPage() {
   return (
@@ -15,8 +63,8 @@ export default function AIModelsPage() {
         </div>
         <h1 className="text-4xl font-bold tracking-tight">AI Models & Selection</h1>
         <p className="text-xl text-muted-foreground">
-          SOHAM routes your queries across 13+ specialized models from Groq, Google, HuggingFace, and
-          OpenRouter. Here's what's available and when to use each.
+          The model selector lists {ENABLED_MODELS.length} models from {formatProviderList(ENABLED_MODELS)}.
+          Here&apos;s what&apos;s available and when to use each.
         </p>
       </div>
 
@@ -28,18 +76,18 @@ export default function AIModelsPage() {
             Auto Mode — Recommended for Most Users
           </CardTitle>
           <CardDescription>
-            SOHAM analyzes your query and routes it to the most capable model automatically
+            SOHAM works out what kind of request you sent and tries the models suited to it, in order
           </CardDescription>
         </CardHeader>
         <CardContent>
           <div className="grid gap-3 md:grid-cols-2">
             {[
-              {emoji: '🧮', label: 'Math problems', desc: 'Routed to math-capable models (Qwen, Llama)'},
-              {emoji: '💻', label: 'Code questions', desc: 'Routed to DeepSeek V3.2 or Llama 3.3 70B'},
-              {emoji: '🖼️', label: 'Image tasks', desc: 'Routed to Gemini multimodal models'},
-              {emoji: '🔍', label: 'Web queries', desc: 'Auto-triggers DuckDuckGo search + AI synthesis'},
-              {emoji: '💬', label: 'General chat', desc: 'Routed to fast conversational models'},
-              {emoji: '📄', label: 'Document tasks', desc: 'Routed to large-context models'},
+              {emoji: '🧮', label: 'Math problems', desc: 'Use /solve for step-by-step working'},
+              {emoji: '💻', label: 'Code questions', desc: 'Coding requests try the coding models first'},
+              {emoji: '🖼️', label: 'Image tasks', desc: 'Visual Math and images you add in chat are analysed by Google Gemini'},
+              {emoji: '🔍', label: 'Web queries', desc: 'Can trigger a web search before answering'},
+              {emoji: '💬', label: 'General chat', desc: 'Handled by general-purpose models'},
+              {emoji: '📄', label: 'Document tasks', desc: 'Use the PDF Analyzer to ask questions about a PDF'},
             ].map((r) => (
               <div key={r.label} className="flex items-start gap-3 bg-background/50 p-3 rounded-lg">
                 <span className="text-xl">{r.emoji}</span>
@@ -56,115 +104,16 @@ export default function AIModelsPage() {
       {/* Model categories */}
       <div className="space-y-6">
         <h2 className="text-2xl font-bold">Available Models</h2>
-
-        <ModelCategory
-          title="General Purpose"
-          icon={Sparkles}
-          color="text-blue-500"
-          description="Fast, versatile models for everyday tasks"
-          models={[
-            {
-              name: 'Llama 3.1 8B Instant',
-              provider: 'Groq',
-              desc: 'Ultra-fast inference, great for quick answers and general chat',
-              features: ['Fastest response', 'Streaming', 'Low latency'],
-            },
-            {
-              name: 'Llama 3.2 1B Instruct',
-              provider: 'HuggingFace',
-              desc: 'Compact free model, good for lightweight tasks',
-              features: ['Free', 'Lightweight', 'No limits'],
-              free: true,
-            },
-            {
-              name: 'Llama 3.1 70B Instruct',
-              provider: 'HuggingFace',
-              desc: 'Large free model with strong reasoning',
-              features: ['Free', 'High quality', 'Complex reasoning'],
-              free: true,
-            },
-            {
-              name: 'Qwen 2.5 7B Instruct',
-              provider: 'HuggingFace',
-              desc: 'Strong multilingual model, excellent at math and code',
-              features: ['Free', 'Multilingual', 'Math & code'],
-              free: true,
-            },
-          ]}
-        />
-
-        <ModelCategory
-          title="Coding Specialists"
-          icon={Code}
-          color="text-green-500"
-          description="Models fine-tuned for programming, debugging, and architecture"
-          models={[
-            {
-              name: 'DeepSeek V3.2',
-              provider: 'HuggingFace',
-              desc: 'State-of-the-art coding model — best for complex programming tasks',
-              features: ['Code generation', 'Debugging', 'Architecture advice'],
-            },
-          ]}
-        />
-
-        <ModelCategory
-          title="Conversational"
-          icon={MessageSquare}
-          color="text-orange-500"
-          description="Models optimized for natural dialogue"
-          models={[
-            {
-              name: 'RNJ-1 Instruct',
-              provider: 'HuggingFace',
-              desc: 'Efficient conversational model with good personality',
-              features: ['Natural dialogue', 'Context awareness', 'Friendly tone'],
-            },
-            {
-              name: 'Gemini 2.5 Flash Lite',
-              provider: 'Google',
-              desc: 'Lightweight Google model, fast and helpful',
-              features: ['Fast responses', 'Casual chat', 'Helpful tone'],
-            },
-          ]}
-        />
-
-        <ModelCategory
-          title="Multimodal (Vision)"
-          icon={Image}
-          color="text-pink-500"
-          description="Models that understand and analyze images"
-          models={[
-            {
-              name: 'Gemini 2.5 Flash',
-              provider: 'Google',
-              desc: 'Google\'s latest multimodal model — best for image analysis',
-              features: ['Image analysis', 'Visual Q&A', 'Large context'],
-            },
-            {
-              name: 'Gemini Flash Latest',
-              provider: 'Google',
-              desc: 'Latest Gemini Flash with improved vision capabilities',
-              features: ['Image understanding', 'Text + vision', 'Fast processing'],
-            },
-          ]}
-        />
-
-        <ModelCategory
-          title="Free / OpenRouter"
-          icon={Zap}
-          color="text-purple-500"
-          description="Completely free models with no usage limits"
-          models={[
-            {
-              name: 'OpenRouter Auto (Free)',
-              provider: 'OpenRouter',
-              desc: 'Automatically selects the best available free model from OpenRouter',
-              features: ['Auto selection', 'No limits', 'Multiple providers'],
-              free: true,
-            },
-          ]}
-        />
+        {modelCategories.map((category) => (
+          <ModelCategory
+            key={category.key}
+            title={category.title}
+            icon={category.icon}
+            color={category.color}
+            description={category.description}
+            models={category.models}
+          />
+        ))}
       </div>
 
       {/* How to select */}
@@ -180,19 +129,19 @@ export default function AIModelsPage() {
             <div className="space-y-3">
               <h4 className="font-semibold">Desktop</h4>
               <ol className="space-y-2 text-sm text-muted-foreground">
-                <li>1. Click the Settings icon (⚙️) in the header</li>
-                <li>2. Find the "AI Model" dropdown</li>
-                <li>3. Select "Auto" or a specific model</li>
-                <li>4. Settings save automatically</li>
+                <li>1. Click the gear icon (⚙️) in the chat header, or Settings at the bottom of the sidebar</li>
+                <li>2. Stay on the AI tab and find Model selection</li>
+                <li>3. Choose Auto (Smart Routing) or a specific model</li>
+                <li>4. Your choice is saved automatically</li>
               </ol>
             </div>
             <div className="space-y-3">
               <h4 className="font-semibold">Mobile</h4>
               <ol className="space-y-2 text-sm text-muted-foreground">
-                <li>1. Tap the model button in the chat header</li>
-                <li>2. A bottom sheet opens with all models</li>
-                <li>3. Tap to select your preferred model</li>
-                <li>4. Sheet closes and model is applied</li>
+                <li>1. Tap Settings in the bottom bar</li>
+                <li>2. On the AI tab, tap the model button</li>
+                <li>3. A bottom sheet opens with all models</li>
+                <li>4. Tap a model to select it</li>
               </ol>
             </div>
           </div>
@@ -209,27 +158,27 @@ export default function AIModelsPage() {
             {[
               {
                 title: 'For coding tasks',
-                desc: 'Use DeepSeek V3.2 for complex programming, debugging, and architecture questions.',
+                desc: 'Try GPT-OSS 120B or Qwen 3.8 27B for programming and debugging, or stay on Auto, which tries them first for code.',
               },
               {
                 title: 'For math problems',
-                desc: 'Auto mode routes to Qwen 2.5 or Llama models which handle math well.',
+                desc: 'Start with /solve to get step-by-step working, or use Visual Math for a photo of an equation.',
               },
               {
                 title: 'For image analysis',
-                desc: 'Use Gemini 2.5 Flash for image understanding and visual Q&A.',
+                desc: 'Use Visual Math, or add an image in chat. Image analysis runs on Google Gemini whichever model you pick.',
               },
               {
                 title: 'For speed',
-                desc: 'Groq\'s Llama 3.1 8B Instant is the fastest model available.',
+                desc: 'Gemini 3.5 Flash-Lite and Gemini 3.1 Flash-Lite are the lighter, quicker Gemini models.',
               },
               {
-                title: 'For free unlimited use',
-                desc: 'HuggingFace models (Llama, Qwen) and OpenRouter Auto have no usage limits.',
+                title: 'About limits',
+                desc: 'All of SOHAM\'s models run on free tiers with rate limits and quotas, so they can be busy at peak times. If a model can\'t answer, another one does, and the reply shows which.',
               },
               {
                 title: 'For general chat',
-                desc: 'Auto mode or RNJ-1 Instruct work best for everyday conversations.',
+                desc: 'Auto mode or Gemini 3.6 Flash are good choices for everyday conversations.',
               },
             ].map((tip) => (
               <div key={tip.title} className="bg-muted/50 p-4 rounded-lg">
@@ -244,33 +193,8 @@ export default function AIModelsPage() {
       {/* Providers */}
       <div className="space-y-4">
         <h2 className="text-2xl font-bold">Model Providers</h2>
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-          {[
-            {
-              name: 'Groq',
-              desc: 'Ultra-fast inference with streaming',
-              models: 2,
-              features: ['Fastest responses', 'Streaming', 'Low latency'],
-            },
-            {
-              name: 'HuggingFace',
-              desc: 'Open-source models, many free',
-              models: 6,
-              features: ['Free models', 'Open source', 'Diverse selection'],
-            },
-            {
-              name: 'Google',
-              desc: 'Advanced multimodal capabilities',
-              models: 3,
-              features: ['Vision support', 'Large context', 'Multimodal'],
-            },
-            {
-              name: 'OpenRouter',
-              desc: 'Aggregated access to many models',
-              models: 1,
-              features: ['Auto selection', 'Free tier', 'Multiple providers'],
-            },
-          ].map((p) => (
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+          {providerSummaries.map((p) => (
             <Card key={p.name}>
               <CardHeader className="pb-3">
                 <CardTitle className="text-lg">{p.name}</CardTitle>

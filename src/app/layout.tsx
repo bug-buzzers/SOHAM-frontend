@@ -10,6 +10,7 @@ import {AuthProvider} from '@/hooks/use-auth';
 import LoadingManager from '@/components/loading-manager';
 import PageTransition from '@/components/page-transition';
 import { PWAPrompt } from '@/components/pwa-prompt';
+import { formatProviderList } from '@/lib/model-catalog';
 import { ServerKeepAlive } from '@/components/server-keepalive';
 import { validateStartup } from '@/lib/startup-validation';
 import { StructuredData } from '@/components/seo/structured-data';
@@ -53,21 +54,21 @@ export const metadata: Metadata = {
     locale: 'en_US',
     url: process.env.NEXT_PUBLIC_SITE_URL || 'https://soham-ai.vercel.app',
     siteName: 'SOHAM',
-    title: 'Free AI Chat Platform | SOHAM - 35+ Models, PDF Analysis, Image Math Solver',
-    description: 'Free AI chat with 35+ models. Chat, code, solve math, analyze PDFs, and use smart web search - no signup required.',
+    title: 'SOHAM — Adaptive AI Workspace by CODEEX-AI',
+    description: `Chat with AI models from ${formatProviderList()}. Code, solve maths, analyze PDFs and search the web. Free to use with a free account.`,
     images: [
       {
         url: 'https://soham-ai.vercel.app/Multi-Chat.png',
-        width: 1200,
-        height: 630,
-        alt: 'SOHAM - Free AI Chat Platform with 35+ Models',
+        width: 1536,
+        height: 1024,
+        alt: 'SOHAM, the adaptive AI workspace by CODEEX-AI',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Free AI Chat Platform | SOHAM - 35+ Models, PDF Analysis, Image Math Solver',
-    description: 'Free AI chat with 35+ models. Chat, code, solve math, analyze PDFs, and use smart web search - no signup required.',
+    title: 'SOHAM — Adaptive AI Workspace by CODEEX-AI',
+    description: `Chat with AI models from ${formatProviderList()}. Code, solve maths, analyze PDFs and search the web. Free to use with a free account.`,
     site: '@The_Heoster_',
     creator: '@The_Heoster_',
     images: ['https://soham-ai.vercel.app/Multi-Chat.png'],
@@ -95,7 +96,7 @@ export const metadata: Metadata = {
     'mobile-web-app-capable': 'yes',
     'apple-mobile-web-app-capable': 'yes',
     'apple-mobile-web-app-status-bar-style': 'black-translucent',
-    'msapplication-TileColor': '#020817',
+    'msapplication-TileColor': '#0e1425',
     'msapplication-config': '/browserconfig.xml',
     'developer': DEVELOPER_INFO.name,
     'developer-age': DEVELOPER_INFO.age.toString(),
@@ -109,7 +110,7 @@ export const viewport: Viewport = {
   initialScale: 1,
   maximumScale: 5,
   userScalable: true,
-  themeColor: '#020817',
+  themeColor: '#0e1425',
 };
 
 export default function RootLayout({

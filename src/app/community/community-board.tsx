@@ -54,7 +54,7 @@ const PLACEHOLDER_POSTS: CommunityPost[] = [
   {
     id: 'demo-3', user_name: 'Vansh', user_avatar: null, user_id: null,
     title: null, sub_slug: null, dislikes: 0,
-    content: 'Question: Which model is best for generating creative writing? I tried a few but Auto mode keeps picking Llama 3.3 — is that the right choice?',
+    content: 'Question: Which model is best for generating creative writing? I tried a few but Auto mode keeps picking Gemini 3.6 Flash — is that the right choice?',
     likes: 7, comment_count: 2, is_pinned: false,
     created_at: new Date(Date.now() - 3600000 * 12).toISOString(), tags: ['question'],
   },

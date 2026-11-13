@@ -6,6 +6,11 @@ import {Button} from '@/components/ui/button';
 import {Card, CardContent, CardDescription, CardHeader, CardTitle} from '@/components/ui/card';
 import {Accordion, AccordionContent, AccordionItem, AccordionTrigger} from '@/components/ui/accordion';
 import {HelpCircle, Cpu, MessageSquare, Settings, Shield, Smartphone, Zap, ArrowRight} from 'lucide-react';
+import {formatProviderList, getEnabledModels} from '@/lib/model-catalog';
+
+// Built from models-config.json, the same list the chat model selector shows.
+const ENABLED_MODELS = getEnabledModels();
+const PROVIDERS = formatProviderList(ENABLED_MODELS);
 
 export default function FAQPage() {
   return (
@@ -55,19 +60,19 @@ export default function FAQPage() {
         questions={[
           {
             q: 'What is SOHAM?',
-            a: 'SOHAM (Self Organising Hyper Adaptive Machine) is a free, multi-model AI assistant built by Heoster (CODEEX-AI). It gives you access to 13+ AI models from Groq, Google, HuggingFace, and OpenRouter through a single interface — with smart auto-routing, voice features, PDF analysis, image generation, and real-time web search.',
+            a: `SOHAM (Self Organising Hyper Adaptive Machine) is a multi-model AI assistant built by Heoster (CODEEX-AI). It brings AI models from ${PROVIDERS} into one interface, with Auto mode, voice chat, PDF analysis, image generation and web search.`,
           },
           {
             q: 'Is SOHAM free?',
-            a: 'Yes, completely free. All core features — chat, 13+ models, image generation, web search, voice, PDF analysis — are free forever. No hidden fees, no subscriptions. Heoster\'s mission is to democratize AI access.',
+            a: 'Yes. There is nothing to pay for in SOHAM today: no subscriptions, no credits and no credit card. SOHAM relies on third-party AI providers, so usage limits apply (chat is currently limited to 30 requests per minute), and a model can be temporarily unavailable when its provider is busy.',
           },
           {
             q: 'Do I need to create an account?',
-            a: 'No account is required for basic usage. Creating an account lets you save conversation history, sync settings, and access personalized features. Sign up is optional and free.',
+            a: 'Yes. You need to sign in to chat, either with Google or with an email address and password (handled by Firebase Authentication). Creating an account is free. Your chat list and settings are saved in the browser you use and don\'t sync between devices. When you\'re signed in, SOHAM\'s server also keeps a memory of your chats (see Privacy & Security below).',
           },
           {
             q: 'What can I ask SOHAM?',
-            a: 'Anything: coding help, math problems, general knowledge, homework, document analysis, image generation, web searches, creative writing, debugging, architecture advice, and more. The AI adapts to your query automatically.',
+            a: 'Anything: coding help, maths problems, general knowledge, homework, document analysis, image generation, web searches, creative writing, debugging and more. In Auto mode SOHAM also chooses a model for each request.',
           },
           {
             q: 'What does "SOHAM" mean?',
@@ -83,23 +88,23 @@ export default function FAQPage() {
         questions={[
           {
             q: 'How many AI models are available?',
-            a: 'SOHAM provides access to 13+ AI models from Groq (Llama 3.1 8B Instant), HuggingFace (Llama 3.1 70B, Llama 3.2 1B, Qwen 2.5 7B, DeepSeek V3.2, RNJ-1), Google (Gemini 2.5 Flash, Gemini Flash Latest, Gemini 2.5 Flash Lite), and OpenRouter (Auto free tier).',
+            a: `The model selector lists ${ENABLED_MODELS.length} models from ${PROVIDERS}: ${ENABLED_MODELS.map((model) => model.name).join(', ')}. The Groq models only answer when Groq is switched on for SOHAM; otherwise another model replies. The Models page has the details.`,
           },
           {
             q: 'What is Auto mode?',
-            a: 'Auto mode is SOHAM\'s smart routing system. It analyzes your query and automatically selects the best model — math questions go to math-capable models, coding questions to DeepSeek or Llama 3.3, image tasks to Gemini, and so on. It\'s recommended for most users.',
+            a: 'Auto mode (Auto (Smart Routing) in the model selector) lets SOHAM choose a model for each request based on what you ask. Each reply shows which model answered, and you can switch to a specific model at any time. It\'s a good default for most people.',
           },
           {
             q: 'Which models are completely free with no limits?',
-            a: 'HuggingFace models (Llama 3.2 1B, Llama 3.1 70B, Qwen 2.5 7B, DeepSeek V3.2, RNJ-1) and OpenRouter Auto free tier have no usage limits. These are marked "Free" in the model selector.',
+            a: 'None are unlimited. SOHAM applies rate limits (for example, 30 chat requests per minute), and every model runs on a provider\'s free tier with its own quotas, so a model can be temporarily unavailable. When that happens another model answers, and the reply shows which one.',
           },
           {
             q: 'Which model is fastest?',
-            a: 'Groq\'s Llama 3.1 8B Instant is the fastest — Groq\'s hardware is purpose-built for ultra-low latency inference. Use it when you need quick answers and speed matters more than depth.',
+            a: 'The Flash-Lite Gemini models (Gemini 3.5 Flash-Lite and Gemini 3.1 Flash-Lite) are the lighter, quicker options. GPT-OSS 20B on Groq is also fast when Groq is switched on.',
           },
           {
             q: 'Which model is best for coding?',
-            a: 'DeepSeek V3.2 (HuggingFace) is the best coding model available in SOHAM. For general programming questions, Llama 3.1 70B also performs very well. Auto mode will route coding questions to these models automatically.',
+            a: 'Try GPT-OSS 120B or Qwen 3.8 27B, or stay on Auto, which tries those coding models first when you ask for code. Both run on Groq, so when Groq is switched off a Gemini model answers instead.',
           },
         ]}
       />
@@ -111,31 +116,31 @@ export default function FAQPage() {
         questions={[
           {
             q: 'What are slash commands?',
-            a: 'Slash commands are shortcuts that route your query to a specialized pipeline. /solve routes to math/coding models with step-by-step output. /search triggers DuckDuckGo web search. /summarize condenses long text into key points. You can also just ask naturally — SOHAM understands intent.',
+            a: 'Slash commands are shortcuts at the start of a message: /solve for step-by-step answers to maths and coding problems, /search to look something up on the web, and /summarize to condense long text. You can also just ask naturally.',
           },
           {
             q: 'Does web search trigger automatically?',
-            a: 'Yes. SOHAM\'s intent detector scans every message for signals that need real-time data — keywords like "today", "latest", "current", "news", "price", "who is the current...", etc. When detected, it automatically fetches DuckDuckGo results and synthesizes them with source links.',
+            a: 'It can. When a message looks like it needs current information (words like "today", "latest" or "news"), SOHAM may search the web before answering. Start your message with /search to make sure it does.',
           },
           {
             q: 'How does voice input work?',
-            a: 'Click the microphone icon next to the message input. Allow microphone access when prompted. Speak clearly — Groq Whisper V3 Turbo transcribes your speech in real time. The transcription appears in the input field for you to review before sending.',
+            a: 'Click the microphone button to start voice chat. Your browser\'s speech recognition turns what you say into text and sends it, and SOHAM listens again after each reply until you click the button again. It works in Chrome, Edge and Safari. The separate Record audio option needs server-side transcription, which is currently switched off.',
           },
           {
             q: 'How does text-to-speech work?',
-            a: 'Enable speech output in settings and choose a voice (troy, diana, hannah, autumn, austin, or daniel). You can also click the speaker icon on any assistant message to hear it read aloud. SOHAM uses Groq\'s Orpheus TTS with a fallback chain to Edge TTS and browser TTS.',
+            a: 'Turn on speech output in Settings (Voice tab) or Quick Settings, and replies are read aloud with your browser\'s built-in voices. You can also click the speaker icon on any reply. The voice presets (Troy, Diana, Hannah, Autumn, Austin and Daniel) only apply if your browser has a voice with that name.',
           },
           {
             q: 'How does image generation work?',
-            a: 'Type "generate an image of..." or "create a picture of..." in chat. SOHAM routes this to the image generation pipeline using HuggingFace FLUX.1-schnell. The generated image appears inline in the chat with download and preview options.',
+            a: 'Ask for an image in chat, for example "generate an image of a lighthouse at dawn". SOHAM creates it with the FLUX model on Pollinations.ai and shows it in the chat, where you can download it. Generated images are saved at a public link. Rate limits apply.',
           },
           {
             q: 'How does PDF analysis work?',
-            a: 'Go to /ai-services or /pdf-analyzer. Upload a PDF (up to 5 MB). Ask questions about the document — SOHAM extracts text, analyzes content, and answers your questions. Great for research papers, contracts, reports, and documentation.',
+            a: 'Open the PDF Analyzer (/pdf-analyzer, also linked from /ai-services). Upload a PDF of up to 5 MB and ask a question about it. The PDF and your question are sent to SOHAM\'s server, where an AI model reads the document and answers. SOHAM doesn\'t keep the file. Useful for research papers, reports and documentation.',
           },
           {
             q: 'Does SOHAM remember our conversation?',
-            a: 'Yes, within a session. The AI maintains full context across all messages in a conversation. You can reference earlier messages naturally: "explain that differently" or "give me another example of what you showed earlier."',
+            a: 'Within a chat, yes: the earlier messages are sent with each new one, so you can say "explain that differently" or "give me another example". When you\'re signed in, SOHAM\'s server also keeps your chat history and facts from your chats, and can use them as context in other chats and on other devices.',
           },
         ]}
       />
@@ -147,11 +152,11 @@ export default function FAQPage() {
         questions={[
           {
             q: 'The AI isn\'t responding or is very slow',
-            a: 'Try: (1) Refresh the page. (2) Check your internet connection. (3) Switch to a different model in settings — free HuggingFace models may be slower during peak times. (4) Try a Groq model for fastest response. (5) Clear browser cache if the issue persists.',
+            a: 'Try: (1) Refresh the page. (2) Check your internet connection. (3) Switch to a different model in Settings, because free-tier models can be busy at peak times. (4) Use Auto, which moves on to another model if one fails. (5) Clear your browser cache if the issue persists.',
           },
           {
             q: 'Voice input isn\'t working',
-            a: 'Check that your browser has microphone permissions (click the lock icon in the address bar). Make sure your microphone works in other apps. Voice input requires HTTPS. Try Chrome or Edge for best compatibility. Disable browser extensions that might block microphone access.',
+            a: 'Check that your browser has microphone permission (click the lock icon in the address bar) and that your microphone works in other apps. Use Chrome, Edge or Safari: Firefox doesn\'t support the speech recognition voice chat relies on. Voice input also needs HTTPS. Disable extensions that might block microphone access.',
           },
           {
             q: 'I can\'t install the mobile app',
@@ -159,15 +164,15 @@ export default function FAQPage() {
           },
           {
             q: 'My settings aren\'t saving',
-            a: 'Settings are stored in browser local storage. Make sure cookies and local storage are enabled. Settings won\'t persist in private/incognito mode. Try clearing browser cache and reconfiguring. If using multiple devices, settings don\'t sync automatically.',
+            a: 'Settings are stored in your browser\'s storage (IndexedDB). Make sure site storage is allowed. Settings won\'t persist in private or incognito mode, and they don\'t sync between devices.',
           },
           {
             q: 'The AI gave an incorrect answer',
-            a: 'Try: (1) Rephrase with more specific details. (2) Use /solve for math/coding, /search for current info. (3) Switch to a different model manually. (4) For current events, make sure web search triggered (you\'ll see source links in the response). (5) Ask the AI to "try again" or "reconsider."',
+            a: 'Try: (1) Rephrase with more specific details. (2) Use /solve for math/coding, /search for current info. (3) Switch to a different model manually. (4) For current events, start your message with /search so SOHAM looks it up first. (5) Ask the AI to "try again" or "reconsider."',
           },
           {
             q: 'Image generation failed',
-            a: 'HuggingFace free tier has rate limits. Wait a few minutes and try again. Make sure your prompt is clear and descriptive. Avoid prompts that might violate content policies. Try simplifying the prompt if it\'s very complex.',
+            a: 'Image generation has rate limits and depends on the image providers being available. Wait a minute and try again, make sure your prompt is clear and descriptive, and avoid prompts that might break content policies.',
           },
         ]}
       />
@@ -183,7 +188,7 @@ export default function FAQPage() {
           },
           {
             q: 'Does the installed app work offline?',
-            a: 'The app shell loads offline (you can open it without internet). However, generating new AI responses requires an internet connection. Previously loaded conversations are accessible offline.',
+            a: 'Partly. The chat screen is cached, so the installed app can open without internet and chats saved in your browser stay on your device. Getting new AI responses always needs a connection.',
           },
           {
             q: 'Why install instead of using the browser?',
@@ -199,15 +204,15 @@ export default function FAQPage() {
         questions={[
           {
             q: 'Is my data safe?',
-            a: 'Yes. Conversations are stored locally in your browser\'s local storage — not on SOHAM servers. We use HTTPS for all connections. We don\'t log or monitor your conversations. Your privacy is a core design principle.',
+            a: 'Connections use HTTPS and sign-in is handled by Firebase. Your chat list is saved in your browser (IndexedDB). When you\'re signed in, SOHAM\'s server also saves your messages, the replies and facts from your chats as memory, and your messages go to an AI provider to write the reply. No service is completely secure, so avoid sharing sensitive information. The Privacy Policy has the details.',
           },
           {
             q: 'Do you use my conversations to train AI models?',
-            a: 'No. Your conversations are not used to train AI models and are not shared with model providers for training purposes.',
+            a: `SOHAM doesn't train AI models. Your messages are sent to AI providers (${PROVIDERS}) to generate replies, and each provider's terms apply; some free tiers let a provider use what it receives to improve its services. SOHAM also saves some questions and corrections, without your user ID, to a shared knowledge base that it uses when answering everyone.`,
           },
           {
             q: 'Can I delete my conversation history?',
-            a: 'Yes. Clear conversation history anytime through the settings panel or by clearing your browser\'s local storage for soham-ai.vercel.app.',
+            a: 'Yes. Delete individual chats from the chat sidebar, or use Clear to delete every chat stored in this browser. To delete the copy of your chats and the memories on SOHAM\'s server, email codeex@email.com from the address on your account.',
           },
         ]}
       />

@@ -24,7 +24,7 @@ const PLACEHOLDER_POSTS: CommunityPost[] = [
   {
     id: 'demo-1', user_name: 'Vidhan', user_avatar: null, user_id: null,
     title: 'Pro tip: Use /solve for step-by-step math solutions',
-    content: 'Use /solve for math problems — it gives step-by-step solutions with the best model automatically selected. Way better than just asking normally! The auto-routing picks Gemini for complex proofs and Cerebras for quick arithmetic.',
+    content: 'Use /solve for math problems — it gives step-by-step solutions with the best model automatically selected. Way better than just asking normally! Auto mode picks the model for you, and each reply shows which one answered.',
     sub_slug: 'tips', likes: 24, dislikes: 1, comment_count: 3, is_pinned: true,
     created_at: new Date(Date.now() - 3600000 * 2).toISOString(), tags: ['tip', 'math'],
   },
@@ -38,7 +38,7 @@ const PLACEHOLDER_POSTS: CommunityPost[] = [
   {
     id: 'demo-3', user_name: 'Vansh', user_avatar: null, user_id: null,
     title: 'Which model is best for creative writing?',
-    content: 'Question: Which model is best for generating creative writing? I tried a few but Auto mode keeps picking Llama 3.3 — is that the right choice for fiction writing?',
+    content: 'Question: Which model is best for generating creative writing? I tried a few but Auto mode keeps picking Gemini 3.6 Flash — is that the right choice for fiction writing?',
     sub_slug: 'help', likes: 7, dislikes: 2, comment_count: 2, is_pinned: false,
     created_at: new Date(Date.now() - 3600000 * 12).toISOString(), tags: ['question'],
   },

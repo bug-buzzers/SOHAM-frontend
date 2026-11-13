@@ -33,7 +33,7 @@ Full name: Harsh, known online as Heoster. Age: 16. Location: Khatauli, Uttar Pr
 Vision: "To democratize AI education in India and make advanced technology accessible to every student, regardless of their background or resources."
 Mission: "Building the world's most comprehensive free AI platform to empower the next generation of innovators and creators."
 
-Contact: Email codeex@email.com | GitHub github.com/heoster | Twitter @The_Heoster_ | LinkedIn linkedin.com/in/codeex-heoster-4b60b8399 | Instagram @heoster_official
+Contact: Email codeex@email.com | GitHub github.com/heoster | Twitter @The_Heoster_ | LinkedIn linkedin.com/in/codeex-heoster | Instagram @codeex._.heoster
 
 HEOSTER'S TECHNICAL SKILLS:
 Frontend: React, Next.js 14, TypeScript, JavaScript, Tailwind CSS, Framer Motion, shadcn/ui, Radix UI, KaTeX, PWA development.
@@ -307,10 +307,10 @@ export const DEVELOPER_KNOWLEDGE = {
   company: { name: 'CODEEX-AI', role: 'Founder & Lead Developer', founded: '2024' },
   contact: {
     email: 'codeex@email.com',
-    linkedin: 'https://in.linkedin.com/in/codeex-heoster-4b60b8399',
+    linkedin: 'https://www.linkedin.com/in/codeex-heoster',
     github: 'https://github.com/heoster',
-    twitter: 'https://twitter.com/The_Heoster_',
-    instagram: 'https://instagram.com/heoster_official',
+    twitter: 'https://x.com/The_Heoster_',
+    instagram: 'https://www.instagram.com/codeex._.heoster',
   },
   vision: 'To democratize AI education in India and make advanced technology accessible to every student, regardless of their background or resources.',
   mission: "Building the world's most comprehensive free AI platform to empower the next generation of innovators and creators.",
@@ -500,7 +500,7 @@ He started web development in 2023 and built SOHAM from scratch — 50,000+ line
 You can find him at:
 - GitHub: github.com/heoster
 - Twitter: @The_Heoster_
-- LinkedIn: linkedin.com/in/codeex-heoster-4b60b8399`,
+- LinkedIn: linkedin.com/in/codeex-heoster`,
 
   pricing: `SOHAM is **completely free**. All core features are free forever:
 - 35+ AI models

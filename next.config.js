@@ -208,4 +208,14 @@ nextConfig.rewrites = async () => [
   },
 ];
 
+// ── Removed docs pages ────────────────────────────────────────────────────────
+// These pages described features SOHAM doesn't have. Send old links to the
+// closest real page instead of a 404.
+nextConfig.redirects = async () => [
+  { source: '/documentation/smart-notes', destination: '/documentation', permanent: true },
+  { source: '/documentation/jarvis-mode', destination: '/documentation/chat', permanent: true },
+  { source: '/documentation/code-analysis', destination: '/documentation/chat', permanent: true },
+  { source: '/documentation/smart-routing', destination: '/documentation/ai-models', permanent: true },
+];
+
 module.exports = withPWA(nextConfig);

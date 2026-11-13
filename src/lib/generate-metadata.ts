@@ -143,29 +143,29 @@ export const metadataGenerators = {
   }),
 
   pricing: () => generatePageMetadata({
-    title: 'Pricing - 100% Free Forever | SOHAM',
-    description: 'SOHAM is 100% free forever. Access 35+ AI models including Groq, Gemini, Cerebras at no cost. No hidden fees, no subscriptions. Free AI for everyone.',
+    title: 'Pricing - Free to Use | SOHAM',
+    description: 'SOHAM is free to use. There are no paid plans, subscriptions or credits today. Rate limits apply, and some models depend on provider quotas.',
     keywords: ['free ai', 'free pricing', 'no cost ai', 'free chatgpt', 'SOHAM pricing'],
     path: '/pricing',
   }),
 
   blog: () => generatePageMetadata({
     title: 'Blog - AI News, Tutorials & Updates | SOHAM',
-    description: 'SOHAM blog: Latest AI news, tutorials, model comparisons, tips & tricks. Learn about Groq, Gemini, Cerebras, and more. Stay updated with AI technology.',
+    description: 'SOHAM blog: Latest AI news, tutorials, model comparisons, tips & tricks. Learn about Gemini, Groq, OpenRouter and more. Stay updated with AI technology.',
     keywords: ['ai blog', 'ai news', 'ai tutorials', 'model comparisons', 'SOHAM blog'],
     path: '/blog',
   }),
 
   careers: () => generatePageMetadata({
     title: 'Careers - Join SOHAM Team | SOHAM',
-    description: 'Join SOHAM team. Work on cutting-edge AI technology. Help democratize AI education. Remote-friendly startup founded by 16-year-old developer.',
+    description: 'Careers at CODEEX-AI, the company behind SOHAM. There are no open roles right now; get in touch if you would like to collaborate.',
     keywords: ['ai careers', 'startup jobs', 'remote work', 'ai developer jobs', 'SOHAM careers'],
     path: '/careers',
   }),
 
   integrations: () => generatePageMetadata({
     title: 'Integrations - API & Third-Party Tools | SOHAM',
-    description: 'SOHAM integrations: REST API, webhooks, browser extensions, mobile apps. Integrate 35+ AI models into your applications. Free API access.',
+    description: 'SOHAM integrations: the HTTP endpoints behind the web app, plus integrations that are planned but not available yet.',
     keywords: ['api integration', 'webhooks', 'browser extension', 'mobile app', 'SOHAM api'],
     path: '/integrations',
   }),

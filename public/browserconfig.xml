@@ -3,7 +3,7 @@
     <msapplication>
         <tile>
             <square150x150logo src="/FINALSOHAM.png"/>
-            <TileColor>#020817</TileColor>
+            <TileColor>#0e1425</TileColor>
         </tile>
     </msapplication>
 </browserconfig>

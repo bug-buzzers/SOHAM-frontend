@@ -19,7 +19,8 @@ export default function WebSearchDocsPage() {
         <h1 className="text-4xl font-bold tracking-tight">Real-Time Web Search</h1>
         <p className="text-xl text-muted-foreground">
           SOHAM automatically searches the web when your question needs current information — no command
-          required. Powered by DuckDuckGo with AI synthesis and source links.
+          required. It looks things up with services such as Tavily, Wikipedia and DuckDuckGo, and the AI
+          writes the answer from what it finds.
         </p>
       </div>
 
@@ -76,8 +77,9 @@ export default function WebSearchDocsPage() {
             </div>
             <div className="bg-green-50 dark:bg-green-950/20 p-3 rounded-lg">
               <p className="text-sm text-green-700 dark:text-green-300">
-                ✅ When search triggers, SOHAM fetches DuckDuckGo results, synthesizes them with AI, and
-                appends numbered source links at the bottom of the response.
+                ✅ When search triggers, SOHAM fetches results and passes them to the AI as background
+                information. The AI then writes the answer in its own words, so replies usually don&apos;t list
+                their sources.
               </p>
             </div>
           </div>
@@ -122,18 +124,18 @@ export default function WebSearchDocsPage() {
           {[
             {
               icon: Clock,
-              title: 'Real-Time Results',
-              desc: 'DuckDuckGo provides fresh results — no stale cached data',
+              title: 'Fetched When You Ask',
+              desc: 'Search runs at the moment you ask, so results reflect what the web shows now',
             },
             {
               icon: LinkIcon,
-              title: 'Source Citations',
-              desc: 'Every answer includes numbered links to original sources',
+              title: 'Live Data Sources',
+              desc: 'News from GNews, weather from Open-Meteo, cricket from CricAPI, and prices from Alpha Vantage, CoinGecko and Binance',
             },
             {
               icon: Shield,
-              title: 'Privacy-Respecting',
-              desc: 'DuckDuckGo doesn\'t track users — your searches stay private',
+              title: 'Search Terms Only',
+              desc: 'Only search terms taken from your message are sent to search services, not your account details',
             },
             {
               icon: Globe,
@@ -142,8 +144,8 @@ export default function WebSearchDocsPage() {
             },
             {
               icon: Zap,
-              title: 'Fallback Chain',
-              desc: 'If DuckDuckGo fails, falls back to AI knowledge with a note',
+              title: 'Fallbacks',
+              desc: 'If one search service is unavailable, SOHAM tries another; if all fail, the AI answers from what it already knows',
             },
             {
               icon: Search,
@@ -174,7 +176,7 @@ export default function WebSearchDocsPage() {
             {
               title: 'Current Events',
               query: 'What are the latest developments in space exploration?',
-              note: 'Triggers on "latest" — fetches recent news from NASA, SpaceX, etc.',
+              note: 'Triggers on "latest" — fetches recent news results',
             },
             {
               title: 'Factual Lookup',
@@ -222,9 +224,10 @@ export default function WebSearchDocsPage() {
             <div className="space-y-3">
               <h4 className="font-semibold text-sm">⚠️ Limitations</h4>
               <ul className="space-y-2 text-sm text-muted-foreground">
-                <li>• DuckDuckGo may not index very niche or paywalled content</li>
+                <li>• Search services may miss niche or paywalled content</li>
                 <li>• Real-time prices may have slight delays</li>
-                <li>• If search fails, AI falls back to its training knowledge</li>
+                <li>• Replies usually don&apos;t link to sources, so check important facts</li>
+                <li>• If search fails, the AI falls back to its training knowledge</li>
                 <li>• Very recent events (last few hours) may not appear</li>
               </ul>
             </div>
