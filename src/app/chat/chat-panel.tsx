@@ -41,6 +41,10 @@ interface ChatPanelProps {
     patch: Partial<Pick<Message, 'content' | 'modelUsed' | 'autoRouted' | 'imageUrl' | 'imageProvider'>>
   ) => void;
   finalizeMessage: (chatId: string, messageId: string) => void;
+  /** Text to put in the message box when the panel opens (not sent). */
+  initialDraft?: string | null;
+  /** Called once `initialDraft` has been put in the message box. */
+  onInitialDraftUsed?: () => void;
 }
 
 function cleanResponseHeaders(text: string): string {
@@ -164,6 +168,8 @@ export function ChatPanel({
   addMessage,
   updateMessage,
   finalizeMessage,
+  initialDraft,
+  onInitialDraftUsed,
 }: ChatPanelProps) {
   const [isLoadingFromAI, setIsLoadingFromAI] = useState(false);
   const [isGeneratingImage, setIsGeneratingImage] = useState(false);
@@ -186,6 +192,13 @@ export function ChatPanel({
   const handleEditPrompt = useCallback((text: string) => {
     setDraft({text, id: Date.now()});
   }, []);
+
+  // A prompt picked on the home page arrives here and waits in the message box.
+  useEffect(() => {
+    if (!initialDraft) return;
+    setDraft({text: initialDraft, id: Date.now()});
+    onInitialDraftUsed?.();
+  }, [initialDraft, onInitialDraftUsed]);
 
   const getTimeGreeting = () => {
     const hour = new Date().getHours();

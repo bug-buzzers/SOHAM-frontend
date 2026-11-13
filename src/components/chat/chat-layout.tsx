@@ -1,6 +1,6 @@
 'use client';
 
-import {useState, useRef, useMemo} from 'react';
+import {useState, useRef, useMemo, useEffect, useCallback} from 'react';
 import Link from 'next/link';
 import {
   SidebarProvider,
@@ -58,6 +58,7 @@ import {isValidModelId} from '@/lib/settings-storage';
 import { InstallPWAButton } from '../install-pwa-button';
 import { SohamLogo } from '@/components/soham-logo';
 import { SohamLoader } from '@/components/soham-loader';
+import {PROMPT_PARAM, PROMPT_PARAM_MAX_LENGTH} from '@/lib/quick-suggestions';
 
 const defaultSettings: Settings = {
   model: 'auto',
@@ -67,6 +68,19 @@ const defaultSettings: Settings = {
   enableSpeech: false,
   voice: 'troy',
 };
+
+/**
+ * Reads a prompt handed over in the URL (/chat?prompt=...) and removes it
+ * from the address bar, so reloading the page doesn't bring it back.
+ */
+function takePromptFromUrl(): string | null {
+  const url = new URL(window.location.href);
+  const value = url.searchParams.get(PROMPT_PARAM);
+  if (value === null) return null;
+  url.searchParams.delete(PROMPT_PARAM);
+  window.history.replaceState(null, '', `${url.pathname}${url.search}${url.hash}`);
+  return value.trim().slice(0, PROMPT_PARAM_MAX_LENGTH) || null;
+}
 
 // Must be rendered inside SidebarProvider to access useSidebar
 function MobileChatsButton() {
@@ -116,6 +130,21 @@ export function ChatLayout() {
     [storedSettings]
   );
   const [isClearHistoryAlertOpen, setIsClearHistoryAlertOpen] = useState(false);
+
+  // ── Prompt handed over from the home page ─────────────────────────────────
+  // It goes into the message box of an empty chat (an existing empty chat is
+  // reused) and is never sent automatically.
+  const [handoffPrompt, setHandoffPrompt] = useState<string | null>(null);
+  useEffect(() => {
+    const prompt = takePromptFromUrl();
+    if (prompt) setHandoffPrompt(prompt);
+  }, []);
+  useEffect(() => {
+    if (handoffPrompt && isLoaded) createNewChat();
+  }, [handoffPrompt, isLoaded, createNewChat]);
+  const clearHandoffPrompt = useCallback(() => setHandoffPrompt(null), []);
+  const handoffDraft =
+    handoffPrompt && isLoaded && activeChat && activeChatMessages.length === 0 ? handoffPrompt : null;
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
 
   // ── Rename dialog state ────────────────────────────────────────────────────
@@ -391,6 +420,8 @@ export function ChatLayout() {
               addMessage={addMessage}
               updateMessage={updateMessage}
               finalizeMessage={finalizeMessage}
+              initialDraft={handoffDraft}
+              onInitialDraftUsed={clearHandoffPrompt}
             />
           ) : (
             <div className="flex flex-1 items-center justify-center px-4">
