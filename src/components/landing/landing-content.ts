@@ -33,6 +33,7 @@ export interface LandingNavLink {
 }
 
 export const LANDING_NAV_LINKS: LandingNavLink[] = [
+  { label: 'Try it', href: '#try' },
   { label: 'Features', href: '#features' },
   { label: 'Models', href: '#models' },
   { label: 'How it works', href: '#how-it-works' },

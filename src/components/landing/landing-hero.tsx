@@ -1,5 +1,7 @@
+'use client';
+
 import Link from 'next/link';
-import type { MouseEvent } from 'react';
+import { useEffect, useRef, useState, type CSSProperties, type MouseEvent } from 'react';
 import {
   ArrowRight,
   CheckCircle2,
@@ -7,6 +9,7 @@ import {
   KeyRound,
   Mic,
   Paperclip,
+  RotateCcw,
   Send,
   Smartphone,
   Sparkles,
@@ -37,7 +40,7 @@ export function LandingHero({ modelStats, isSignedIn, onNavigate }: LandingHeroP
     >
       <div aria-hidden className={`pointer-events-none absolute inset-0 ${HERO_GRADIENT}`} />
 
-      <div className="relative grid items-center gap-10 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] lg:gap-12">
+      <div className="relative grid grid-cols-1 items-center gap-10 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] lg:gap-12">
         <div className="space-y-6">
           <div className="inline-flex items-center gap-2 rounded-full border bg-background/80 px-3 py-1 text-xs font-medium text-muted-foreground">
             <Sparkles className="h-3.5 w-3.5 text-primary" />
@@ -65,8 +68,8 @@ export function LandingHero({ modelStats, isSignedIn, onNavigate }: LandingHeroP
               </Link>
             </Button>
             <Button asChild size="lg" variant="outline">
-              <a href="#features" onClick={(event) => onNavigate(event, '#features')}>
-                Explore features
+              <a href="#try" onClick={(event) => onNavigate(event, '#try')}>
+                Try a prompt
               </a>
             </Button>
           </div>
@@ -93,13 +96,52 @@ export function LandingHero({ modelStats, isSignedIn, onNavigate }: LandingHeroP
   );
 }
 
+/** Inline timing for one step of the preview animation (see `.landing-demo` in globals.css). */
+function at(delaySeconds: number, durationSeconds?: number): CSSProperties {
+  return durationSeconds === undefined
+    ? { animationDelay: `${delaySeconds}s` }
+    : { animationDelay: `${delaySeconds}s`, animationDuration: `${durationSeconds}s` };
+}
+
 /**
- * A static, clearly labelled illustration that reuses the chat workspace's
- * bubble, attribution chip and composer styles. It is not a live response.
+ * A clearly labelled illustration that reuses the chat workspace's bubble,
+ * status pill, attribution chip and composer styles. It plays like a real
+ * reply (status lines, then the text streaming in), but it is not a live
+ * response. The animation is pure CSS, so the layout never shifts and it
+ * works without JavaScript; reduced-motion visitors see the finished chat.
  */
 function ExampleChatPreview() {
+  const rootRef = useRef<HTMLElement>(null);
+  const [run, setRun] = useState(0);
+  const [paused, setPaused] = useState(false);
+
+  // On phones the preview sits below the fold. Hold it until it is on
+  // screen so visitors see it play from the start.
+  useEffect(() => {
+    const root = rootRef.current;
+    if (!root || typeof IntersectionObserver === 'undefined') return;
+    if (root.getBoundingClientRect().top < window.innerHeight * 0.8) return;
+
+    setPaused(true);
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry?.isIntersecting) return;
+        observer.disconnect();
+        setRun((value) => value + 1);
+        setPaused(false);
+      },
+      { threshold: 0.45 }
+    );
+    observer.observe(root);
+    return () => observer.disconnect();
+  }, []);
+
   return (
-    <figure className="relative mx-auto w-full max-w-lg lg:max-w-none">
+    <figure
+      ref={rootRef}
+      className="landing-demo relative mx-auto w-full max-w-lg lg:max-w-none"
+      data-paused={paused ? 'true' : undefined}
+    >
       <div aria-hidden className="pointer-events-none absolute inset-8 rounded-full bg-primary/15 blur-[80px]" />
 
       <div className="relative overflow-hidden rounded-3xl border bg-background shadow-sm">
@@ -119,38 +161,64 @@ function ExampleChatPreview() {
           </Badge>
         </div>
 
-        <div className="space-y-4 px-4 py-5">
-          <div className="flex justify-end">
-            <div className="max-w-[85%] rounded-2xl rounded-tr-sm bg-primary px-4 py-2.5 text-sm text-primary-foreground shadow-sm">
-              Solve step by step: 2x² − 8x + 6 = 0
+        <div key={run} className="relative">
+          <div className="space-y-4 px-4 py-5">
+            <div className="flex justify-end" data-demo style={at(0.2)}>
+              <div className="max-w-[85%] rounded-2xl rounded-tr-sm bg-primary px-4 py-2.5 text-sm text-primary-foreground shadow-sm">
+                Solve step by step: 2x² − 8x + 6 = 0
+              </div>
+            </div>
+
+            <div className="flex items-start gap-3">
+              <span
+                className="flex h-8 w-8 shrink-0 items-center justify-center overflow-hidden rounded-full border bg-background ring-2 ring-primary/20 ring-offset-2 ring-offset-background"
+                data-demo
+                style={at(1.9)}
+              >
+                <SohamLogo size={22} />
+              </span>
+              <div className="min-w-0 flex-1 space-y-2">
+                <div
+                  className="space-y-1.5 rounded-2xl rounded-tl-sm bg-muted px-4 py-3 text-sm leading-6 text-foreground shadow-sm"
+                  data-demo
+                  style={at(1.9)}
+                >
+                  <p data-demo style={at(2.05)}>
+                    Divide every term by 2:
+                  </p>
+                  <p className="font-mono text-[13px]" data-demo style={at(2.4)}>
+                    x² − 4x + 3 = 0
+                  </p>
+                  <p data-demo style={at(2.75)}>
+                    Factor the left side:
+                  </p>
+                  <p className="font-mono text-[13px]" data-demo style={at(3.1)}>
+                    (x − 1)(x − 3) = 0
+                  </p>
+                  <p data-demo style={at(3.45)}>
+                    So <strong>x = 1</strong> or <strong>x = 3</strong>.
+                  </p>
+                </div>
+                <div className="flex flex-wrap items-center gap-2 text-xs" data-demo style={at(3.95)}>
+                  <span className="flex items-center gap-1.5 rounded-md border border-border/50 bg-background/50 px-2 py-1">
+                    <Sparkles className="h-3.5 w-3.5 text-blue-500" />
+                    <span className="font-medium text-foreground">Gemini 3.6 Flash</span>
+                  </span>
+                  <span className="flex items-center gap-1 rounded-md border border-primary/20 bg-primary/10 px-2 py-1">
+                    <Zap className="h-3 w-3 text-primary" />
+                    <span className="font-medium text-primary">Auto-routed</span>
+                  </span>
+                </div>
+              </div>
             </div>
           </div>
 
-          <div className="flex items-start gap-3">
-            <span className="flex h-8 w-8 shrink-0 items-center justify-center overflow-hidden rounded-full border bg-background ring-2 ring-primary/20 ring-offset-2 ring-offset-background">
-              <SohamLogo size={22} />
-            </span>
-            <div className="min-w-0 flex-1 space-y-2">
-              <div className="space-y-1.5 rounded-2xl rounded-tl-sm bg-muted px-4 py-3 text-sm leading-6 text-foreground shadow-sm">
-                <p>Divide every term by 2:</p>
-                <p className="font-mono text-[13px]">x² − 4x + 3 = 0</p>
-                <p>Factor the left side:</p>
-                <p className="font-mono text-[13px]">(x − 1)(x − 3) = 0</p>
-                <p>
-                  So <strong>x = 1</strong> or <strong>x = 3</strong>.
-                </p>
-              </div>
-              <div className="flex flex-wrap items-center gap-2 text-xs">
-                <span className="flex items-center gap-1.5 rounded-md border border-border/50 bg-background/50 px-2 py-1">
-                  <Sparkles className="h-3.5 w-3.5 text-blue-500" />
-                  <span className="font-medium text-foreground">Gemini 3.6 Flash</span>
-                </span>
-                <span className="flex items-center gap-1 rounded-md border border-primary/20 bg-primary/10 px-2 py-1">
-                  <Zap className="h-3 w-3 text-primary" />
-                  <span className="font-medium text-primary">Auto-routed</span>
-                </span>
-              </div>
-            </div>
+          {/* Status pills, as the chat shows them above the message box. */}
+          <div aria-hidden className="pointer-events-none absolute inset-x-0 bottom-2 flex justify-center">
+            <StatusPill text="Thinking…" style={at(0.7, 1.1)} />
+          </div>
+          <div aria-hidden className="pointer-events-none absolute inset-x-0 bottom-2 flex justify-center">
+            <StatusPill text="Generating response…" style={at(1.8, 2.05)} />
           </div>
         </div>
 
@@ -173,9 +241,36 @@ function ExampleChatPreview() {
         </div>
       </div>
 
-      <figcaption className="mt-3 text-center text-xs text-muted-foreground">
-        Illustration only. Real replies and the model chosen depend on your question.
+      <figcaption className="mt-3 flex flex-wrap items-center justify-center gap-x-2 gap-y-1 text-center text-xs text-muted-foreground">
+        <span>Illustration only. Real replies and the model chosen depend on your question.</span>
+        <button
+          type="button"
+          onClick={() => {
+            setPaused(false);
+            setRun((value) => value + 1);
+          }}
+          className="inline-flex items-center gap-1 rounded-full px-2 py-1 font-medium text-primary transition-colors hover:bg-primary/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring motion-reduce:hidden"
+        >
+          <RotateCcw className="h-3 w-3" aria-hidden />
+          Replay
+        </button>
       </figcaption>
     </figure>
+  );
+}
+
+function StatusPill({ text, style }: { text: string; style: CSSProperties }) {
+  return (
+    <div
+      data-demo="status"
+      style={style}
+      className="flex items-center gap-2 rounded-full border border-primary/20 bg-background/95 px-4 py-1.5 text-xs text-muted-foreground shadow-sm backdrop-blur"
+    >
+      <span className="relative flex h-2 w-2">
+        <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary opacity-75" />
+        <span className="relative inline-flex h-2 w-2 rounded-full bg-primary" />
+      </span>
+      {text}
+    </div>
   );
 }

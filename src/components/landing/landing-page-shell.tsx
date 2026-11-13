@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { useCallback, useEffect, useState, type MouseEvent, type ReactNode } from 'react';
 import { useRouter } from 'next/navigation';
 import {
+  ArrowDown,
   ArrowRight,
   BookOpen,
   FileText,
@@ -36,9 +37,13 @@ import { SohamLogo } from '@/components/soham-logo';
 import { LandingFooter } from '@/components/landing/landing-footer';
 import { LandingHeader } from '@/components/landing/landing-header';
 import { HERO_GRADIENT, LandingHero } from '@/components/landing/landing-hero';
+import { BreathingName } from '@/components/landing/landing-breathe';
+import { Reveal } from '@/components/landing/landing-motion';
+import { LandingTryIt } from '@/components/landing/landing-try-it';
 import type { LandingFaq, LandingModelStats } from '@/components/landing/landing-content';
 import { useAuth } from '@/hooks/use-auth';
 import { idbGet, idbSet } from '@/lib/indexed-db';
+import { SUGGESTION_GROUPS } from '@/lib/quick-suggestions';
 import { cn } from '@/lib/utils';
 
 // ─── Content ──────────────────────────────────────────────────────────────────
@@ -61,6 +66,8 @@ const SLASH_COMMANDS = [
   '/joke',
   '/sentiment',
 ];
+
+const STARTER_PROMPT_COUNT = SUGGESTION_GROUPS.reduce((count, group) => count + group.suggestions.length, 0);
 
 interface Feature {
   icon: LucideIcon;
@@ -237,8 +244,12 @@ function Section({
       className={cn('scroll-mt-16 py-14 md:py-20', muted && 'border-y border-border/60 bg-muted/30')}
     >
       <div className="container mx-auto max-w-6xl px-4 md:px-6">
-        <SectionHeading id={id} eyebrow={eyebrow} title={title} description={description} />
-        <div className="mt-8 md:mt-10">{children}</div>
+        <Reveal>
+          <SectionHeading id={id} eyebrow={eyebrow} title={title} description={description} />
+        </Reveal>
+        <Reveal delay={120} className="mt-8 md:mt-10">
+          {children}
+        </Reveal>
       </div>
     </section>
   );
@@ -246,7 +257,13 @@ function Section({
 
 // ─── Sections ─────────────────────────────────────────────────────────────────
 
-function FactsStrip({ modelStats }: { modelStats: LandingModelStats }) {
+function FactsStrip({
+  modelStats,
+  onNavigate,
+}: {
+  modelStats: LandingModelStats;
+  onNavigate: (event: MouseEvent<HTMLAnchorElement>, href: string) => void;
+}) {
   const facts = [
     { value: modelStats.total, label: 'AI models', detail: 'in the chat model selector' },
     { value: modelStats.providers.length, label: 'providers', detail: 'from Groq to OpenRouter' },
@@ -254,7 +271,7 @@ function FactsStrip({ modelStats }: { modelStats: LandingModelStats }) {
   ];
 
   return (
-    <ul aria-label="SOHAM at a glance" className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-3 md:mt-5 md:gap-4">
+    <ul aria-label="SOHAM at a glance" className="mt-4 grid grid-cols-2 gap-3 md:mt-5 md:grid-cols-4 md:gap-4">
       {facts.map((fact) => (
         <li key={fact.label} className="rounded-2xl border border-border/70 bg-card p-4 shadow-sm md:p-5">
           <p className="text-2xl font-bold tracking-tight md:text-3xl">{fact.value}</p>
@@ -262,7 +279,34 @@ function FactsStrip({ modelStats }: { modelStats: LandingModelStats }) {
           <p className="mt-0.5 text-xs text-muted-foreground">{fact.detail}</p>
         </li>
       ))}
+      <li>
+        <a
+          href="#try"
+          onClick={(event) => onNavigate(event, '#try')}
+          className="group block h-full rounded-2xl border border-primary/30 bg-primary/5 p-4 shadow-sm transition-colors hover:border-primary/60 hover:bg-primary/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring md:p-5"
+        >
+          <p className="text-2xl font-bold tracking-tight md:text-3xl">{STARTER_PROMPT_COUNT}</p>
+          <p className="mt-1 text-sm font-medium">starter prompts</p>
+          <p className="mt-0.5 flex items-center gap-1 text-xs text-primary">
+            in {SUGGESTION_GROUPS.length} topics, try them below
+            <ArrowDown className="h-3 w-3 shrink-0 transition-transform group-hover:translate-y-0.5" aria-hidden />
+          </p>
+        </a>
+      </li>
     </ul>
+  );
+}
+
+function TryItSection({ isSignedIn }: { isSignedIn: boolean }) {
+  return (
+    <Section
+      id="try"
+      eyebrow="Try it"
+      title="What will you ask first?"
+      description="Pick one of the starter prompts from the chat, or type your own, and see what SOHAM does with it. When you're ready, open it in the chat."
+    >
+      <LandingTryIt isSignedIn={isSignedIn} />
+    </Section>
   );
 }
 
@@ -466,20 +510,11 @@ function YourDataSection() {
 function AboutSection() {
   return (
     <section id="about" aria-labelledby="about-title" className="scroll-mt-16 py-14 md:py-20">
-      <div className="container mx-auto max-w-6xl px-4 md:px-6">
+      <Reveal className="container mx-auto max-w-6xl px-4 md:px-6">
         <Card className="overflow-hidden rounded-3xl border-border/70">
           <div className="grid md:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)]">
-            <div className="relative flex flex-col items-center justify-center gap-4 border-b border-border/70 bg-muted/30 p-8 text-center md:border-b-0 md:border-r md:p-10">
-              <div className="relative">
-                <div aria-hidden className="absolute inset-0 rounded-full bg-primary/15 blur-2xl" />
-                <SohamLogo size={64} className="relative" />
-              </div>
-              <p lang="sa" className="text-3xl font-semibold tracking-tight">
-                सोऽहम्
-              </p>
-              <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground/80">
-                “I am That”
-              </p>
+            <div className="relative flex flex-col items-center justify-center border-b border-border/70 bg-muted/30 p-8 text-center md:border-b-0 md:border-r md:p-10">
+              <BreathingName />
             </div>
 
             <div className="space-y-4 p-6 md:p-10">
@@ -506,7 +541,7 @@ function AboutSection() {
             </div>
           </div>
         </Card>
-      </div>
+      </Reveal>
     </section>
   );
 }
@@ -519,7 +554,7 @@ function FaqSection({ faqs }: { faqs: LandingFaq[] }) {
       className="scroll-mt-16 border-y border-border/60 bg-muted/30 py-14 md:py-20"
     >
       <div className="container mx-auto grid max-w-6xl gap-8 px-4 md:px-6 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)] lg:gap-12">
-        <div className="space-y-6">
+        <Reveal className="space-y-6">
           <SectionHeading
             id="faq"
             eyebrow="FAQ"
@@ -540,24 +575,26 @@ function FaqSection({ faqs }: { faqs: LandingFaq[] }) {
               </Link>
             </Button>
           </div>
-        </div>
+        </Reveal>
 
-        <Card className="rounded-3xl border-border/70 px-5 py-1 md:px-6">
-          <Accordion type="single" collapsible defaultValue="faq-0">
-            {faqs.map((faq, index) => (
-              <AccordionItem
-                key={faq.question}
-                value={`faq-${index}`}
-                className={cn(index === faqs.length - 1 && 'border-b-0')}
-              >
-                <AccordionTrigger className="gap-4 text-left text-sm font-semibold hover:no-underline md:text-base">
-                  {faq.question}
-                </AccordionTrigger>
-                <AccordionContent className="leading-6 text-muted-foreground">{faq.answer}</AccordionContent>
-              </AccordionItem>
-            ))}
-          </Accordion>
-        </Card>
+        <Reveal delay={120}>
+          <Card className="rounded-3xl border-border/70 px-5 py-1 md:px-6">
+            <Accordion type="single" collapsible defaultValue="faq-0">
+              {faqs.map((faq, index) => (
+                <AccordionItem
+                  key={faq.question}
+                  value={`faq-${index}`}
+                  className={cn(index === faqs.length - 1 && 'border-b-0')}
+                >
+                  <AccordionTrigger className="gap-4 text-left text-sm font-semibold hover:no-underline md:text-base">
+                    {faq.question}
+                  </AccordionTrigger>
+                  <AccordionContent className="leading-6 text-muted-foreground">{faq.answer}</AccordionContent>
+                </AccordionItem>
+              ))}
+            </Accordion>
+          </Card>
+        </Reveal>
       </div>
     </section>
   );
@@ -566,7 +603,7 @@ function FaqSection({ faqs }: { faqs: LandingFaq[] }) {
 function FinalCta({ isSignedIn }: { isSignedIn: boolean }) {
   return (
     <section aria-labelledby="cta-title" className="py-14 md:py-20">
-      <div className="container mx-auto max-w-6xl px-4 md:px-6">
+      <Reveal className="container mx-auto max-w-6xl px-4 md:px-6">
         <div className="relative overflow-hidden rounded-3xl border bg-card px-6 py-12 text-center shadow-sm md:px-12 md:py-16">
           <div aria-hidden className={`pointer-events-none absolute inset-0 ${HERO_GRADIENT}`} />
           <div className="relative mx-auto flex max-w-xl flex-col items-center gap-5">
@@ -595,7 +632,7 @@ function FinalCta({ isSignedIn }: { isSignedIn: boolean }) {
             </div>
           </div>
         </div>
-      </div>
+      </Reveal>
     </section>
   );
 }
@@ -694,9 +731,10 @@ export function LandingPageShell({ modelStats, faqs }: LandingPageShellProps) {
       <main id="main-content">
         <div className="container mx-auto max-w-6xl px-4 pt-6 md:px-6 md:pt-10">
           <LandingHero modelStats={modelStats} isSignedIn={isSignedIn} onNavigate={handleNavigate} />
-          <FactsStrip modelStats={modelStats} />
+          <FactsStrip modelStats={modelStats} onNavigate={handleNavigate} />
         </div>
 
+        <TryItSection isSignedIn={isSignedIn} />
         <FeaturesSection />
         <ToolsSection />
         <ModelsSection modelStats={modelStats} />

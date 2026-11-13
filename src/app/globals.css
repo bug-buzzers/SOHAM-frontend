@@ -280,6 +280,83 @@ html {
 }
 
 /* ==========================================================================
+   Landing page motion
+   ========================================================================== */
+
+/* Content fades in the first time it scrolls into view (see Reveal). */
+.landing-reveal[data-reveal='hidden'] {
+  opacity: 0;
+  transform: translate3d(0, 1.5rem, 0);
+}
+
+.landing-reveal[data-reveal='shown'] {
+  opacity: 1;
+  transform: none;
+  transition:
+    opacity 0.7s ease,
+    transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Hero example chat: each step appears at its own delay (set inline). */
+.landing-demo [data-demo] {
+  animation: landing-demo-in 0.45s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* Status pills show for their duration, then fade out again. */
+.landing-demo [data-demo='status'] {
+  animation-name: landing-demo-flash;
+  animation-timing-function: ease;
+}
+
+.landing-demo[data-paused] [data-demo] {
+  animation-play-state: paused;
+}
+
+@keyframes landing-demo-in {
+  from {
+    opacity: 0;
+    transform: translateY(0.5rem);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes landing-demo-flash {
+  0% {
+    opacity: 0;
+    transform: translateY(0.25rem);
+  }
+  12%,
+  88% {
+    opacity: 1;
+    transform: none;
+  }
+  100% {
+    opacity: 0;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .landing-demo [data-demo] {
+    animation: none;
+  }
+
+  .landing-demo [data-demo='status'] {
+    display: none;
+  }
+}
+
+@media print {
+  .landing-reveal {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
+
+/* ==========================================================================
    Mobile and accessibility
    ========================================================================== */
 

@@ -15,6 +15,7 @@ import {
 import { SohamLogo } from '@/components/soham-logo';
 import { ThemeToggle } from '@/components/theme-toggle';
 import { LANDING_NAV_LINKS } from '@/components/landing/landing-content';
+import { ScrollProgress } from '@/components/landing/landing-motion';
 import { cn } from '@/lib/utils';
 
 interface LandingHeaderProps {
@@ -44,6 +45,7 @@ export function LandingHeader({
         isScrolled ? 'border-border/70 shadow-sm' : 'border-transparent'
       )}
     >
+      <ScrollProgress />
       <div className="container mx-auto flex h-16 max-w-6xl items-center justify-between gap-4 px-4 md:px-6">
         <Link
           href="/"
