@@ -150,8 +150,8 @@ const supportTopics = [
 const faqHighlights = [
   { q: 'Is SOHAM completely free?', a: 'Yes. There is nothing to pay for today: no subscriptions, no credits and no credit card. Usage limits apply because SOHAM relies on third-party AI providers.' },
   { q: 'How do I install SOHAM on my phone?', a: 'Android: Chrome → menu → "Add to Home screen". iOS: Safari → share → "Add to Home Screen". Works as a full PWA.' },
-  { q: 'Which AI model should I use?', a: 'Start with Auto mode, which chooses a model for each request. For coding, try GPT-OSS 120B or DeepSeek R1 Distill; for quick answers, Groq Llama 3.1 8B Instant.' },
-  { q: 'Does SOHAM store my conversations?', a: 'Your chat history is saved in your browser. Each message is sent to SOHAM\'s servers and an AI provider to generate the reply. See the Privacy Policy for details.' },
+  { q: 'Which AI model should I use?', a: 'Start with Auto mode, which chooses a model for each request and tries another if one fails. To pick one yourself, Gemini 3.6 Flash is a good all-rounder and Gemini 3.5 Flash-Lite is quick.' },
+  { q: 'Does SOHAM store my conversations?', a: 'Yes. Your chat list is saved in your browser, and SOHAM\'s server also saves your messages, and facts it picks up from them, linked to your account. Each message is sent to an AI provider to generate the reply. See the Privacy Policy for details.' },
   { q: 'How do I report a bug or request a feature?', a: 'Use the contact form below or email us directly. Include as much detail as possible for bug reports.' },
   { q: 'Can I use SOHAM for commercial projects?', a: 'The Terms of Service explain how SOHAM may be used. If you are planning commercial use, please contact us first.' },
 ];

@@ -36,6 +36,11 @@ export const metadata: Metadata = {
   },
 };
 
+// Provider names from models-config.json, e.g. "Google Gemini · OpenRouter · Groq".
+const PROVIDER_DETAIL = groupModels(getEnabledModels(), 'provider')
+  .map(({ key }) => PROVIDER_LABELS[key] ?? key)
+  .join(' · ');
+
 const coreGuides = [
   {
     title: 'AI Chat & Model Selection',
@@ -43,7 +48,7 @@ const coreGuides = [
     href: '/documentation/chat',
     icon: MessageSquare,
     badge: 'Core',
-    detail: 'Groq · Cerebras · Gemini · HuggingFace · OpenRouter',
+    detail: PROVIDER_DETAIL,
   },
   {
     title: 'PDF Analyzer',
@@ -63,7 +68,7 @@ const coreGuides = [
   },
   {
     title: 'Web Search',
-    description: 'Use /search, or ask about something recent, and SOHAM can search the web before answering. Sources include DuckDuckGo, GNews, Open-Meteo, CricAPI and CoinGecko.',
+    description: 'Use /search, or ask about something recent, and SOHAM can search the web before answering. Sources include Tavily, Wikipedia and DuckDuckGo, plus GNews, Open-Meteo, CricAPI, CoinGecko and Alpha Vantage for news, weather, cricket and prices.',
     href: '/documentation/web-search',
     icon: Search,
     badge: 'Live Data',
@@ -71,19 +76,19 @@ const coreGuides = [
   },
   {
     title: 'Image Generation',
-    description: 'Describe an image in chat to generate it with FLUX models, using Pollinations.ai, Cloudflare Workers AI and Hugging Face as fallbacks. Rate limits apply.',
+    description: 'Describe an image in chat and SOHAM generates it with the FLUX model on Pollinations.ai. Images are saved at a public link so they can be shown in chat. Rate limits apply.',
     href: '/documentation/image-generation',
     icon: ImageIcon,
     badge: 'Creative',
-    detail: 'FLUX · Preview and download in chat',
+    detail: 'FLUX · Pollinations.ai · Download in chat',
   },
   {
     title: 'Voice Features',
-    description: 'Speech-to-text via Groq Whisper. Read replies aloud with Groq Orpheus TTS in one of 6 voices, with Edge TTS and browser speech as fallbacks.',
+    description: 'Dictate messages with your browser\'s speech recognition, and have replies read aloud with your browser\'s built-in voices.',
     href: '/documentation/settings',
     icon: Mic,
     badge: 'Voice',
-    detail: 'Whisper · 6 voices · Read aloud',
+    detail: 'Browser speech · Read aloud',
   },
 ];
 
@@ -114,7 +119,7 @@ const operationsGuides = [
   },
   {
     title: 'Security & Privacy',
-    description: 'Where chat history is stored, how sign-in works, and what is sent to AI providers.',
+    description: 'What is saved in your browser and on SOHAM\'s server, how sign-in works, and what is sent to AI providers.',
     href: '/documentation/security',
   },
   {
@@ -130,11 +135,9 @@ const operationsGuides = [
 ];
 
 const PROVIDER_STYLES: Record<string, { color: string; bg: string }> = {
-  groq: { color: 'text-orange-400', bg: 'bg-orange-400/10' },
-  cerebras: { color: 'text-blue-400', bg: 'bg-blue-400/10' },
   google: { color: 'text-green-400', bg: 'bg-green-400/10' },
-  huggingface: { color: 'text-yellow-400', bg: 'bg-yellow-400/10' },
   openrouter: { color: 'text-purple-400', bg: 'bg-purple-400/10' },
+  groq: { color: 'text-orange-400', bg: 'bg-orange-400/10' },
 };
 
 // Built from models-config.json, the same list the chat model selector shows.
@@ -190,7 +193,7 @@ export default function DocsHomePage() {
           { label: 'AI Models', value: String(enabledModels.length), icon: Cpu },
           { label: 'Providers', value: String(modelProviders.length), icon: Globe },
           { label: 'Slash Commands', value: '3', icon: Zap },
-          { label: 'Read-aloud Voices', value: '6', icon: Mic },
+          { label: 'PDF Size Limit', value: '5 MB', icon: FileText },
         ].map((s) => (
           <Card key={s.label} className="text-center">
             <CardContent className="p-4">
@@ -325,7 +328,8 @@ export default function DocsHomePage() {
           <div className="space-y-2">
             <h2 className="text-2xl font-bold">Ready to start?</h2>
             <p className="text-sm text-muted-foreground max-w-lg">
-              Sign in with Google or email to start chatting. Your chat history and settings are saved in this browser.
+              Sign in with Google or email to start chatting. Your chat list and settings are saved in this browser,
+              and SOHAM&apos;s server keeps a memory of your chats so it can pick up context later.
             </p>
           </div>
           <div className="flex flex-wrap gap-3">

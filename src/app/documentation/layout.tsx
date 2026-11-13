@@ -1,6 +1,7 @@
 import type {Metadata} from 'next';
 import DocLayout from '@/components/documentation/doc-layout';
 import { StructuredData } from '@/components/seo/structured-data';
+import { formatProviderList, getEnabledModels } from '@/lib/model-catalog';
 
 export const metadata: Metadata = {
   title: 'Documentation | SOHAM — AI Chat, Models, Commands & Setup',
@@ -44,10 +45,15 @@ export const metadata: Metadata = {
   },
 };
 
+const ENABLED_MODELS = getEnabledModels();
+
 const docFaqs = [
   { question: 'How do I use slash commands in SOHAM?', answer: 'Type /solve for math, /search for web search, or /summarize for text summarization directly in the chat input.' },
   { question: 'How do I install SOHAM as a mobile app?', answer: 'On Android, open SOHAM in Chrome and tap "Install app" from the menu. On iOS, open in Safari, tap Share, then "Add to Home Screen".' },
-  { question: 'Which AI models are available in SOHAM?', answer: 'The model selector lists models from Groq, Cerebras, Google Gemini, Hugging Face and OpenRouter, including Llama 3.3 70B, Gemini 2.5 Flash, Qwen 3 235B and DeepSeek R1 Distill 70B. You can also leave it on Auto.' },
+  {
+    question: 'Which AI models are available in SOHAM?',
+    answer: `The model selector lists ${ENABLED_MODELS.length} models from ${formatProviderList(ENABLED_MODELS)}: ${ENABLED_MODELS.map((model) => model.name).join(', ')}. You can also leave it on Auto.`,
+  },
   { question: 'How does PDF analysis work?', answer: 'Upload a PDF up to 5MB on the PDF Analyzer page, then ask any question about the document. The AI extracts text and answers based on the content.' },
 ];
 

@@ -34,7 +34,6 @@ import {
   Loader2,
   Sparkles,
   Image,
-  Video,
   Search,
   Mic,
   Volume2,
@@ -105,49 +104,43 @@ export default function AccountPage() {
     {
       icon: Sparkles,
       title: 'Multi-Model AI',
-      description: 'Access Groq, Google Gemini, Cerebras, and HuggingFace models',
+      description: 'Google Gemini, OpenRouter and Groq models, or Auto mode',
       status: 'active',
     },
     {
       icon: Image,
       title: 'Image Generation',
-      description: 'SOHAM pipeline with HuggingFace FLUX.1-schnell',
-      status: 'active',
-    },
-    {
-      icon: Video,
-      title: 'Video Generation',
-      description: 'Google Veo 3.1 for AI video creation',
+      description: 'FLUX images generated through Pollinations.ai',
       status: 'active',
     },
     {
       icon: Search,
       title: 'Web Search',
-      description: 'Real-time web search',
-      status: 'planned',
+      description: 'Looks up current information on the web',
+      status: 'active',
     },
     {
       icon: Mic,
-      title: 'Speech-to-Text',
-      description: 'Groq Whisper V3 Turbo',
+      title: 'Voice Input',
+      description: 'Uses your browser\'s speech recognition',
       status: 'active',
     },
     {
       icon: Volume2,
-      title: 'Text-to-Speech',
-      description: 'Groq Orpheus TTS with 6 voices',
+      title: 'Read Aloud',
+      description: 'Uses your browser\'s built-in voices',
       status: 'active',
     },
     {
       icon: MessageSquare,
       title: 'Smart Intent Detection',
-      description: 'Automatic routing',
+      description: 'Sends each message to chat, web search or image generation',
       status: 'active',
     },
     {
       icon: Zap,
       title: 'Memory System',
-      description: 'Context-aware conversations',
+      description: 'Saves chat history and facts from your chats to your account',
       status: 'beta',
     }
   ];
@@ -561,7 +554,7 @@ export default function AccountPage() {
                       </SelectContent>
                     </Select>
                     <p className="text-xs text-muted-foreground">
-                      Powered by Groq Orpheus TTS
+                      Read-aloud uses your browser&apos;s built-in voices. A preset applies only if your browser has a voice with that name.
                     </p>
                   </div>
                 </CardContent>

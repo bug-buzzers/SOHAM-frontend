@@ -13,11 +13,9 @@ export const APP_CONFIG = {
   // Feature Routes
   FEATURES: {
     chat: '/chat',
-    smartNotes: '/ai-services',
     mathSolver: '/visual-math',
     pdfAnalyzer: '/pdf-analyzer',
     imageGenerator: '/ai-services',
-    jarvisMode: '/chat',
     memoryDashboard: '/account',
     aiServices: '/ai-services',
   },
@@ -29,7 +27,6 @@ export const APP_CONFIG = {
     aiModels: '/documentation/ai-models',
     commands: '/documentation/commands',
     chat: '/documentation/chat',
-    smartNotes: '/documentation/smart-notes',
     mathSolver: '/documentation/math-solver',
     pdfAnalysis: '/documentation/pdf-analysis',
     webSearch: '/documentation/web-search',
@@ -40,7 +37,6 @@ export const APP_CONFIG = {
   // Share URLs (for embedding)
   SHARE_URLS: {
     chat: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://soham-ai.vercel.app'}/chat`,
-    smartNotes: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://soham-ai.vercel.app'}/ai-services`,
     mathSolver: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://soham-ai.vercel.app'}/visual-math`,
   },
 

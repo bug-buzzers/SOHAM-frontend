@@ -13,7 +13,6 @@ import {
   Shield,
   Sparkles,
   Image,
-  Video,
   Search,
   Mic,
   Volume2,
@@ -50,56 +49,49 @@ export default function UserManagementPage() {
     {
       icon: Sparkles,
       title: 'Multi-Model AI',
-      description: 'Access Groq, Google Gemini, Cerebras, and HuggingFace models',
+      description: 'Google Gemini, OpenRouter and Groq models, or Auto mode',
       status: 'active',
       link: '/chat'
     },
     {
       icon: Image,
       title: 'Image Generation',
-      description: 'SOHAM pipeline with HuggingFace FLUX.1-schnell',
-      status: 'active',
-      link: '/chat'
-    },
-    {
-      icon: Video,
-      title: 'Video Generation',
-      description: 'Google Veo 3.1 for AI video creation',
+      description: 'FLUX images generated through Pollinations.ai',
       status: 'active',
       link: '/chat'
     },
     {
       icon: Search,
       title: 'Web Search',
-      description: 'Real-time web search (coming soon)',
-      status: 'planned',
+      description: 'Looks up current information on the web',
+      status: 'active',
       link: '/chat'
     },
     {
       icon: Mic,
-      title: 'Speech-to-Text',
-      description: 'Groq Whisper V3 Turbo for voice transcription',
+      title: 'Voice Input',
+      description: 'Uses your browser\'s speech recognition',
       status: 'active',
       link: '/chat'
     },
     {
       icon: Volume2,
-      title: 'Text-to-Speech',
-      description: 'Groq PlayAI TTS with 6 voice options',
+      title: 'Read Aloud',
+      description: 'Uses your browser\'s built-in voices',
       status: 'active',
       link: '/chat'
     },
     {
       icon: MessageSquare,
       title: 'Smart Intent Detection',
-      description: 'Automatic routing to image, video, or search',
+      description: 'Sends each message to chat, web search or image generation',
       status: 'active',
       link: '/chat'
     },
     {
       icon: Zap,
       title: 'Memory System',
-      description: 'Context-aware conversations with memory',
+      description: 'Saves chat history and facts from your chats to your account',
       status: 'beta',
       link: '/chat'
     }

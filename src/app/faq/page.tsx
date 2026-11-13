@@ -2,7 +2,7 @@ import { Metadata } from 'next';
 import Link from 'next/link';
 import { structuredData, pageSEO } from '@/lib/seo-config';
 import { DEVELOPER_INFO } from '@/lib/developer-info';
-import { getEnabledModels, groupModels } from '@/lib/model-catalog';
+import { formatProviderList, getEnabledModels, groupModels } from '@/lib/model-catalog';
 import { PageHeader } from '@/components/page-header';
 import {
   Accordion,
@@ -75,6 +75,9 @@ export const metadata: Metadata = {
 // Counts come from models-config.json, the same list the chat model selector shows.
 const ENABLED_MODELS = getEnabledModels();
 const MODEL_COUNT = ENABLED_MODELS.length;
+const PROVIDERS = formatProviderList(ENABLED_MODELS);
+const MODEL_NAMES = ENABLED_MODELS.map((model) => model.shortName).join(', ');
+const CONTACT_EMAIL = DEVELOPER_INFO.contact.email;
 const PROVIDER_COUNT = groupModels(ENABLED_MODELS, 'provider').length;
 
 const sections = [
@@ -87,7 +90,7 @@ const sections = [
     questions: [
       {
         q: 'What is SOHAM?',
-        a: `SOHAM (Self Organising Hyper Adaptive Machine) is a multi-model AI assistant built by Heoster at CODEEX-AI. It brings AI models from Groq, Google, Cerebras, Hugging Face and OpenRouter into one interface, with Auto mode, voice features, PDF analysis, image generation and web search. The name is also inspired by the Sanskrit mantra Soham (So Hum), meaning "I am That".`,
+        a: `SOHAM (Self Organising Hyper Adaptive Machine) is a multi-model AI assistant built by Heoster at CODEEX-AI. It brings AI models from ${PROVIDERS} into one interface, with Auto mode, voice features, PDF analysis, image generation and web search. The name is also inspired by the Sanskrit mantra Soham (So Hum), meaning "I am That".`,
       },
       {
         q: 'Is SOHAM completely free?',
@@ -95,7 +98,7 @@ const sections = [
       },
       {
         q: 'Do I need to create an account?',
-        a: `Yes. You need to sign in to chat, either with Google or with an email address and password (handled by Firebase Authentication). Creating an account is free. Your chat history and settings are saved in the browser you use and are not synced between devices.`,
+        a: `Yes. You need to sign in to chat, either with Google or with an email address and password (handled by Firebase Authentication). Creating an account is free. Your chat list and settings are saved in the browser you use and aren't synced between devices, while SOHAM's server also saves your messages with your account (see the Privacy Policy).`,
       },
       {
         q: 'What can I ask SOHAM?',
@@ -120,7 +123,7 @@ const sections = [
     questions: [
       {
         q: 'How many AI models are available?',
-        a: `The model selector currently lists ${MODEL_COUNT} models from Groq, Cerebras, Google Gemini, Hugging Face and OpenRouter, including Llama 3.3 70B, Qwen 3 235B, Gemini 2.5 Pro, GPT-OSS 120B and DeepSeek R1 Distill 70B. The Models page lists all of them.`,
+        a: `The model selector currently lists ${MODEL_COUNT} models from ${PROVIDERS}: ${MODEL_NAMES}. The Groq models answer only while Groq is switched on for SOHAM; otherwise another model replies. The Models page lists all of them.`,
       },
       {
         q: 'What is Auto mode?',
@@ -128,19 +131,19 @@ const sections = [
       },
       {
         q: 'Which models are completely free with no limits?',
-        a: `None are unlimited. SOHAM applies rate limits (for example, 30 chat requests per minute), and each AI provider has its own quotas. Models marked "Free" in the selector run on providers' free tiers and can be temporarily unavailable when those quotas run out.`,
+        a: `None are unlimited. SOHAM applies rate limits (for example, 30 chat requests per minute), and each AI provider has its own quotas. SOHAM uses providers' free tiers, so a model can be temporarily unavailable when its quota runs out.`,
       },
       {
         q: 'Which model is fastest?',
-        a: `Groq's Llama 3.1 8B Instant is usually the quickest to respond, because Groq runs models on hardware built for low-latency inference. Use it when speed matters more than depth.`,
+        a: `Gemini 3.5 Flash-Lite and Gemini 3.1 Flash-Lite are built for quick, low-latency answers. GPT-OSS 20B on Groq is also fast when Groq is available. Use them when speed matters more than depth.`,
       },
       {
         q: 'Which model is best for coding?',
-        a: `Try GPT-OSS 120B, DeepSeek R1 Distill 70B or Llama 3.3 70B, or stay on Auto: /solve requests that contain code are sent to a coding model.`,
+        a: `Try GPT-OSS 120B or Qwen 3.8 27B on Groq, or Gemini 3.6 Flash. In Auto mode, coding questions go to GPT-OSS 120B first and to other models if it isn't available.`,
       },
       {
         q: 'Which model is best for long documents?',
-        a: `The Gemini 2.5 models have the largest context window in SOHAM (about 1 million tokens), so they suit long documents and multi-step tasks. Gemini 2.5 Pro depends on a paid quota on the server, so it is not always available.`,
+        a: `The Gemini models have the largest context window in SOHAM (about 1 million tokens), so they suit long documents and multi-step tasks.`,
       },
       {
         q: 'Can I switch models mid-conversation?',
@@ -165,15 +168,15 @@ const sections = [
       },
       {
         q: 'How does voice input work?',
-        a: `Use the microphone button for voice chat, which relies on your browser's speech recognition (best supported in Chrome and Edge), or record a clip that is transcribed by Groq Whisper. Check the text before you send it.`,
+        a: `Use the microphone button for voice chat. It relies on your browser's speech recognition (best supported in Chrome and Edge) and listens in US English until you click the microphone again. Check the text before you send it.`,
       },
       {
         q: 'How does text-to-speech work?',
-        a: 'Enable speech output in settings and choose a voice. You can also click the speaker icon on any assistant message to hear it read aloud. SOHAM uses Groq\'s Orpheus TTS with a fallback chain to Edge TTS and browser TTS.',
+        a: 'Turn on speech output in settings, or click the speaker icon on any assistant message to hear it read aloud. Replies are read by your browser\'s built-in voices; a voice preset applies only if your browser has a voice with that name.',
       },
       {
         q: 'How does image generation work?',
-        a: `Ask for an image in chat, for example "generate an image of a lighthouse at dawn". SOHAM creates it with FLUX image models and shows it in the chat with preview and download options. Rate limits apply.`,
+        a: `Ask for an image in chat, for example "generate an image of a lighthouse at dawn". SOHAM creates it with the FLUX model on Pollinations.ai and shows it in the chat with preview and download options. Generated images are saved at a public link. Rate limits apply.`,
       },
       {
         q: 'How does PDF analysis work?',
@@ -181,7 +184,7 @@ const sections = [
       },
       {
         q: 'Does SOHAM remember our conversation?',
-        a: `Within a chat, yes. Recent messages are sent along with each new one, so you can refer back naturally: "explain that differently" or "give me another example". Separate chats do not share context.`,
+        a: `Within a chat, yes. Recent messages are sent along with each new one, so you can refer back naturally: "explain that differently" or "give me another example". SOHAM's server also saves your messages and facts it picks up from them, such as your name or interests, and can use them as context in later chats. The Privacy Policy explains this and how to ask for deletion.`,
       },
       {
         q: 'Can I export my conversations?',
@@ -198,7 +201,7 @@ const sections = [
     questions: [
       {
         q: "The AI isn't responding or is very slow",
-        a: 'Try: (1) Refresh the page. (2) Check your internet connection. (3) Switch to a different model in settings — free HuggingFace models may be slower during peak times. (4) Try a Groq model for fastest response. (5) Clear browser cache if the issue persists.',
+        a: 'Try: (1) Refresh the page. (2) Check your internet connection. (3) Switch to a different model — free models can be slower at busy times. (4) Leave the model on Auto so SOHAM can try another model if one fails. (5) Clear your browser cache if the issue persists.',
       },
       {
         q: "Voice input isn't working",
@@ -214,11 +217,11 @@ const sections = [
       },
       {
         q: 'The AI gave an incorrect answer',
-        a: 'Try: (1) Rephrase with more specific details. (2) Use /solve for math/coding, /search for current info. (3) Switch to a different model manually. (4) For current events, make sure web search triggered (you\'ll see source links in the response). (5) Ask the AI to "try again" or "reconsider."',
+        a: 'Try: (1) Rephrase with more specific details. (2) Use /solve for math/coding, /search for current info. (3) Switch to a different model manually. (4) For current events, start your message with /search so SOHAM looks it up first. (5) Ask the AI to "try again" or "reconsider."',
       },
       {
         q: 'Image generation failed',
-        a: 'HuggingFace free tier has rate limits. Wait a few minutes and try again. Make sure your prompt is clear and descriptive. Avoid prompts that might violate content policies. Try simplifying the prompt if it\'s very complex.',
+        a: 'The image service may be busy, or you may have reached the rate limit. Wait a minute and try again. Keep the prompt clear and descriptive, simplify it if it is very complex, and avoid prompts for violent or explicit content.',
       },
       {
         q: 'The page is loading slowly',
@@ -260,15 +263,15 @@ const sections = [
     questions: [
       {
         q: 'Is my data safe?',
-        a: `Your chat history is saved in your browser (IndexedDB) rather than in your SOHAM account. To answer you, your messages and their recent context are sent over HTTPS to SOHAM's servers and to the AI provider that writes the reply. The Privacy Policy explains what is collected and how it is used.`,
+        a: `Your messages and their recent context are sent over HTTPS to SOHAM's servers and to the AI provider that writes the reply. Your chat list is saved in your browser (IndexedDB), and SOHAM's server also saves your messages, facts picked up from them and a profile built from those facts. No system is perfectly secure, so don't share passwords or very sensitive details in chat. The Privacy Policy explains what is collected, where it is stored and how long it is kept.`,
       },
       {
         q: 'Do you use my conversations to train AI models?',
-        a: `SOHAM doesn't train its own AI models on your conversations. Your messages are sent to third-party AI providers (Groq, Cerebras, Google, Hugging Face or OpenRouter) to generate replies, and each provider's own terms apply to that data.`,
+        a: `SOHAM doesn't train AI models on your conversations. Your messages are sent to third-party AI providers (${PROVIDERS}) to generate replies, and each provider's own terms apply to that data. SOHAM also saves some questions and answers, without your user ID, to a shared knowledge base that can help answer other users.`,
       },
       {
         q: 'Can I delete my conversation history?',
-        a: `Yes. Delete individual chats from the chat sidebar, or clear this site's data in your browser to remove every chat stored on that device.`,
+        a: `Yes. Delete individual chats from the chat sidebar, or clear this site's data in your browser, to remove the chats stored on that device. To delete the copies saved on SOHAM's server (chat history, memories and profile), email ${CONTACT_EMAIL} from the address on your account.`,
       },
       {
         q: 'What are my privacy rights?',
@@ -276,7 +279,7 @@ const sections = [
       },
       {
         q: 'What data does SOHAM collect?',
-        a: `Your account details (such as email and display name) for sign-in, the messages you send so SOHAM's servers and AI providers can process them, and usage analytics such as page views via Google Analytics. Your chat history itself is stored in your browser. The Privacy Policy has the full list.`,
+        a: `Your account details (such as email and display name) for sign-in; the messages you send, which go to SOHAM's servers and AI providers and are saved with your account along with facts picked up from them; images and PDFs you upload; anything you post on the community board; and usage analytics such as page views via Google Analytics. The Privacy Policy has the full list.`,
       },
     ],
   },

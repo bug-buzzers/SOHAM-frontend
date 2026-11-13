@@ -63,25 +63,30 @@ Content-Type: application/json
 Content-Type: application/json
 
 {
-  "response": "async/await is syntactic sugar built on top of Promises...",
-  "model": "llama-3.1-8b-instant",
-  "provider": "groq"
+  "success": true,
+  "content": "async/await is syntactic sugar built on top of Promises...",
+  "modelUsed": "gemini-3.6-flash",
+  "autoRouted": false,
+  "toolsUsed": [],
+  "responseTime": "1840ms",
+  "timestamp": "2026-11-13T10:00:00.000Z"
 }`,
 };
 
 const pdfAnalyzerExample = {
   request: `POST /api/ai/pdf-analyzer
-Content-Type: multipart/form-data
+Content-Type: application/json
 
-file: <PDF binary, max 5MB>
-query: "What are the main conclusions of this paper?"`,
+{
+  "pdfDataUri": "data:application/pdf;base64,JVBERi0xLjcK...",
+  "question": "What are the main conclusions of this paper?"
+}`,
   response: `HTTP/1.1 200 OK
 Content-Type: application/json
 
 {
   "answer": "The paper concludes that...",
-  "pages": 12,
-  "model": "gemini-2.5-flash"
+  "modelUsed": "gemini-3.6-flash"
 }`,
 };
 
@@ -96,14 +101,20 @@ Content-Type: application/json
 Content-Type: application/json
 
 {
-  "results": [
+  "success": true,
+  "answer": "Next.js 15 brings React 19 support, stable Turbopack... [1]",
+  "sources": [
     {
-      "title": "Next.js 15 Release Notes",
+      "index": 1,
+      "title": "Next.js 15",
       "url": "https://nextjs.org/blog/next-15",
-      "snippet": "Next.js 15 introduces React 19 support, Turbopack..."
+      "snippet": "Next.js 15 introduces React 19 support, Turbopack...",
+      "source": "tavily"
     }
   ],
-  "summary": "Next.js 15 brings React 19 support, stable Turbopack..."
+  "queryType": "factual",
+  "modelUsed": "gemini-3.6-flash",
+  "totalSources": 1
 }`,
 };
 
@@ -113,12 +124,12 @@ const endpoints = [
     path: '/api/chat-direct',
     icon: MessageSquare,
     title: 'Chat Direct',
-    desc: 'Send a message to the AI and receive a response. Supports conversation history and per-request settings.',
+    desc: 'Send a message (up to 10,000 characters) and receive the full reply as JSON. Supports conversation history and per-request settings.',
     example: chatDirectExample,
     params: [
       { name: 'message',                  type: 'string',   required: true,  desc: 'The user\'s message' },
       { name: 'history',                  type: 'array',    required: false, desc: 'Previous messages [{role, content}]' },
-      { name: 'settings.model',           type: 'string',   required: false, desc: '"auto" or a specific model ID' },
+      { name: 'settings.model',           type: 'string',   required: false, desc: '"auto" or a model ID from the AI Models page' },
       { name: 'settings.tone',            type: 'string',   required: false, desc: '"helpful" | "formal" | "casual"' },
       { name: 'settings.technicalLevel',  type: 'string',   required: false, desc: '"beginner" | "intermediate" | "expert"' },
     ],
@@ -128,11 +139,12 @@ const endpoints = [
     path: '/api/ai/pdf-analyzer',
     icon: FileText,
     title: 'PDF Analyzer',
-    desc: 'Upload a PDF (up to 5MB) and ask a question about its contents. Send as multipart/form-data.',
+    desc: 'Ask a question about a PDF (up to 5 MB). Send JSON with the PDF encoded as a base64 data URI.',
     example: pdfAnalyzerExample,
     params: [
-      { name: 'file',  type: 'File',   required: true,  desc: 'PDF file, max 5MB' },
-      { name: 'query', type: 'string', required: true,  desc: 'Question to ask about the PDF' },
+      { name: 'pdfDataUri',     type: 'string', required: true,  desc: 'The PDF as a data URI (data:application/pdf;base64,...), max 5 MB' },
+      { name: 'question',       type: 'string', required: true,  desc: 'Question to ask about the PDF' },
+      { name: 'preferredModel', type: 'string', required: false, desc: 'A model ID; leave it out to let SOHAM choose' },
     ],
   },
   {
@@ -140,10 +152,12 @@ const endpoints = [
     path: '/api/ai/search',
     icon: Search,
     title: 'Web Search',
-    desc: 'Perform a DuckDuckGo web search and receive summarised results.',
+    desc: 'Search the web and get an AI-written answer with numbered sources. Uses Tavily when it is configured, with Wikipedia and DuckDuckGo as fallbacks.',
     example: searchExample,
     params: [
-      { name: 'query', type: 'string', required: true, desc: 'Search query string' },
+      { name: 'query',          type: 'string', required: true,  desc: 'Search query, up to 500 characters' },
+      { name: 'maxResults',     type: 'number', required: false, desc: 'Maximum number of results (default 8)' },
+      { name: 'preferredModel', type: 'string', required: false, desc: 'A model ID for writing the answer' },
     ],
   },
 ];
@@ -173,7 +187,9 @@ export default function ApiPage() {
             <p className="font-semibold text-sm">No Public API Key System</p>
             <p className="text-sm text-muted-foreground">
               SOHAM does not currently offer a public API key system. These endpoints are used
-              internally by the web app. For direct integration, use the web app at{' '}
+              internally by the web app and can change without notice. Requests from other websites are
+              blocked by the browser (CORS), and per-IP rate limits apply. For direct integration, use the
+              web app at{' '}
               <a href={APP_CONFIG.BASE_URL} className="text-primary underline underline-offset-4">
                 {APP_CONFIG.BASE_URL}
               </a>

@@ -72,7 +72,7 @@ export function buildLandingFaqs({ total, providers }: LandingModelStats): Landi
     {
       question: 'Where are my chats stored?',
       answer:
-        "Your chat history is saved in your browser's IndexedDB storage, so it stays on that device and is not synced to your other devices. To answer you, each message and its recent context are sent to SOHAM's servers and to the AI provider that writes the reply. The privacy policy has the details.",
+        "The chat list in the sidebar is saved in your browser's IndexedDB storage, so it stays on that device. To answer you, each message and its recent context are sent to SOHAM's servers and to the AI provider that writes the reply. SOHAM's server also saves your messages, and facts it picks up from them, linked to your account. The privacy policy has the details.",
     },
     {
       question: 'Can SOHAM search the web or create images?',

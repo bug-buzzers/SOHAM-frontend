@@ -4,6 +4,7 @@ import { ReactNode, useState } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { cn } from '@/lib/utils';
+import { DOCS_LAST_UPDATED, formatContentDate } from '@/lib/content-dates';
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
@@ -142,6 +143,24 @@ function Breadcrumb({ pathname }: { pathname: string }) {
 
 // ─── Prev / Next navigation ───────────────────────────────────────────────────
 
+// ─── Page footer: last-updated date + prev/next links ──────────────────────
+function DocFooter({ pathname }: { pathname: string }) {
+  const updated = DOCS_LAST_UPDATED[pathname];
+  const inNav = allItems.some(i => i.href === pathname);
+  if (!updated && !inNav) return null;
+
+  return (
+    <div className="mt-12 border-t pt-6">
+      {updated && (
+        <p className="text-sm text-muted-foreground">
+          Last updated: <time dateTime={updated}>{formatContentDate(updated)}</time>
+        </p>
+      )}
+      <PrevNext pathname={pathname} />
+    </div>
+  );
+}
+
 function PrevNext({ pathname }: { pathname: string }) {
   const idx = allItems.findIndex(i => i.href === pathname);
   if (idx === -1) return null;
@@ -150,7 +169,7 @@ function PrevNext({ pathname }: { pathname: string }) {
   const next = allItems[idx + 1];
 
   return (
-    <div className="mt-12 flex items-center justify-between gap-4 border-t pt-6">
+    <div className="mt-6 flex items-center justify-between gap-4">
       {prev ? (
         <Link
           href={prev.href}
@@ -365,7 +384,7 @@ export default function DocLayout({ children }: { children: ReactNode }) {
         <div className="mx-auto max-w-3xl px-4 pt-20 pb-28 md:px-8 md:pt-10 md:pb-16">
           <Breadcrumb pathname={pathname} />
           {children}
-          <PrevNext pathname={pathname} />
+          <DocFooter pathname={pathname} />
         </div>
       </main>
 

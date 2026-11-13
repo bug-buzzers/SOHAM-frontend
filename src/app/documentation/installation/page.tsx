@@ -98,8 +98,8 @@ const desktopSteps = [
 const afterInstall = [
   { icon: Home,      text: 'Home screen icon — launches like a native app' },
   { icon: Zap,       text: 'Full-screen mode — no browser chrome or address bar' },
-  { icon: WifiOff,   text: 'Offline UI cache — browse previous chats without internet' },
-  { icon: RefreshCw, text: 'Auto-updates — always runs the latest version silently' },
+  { icon: WifiOff,   text: 'Offline app shell — opens without internet and shows chats saved on this device' },
+  { icon: RefreshCw, text: 'Auto-updates — the next launch runs the latest version' },
   { icon: Smartphone,text: 'Touch-optimised layout on mobile' },
   { icon: Monitor,   text: 'Standalone window on desktop — separate from your browser' },
 ];
@@ -221,8 +221,8 @@ export default function InstallationPage() {
             <div className="rounded-lg bg-blue-50 dark:bg-blue-950/20 p-4 flex gap-3">
               <AlertCircle className="h-4 w-4 text-blue-500 mt-0.5 shrink-0" />
               <p className="text-sm text-blue-700 dark:text-blue-300">
-                iOS PWAs run in a separate browser context from Safari. Requires iOS 14+ for basic
-                PWA support; iOS 16.4+ for push notifications.
+                iOS PWAs run in a separate browser context from Safari, so you may need to sign in again in
+                the installed app. iOS 14 or later is recommended.
               </p>
             </div>
           </CardContent>
@@ -263,8 +263,8 @@ export default function InstallationPage() {
             'Full-screen experience with no browser address bar',
             'Home screen / desktop icon for one-tap access',
             'Faster load times via service-worker caching',
-            'Offline access to the UI and cached conversations',
-            'Auto-updates in the background — always up to date',
+            'Opens without internet and shows chats saved on this device (new replies need a connection)',
+            'Updates install automatically',
             'All SOHAM features: chat, image gen, PDF analysis, voice',
             'Works on Android (Chrome), iOS (Safari), and desktop',
             'Free to use: no subscription and no app store (sign-in required to chat)',

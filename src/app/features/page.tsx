@@ -68,7 +68,7 @@ const coreFeatures = [
   {
     icon: <Mic className="h-6 w-6" />,
     title: 'Voice Interaction',
-    description: 'Talk to the AI using voice commands and hear responses with text-to-speech.',
+    description: 'Talk to the AI with voice chat in browsers that support speech recognition, and hear replies read aloud by your browser.',
     color: 'text-indigo-500',
   },
   {

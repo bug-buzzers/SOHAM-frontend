@@ -10,6 +10,7 @@ import {
   getEnabledModels,
   groupModels,
   PROVIDER_LABELS,
+  formatProviderList,
 } from '@/lib/model-catalog';
 
 // Built from models-config.json, the same list the chat model selector shows.
@@ -23,11 +24,15 @@ const CATEGORY_STYLES: Record<string, {icon: React.ElementType; color: string; d
 };
 
 const PROVIDER_DETAILS: Record<string, {desc: string; features: string[]}> = {
-  groq: {desc: 'Low-latency inference with streaming', features: ['Streaming', 'Low latency']},
-  cerebras: {desc: 'Fast inference on Cerebras hardware', features: ['Streaming', 'Large Qwen model']},
-  google: {desc: 'Multimodal Gemini models', features: ['Vision support', 'About 1M token context']},
-  huggingface: {desc: 'Open-weight models via the Hugging Face router', features: ['Open-weight models', 'Used as fallbacks']},
-  openrouter: {desc: 'Free-tier models from several labs', features: ['Free tier', 'Several model families']},
+  google: {desc: 'Gemini models on Google\'s free tier', features: ['About 1M token context', 'Free tier']},
+  openrouter: {
+    desc: 'A free router that picks one of OpenRouter\'s free models for each request',
+    features: ['Free tier', 'Model can vary per request'],
+  },
+  groq: {
+    desc: 'Open-weight GPT-OSS and Qwen models. They answer only when Groq is switched on for SOHAM.',
+    features: ['Fast inference', 'Reasoning and code'],
+  },
 };
 
 const modelCategories = groupModels(ENABLED_MODELS, 'category').map(({key, models}) => ({
@@ -39,7 +44,6 @@ const modelCategories = groupModels(ENABLED_MODELS, 'category').map(({key, model
     provider: model.providerLabel,
     desc: model.description,
     features: [`${formatContextWindow(model.contextWindow)} context`],
-    free: /free/i.test(model.name),
   })),
 }));
 
@@ -59,8 +63,8 @@ export default function AIModelsPage() {
         </div>
         <h1 className="text-4xl font-bold tracking-tight">AI Models & Selection</h1>
         <p className="text-xl text-muted-foreground">
-          The model selector lists {ENABLED_MODELS.length} models from Groq, Cerebras, Google Gemini, Hugging
-          Face and OpenRouter. Here&apos;s what&apos;s available and when to use each.
+          The model selector lists {ENABLED_MODELS.length} models from {formatProviderList(ENABLED_MODELS)}.
+          Here&apos;s what&apos;s available and when to use each.
         </p>
       </div>
 
@@ -72,18 +76,18 @@ export default function AIModelsPage() {
             Auto Mode — Recommended for Most Users
           </CardTitle>
           <CardDescription>
-            SOHAM analyzes your query and routes it to the most capable model automatically
+            SOHAM works out what kind of request you sent and tries the models suited to it, in order
           </CardDescription>
         </CardHeader>
         <CardContent>
           <div className="grid gap-3 md:grid-cols-2">
             {[
               {emoji: '🧮', label: 'Math problems', desc: 'Use /solve for step-by-step working'},
-              {emoji: '💻', label: 'Code questions', desc: '/solve requests that contain code go to a coding model'},
-              {emoji: '🖼️', label: 'Image tasks', desc: 'Visual Math and image questions use multimodal models'},
+              {emoji: '💻', label: 'Code questions', desc: 'Coding requests try the coding models first'},
+              {emoji: '🖼️', label: 'Image tasks', desc: 'Visual Math and images you add in chat are analysed by Google Gemini'},
               {emoji: '🔍', label: 'Web queries', desc: 'Can trigger a web search before answering'},
               {emoji: '💬', label: 'General chat', desc: 'Handled by general-purpose models'},
-              {emoji: '📄', label: 'Document tasks', desc: 'The PDF Analyzer uses multimodal models'},
+              {emoji: '📄', label: 'Document tasks', desc: 'Use the PDF Analyzer to ask questions about a PDF'},
             ].map((r) => (
               <div key={r.label} className="flex items-start gap-3 bg-background/50 p-3 rounded-lg">
                 <span className="text-xl">{r.emoji}</span>
@@ -125,19 +129,19 @@ export default function AIModelsPage() {
             <div className="space-y-3">
               <h4 className="font-semibold">Desktop</h4>
               <ol className="space-y-2 text-sm text-muted-foreground">
-                <li>1. Click the Settings icon (⚙️) in the header</li>
-                <li>2. Find the "AI Model" dropdown</li>
-                <li>3. Select "Auto" or a specific model</li>
-                <li>4. Settings save automatically</li>
+                <li>1. Click the gear icon (⚙️) in the chat header, or Settings at the bottom of the sidebar</li>
+                <li>2. Stay on the AI tab and find Model selection</li>
+                <li>3. Choose Auto (Smart Routing) or a specific model</li>
+                <li>4. Your choice is saved automatically</li>
               </ol>
             </div>
             <div className="space-y-3">
               <h4 className="font-semibold">Mobile</h4>
               <ol className="space-y-2 text-sm text-muted-foreground">
-                <li>1. Tap the model button in the chat header</li>
-                <li>2. A bottom sheet opens with all models</li>
-                <li>3. Tap to select your preferred model</li>
-                <li>4. Sheet closes and model is applied</li>
+                <li>1. Tap Settings in the bottom bar</li>
+                <li>2. On the AI tab, tap the model button</li>
+                <li>3. A bottom sheet opens with all models</li>
+                <li>4. Tap a model to select it</li>
               </ol>
             </div>
           </div>
@@ -154,7 +158,7 @@ export default function AIModelsPage() {
             {[
               {
                 title: 'For coding tasks',
-                desc: 'Try GPT-OSS 120B or DeepSeek R1 Distill 70B for programming, debugging and architecture questions.',
+                desc: 'Try GPT-OSS 120B or Qwen 3.8 27B for programming and debugging, or stay on Auto, which tries them first for code.',
               },
               {
                 title: 'For math problems',
@@ -162,19 +166,19 @@ export default function AIModelsPage() {
               },
               {
                 title: 'For image analysis',
-                desc: 'Gemini 2.5 Flash and Llama 4 Scout can work with images as well as text.',
+                desc: 'Use Visual Math, or add an image in chat. Image analysis runs on Google Gemini whichever model you pick.',
               },
               {
                 title: 'For speed',
-                desc: 'Groq\'s Llama 3.1 8B Instant is usually the quickest to respond.',
+                desc: 'Gemini 3.5 Flash-Lite and Gemini 3.1 Flash-Lite are the lighter, quicker Gemini models.',
               },
               {
                 title: 'About limits',
-                desc: 'Every model has rate limits and provider quotas. Models marked Free run on free tiers and can be busy at peak times.',
+                desc: 'All of SOHAM\'s models run on free tiers with rate limits and quotas, so they can be busy at peak times. If a model can\'t answer, another one does, and the reply shows which.',
               },
               {
                 title: 'For general chat',
-                desc: 'Auto mode, Llama 3.3 70B or Gemini 2.5 Flash Lite are good choices for everyday conversations.',
+                desc: 'Auto mode or Gemini 3.6 Flash are good choices for everyday conversations.',
               },
             ].map((tip) => (
               <div key={tip.title} className="bg-muted/50 p-4 rounded-lg">

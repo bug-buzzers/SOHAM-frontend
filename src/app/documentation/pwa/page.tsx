@@ -11,7 +11,6 @@ import {
   Wifi,
   WifiOff,
   Zap,
-  Bell,
   Home,
   RefreshCw,
   Shield,
@@ -67,12 +66,12 @@ export default function PWAPage() {
         <h2 className="text-2xl font-bold">Why Install SOHAM as a PWA?</h2>
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {[
-            { icon: Zap,    title: 'Instant Launch',      desc: 'Opens in under a second from your home screen thanks to service-worker caching.' },
+            { icon: Zap,    title: 'Quick Launch',        desc: 'Opens quickly from your home screen, because the app shell is cached by a service worker.' },
             { icon: WifiOff,title: 'Offline Ready',       desc: 'The app can open without internet and show chats saved on this device. New replies need a connection.' },
             { icon: Home,   title: 'Home Screen Icon',    desc: 'Looks and feels like a native app — no browser chrome, just SOHAM.' },
-            { icon: Bell,   title: 'Push Notifications',  desc: 'Receive update alerts on Android (Chrome). Coming to iOS 16.4+.' },
-            { icon: RefreshCw, title: 'Auto Updates',     desc: 'Always runs the latest version — updates happen silently in the background.' },
-            { icon: Shield, title: 'Secure by Default',   desc: 'Served over HTTPS with strict content security policies.' },
+            { icon: Smartphone, title: 'App Shortcuts',   desc: 'Long-press the icon (Android) or right-click it (desktop) to jump to New Chat, Visual Math, the PDF Analyzer or AI Services.' },
+            { icon: RefreshCw, title: 'Auto Updates',     desc: 'Updates install automatically, so the next time you open the app it runs the latest version.' },
+            { icon: Shield, title: 'HTTPS Only',          desc: 'SOHAM is served over HTTPS with a content security policy.' },
           ].map(({ icon: Icon, title, desc }) => (
             <div key={title} className="flex gap-3 rounded-xl border bg-background p-4">
               <div className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-primary/10">
@@ -178,8 +177,8 @@ export default function PWAPage() {
             <div className="rounded-lg bg-blue-50 dark:bg-blue-950/20 p-4 flex gap-3">
               <AlertCircle className="h-4 w-4 text-blue-500 mt-0.5 shrink-0" />
               <p className="text-sm text-blue-700 dark:text-blue-300">
-                iOS PWAs run in a separate browser context. Push notifications require iOS 16.4+ and must be
-                enabled in Settings → SOHAM → Notifications.
+                iOS PWAs run in a separate browser context from Safari, so you may need to sign in again in the
+                installed app.
               </p>
             </div>
           </CardContent>
@@ -235,10 +234,7 @@ export default function PWAPage() {
                 { feature: 'Home screen icon',       android: true,  ios: true,  desktop: true  },
                 { feature: 'Full-screen mode',       android: true,  ios: true,  desktop: true  },
                 { feature: 'Offline UI cache',       android: true,  ios: true,  desktop: true  },
-                { feature: 'Background sync',        android: true,  ios: false, desktop: true  },
-                { feature: 'Push notifications',     android: true,  ios: '16.4+', desktop: true },
                 { feature: 'App shortcuts',          android: true,  ios: false, desktop: true  },
-                { feature: 'Share target',           android: true,  ios: false, desktop: false },
               ].map(row => (
                 <tr key={row.feature} className="hover:bg-muted/30">
                   <td className="px-4 py-3 font-medium">{row.feature}</td>

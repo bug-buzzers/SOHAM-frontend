@@ -42,11 +42,11 @@ const voicePresets = [
 const faqs = [
   {
     q: 'Where are my personalization settings stored?',
-    a: 'They are saved in your browser (IndexedDB) on the device you use, so they do not follow you to other devices. Your tone, technical level and model choice are sent along with each message so the AI can follow them.',
+    a: 'They are saved in your browser (IndexedDB) on the device you use, so they do not follow you to other devices. Your tone, technical level and model choice are sent along with each message so the AI can follow them. Separately, when you are signed in, SOHAM\'s server can note preferences you mention in chat, such as how detailed you like answers.',
   },
   {
     q: 'Can I reset my settings?',
-    a: "Change any option back in the settings dialog. Clearing this site's data in your browser resets everything stored on that device, including your chat history.",
+    a: "Change any option back in the settings dialog. Clearing this site's data in your browser resets everything stored on that device, including your chat history. It doesn't delete what SOHAM's server has saved; email codeex@email.com for that.",
   },
   {
     q: 'Do these settings work with every model?',
@@ -110,8 +110,9 @@ export default function PersonalizationDocsPage() {
           <CardContent className="space-y-4">
             <p className="text-sm text-muted-foreground">
               Turn on <strong className="text-foreground">Speech output</strong> to hear assistant replies,
-              or press the speaker icon on any message. Voices come from Groq Orpheus text-to-speech, with
-              Edge TTS and your browser&apos;s speech engine as fallbacks.
+              or press the speaker icon on any message. Replies are read with your browser&apos;s built-in
+              voices, so they sound different on different devices. A preset is used only if your browser
+              has a voice with that name.
             </p>
             <div className="flex flex-wrap gap-1.5">
               {voicePresets.map((voice) => (

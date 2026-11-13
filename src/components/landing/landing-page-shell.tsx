@@ -89,8 +89,8 @@ const FEATURES: Feature[] = [
     icon: Mic,
     title: 'Voice in and out',
     description:
-      'Talk with voice chat (in browsers that support it) or record a clip for transcription, and have any reply read aloud in one of six voices.',
-    tags: ['Voice chat', 'Record audio', 'Read aloud'],
+      'Talk with voice chat in browsers that support speech recognition, and have any reply read aloud by your browser\'s built-in voices.',
+    tags: ['Voice chat', 'Read aloud'],
   },
   {
     icon: SquareSlash,
@@ -142,16 +142,16 @@ const STEPS = [
     icon: History,
     title: 'Keep your chats',
     description:
-      'Replies stream in with the model name attached. Your history stays in this browser, where you can rename, export or delete any chat.',
+      'Replies stream in with the model name attached. Your chat list is kept in this browser, where you can rename, export or delete any chat.',
   },
 ];
 
 const DATA_POINTS = [
   {
     icon: HardDrive,
-    title: 'Stored in your browser',
+    title: 'In your browser',
     description:
-      "Your chat history lives in this browser's IndexedDB storage. It is not synced to other devices, and deleting a chat removes it from this one.",
+      "Your chat list lives in this browser's IndexedDB storage and isn't synced to other devices. Deleting a chat removes it from this browser.",
   },
   {
     icon: Server,
@@ -161,9 +161,9 @@ const DATA_POINTS = [
   },
   {
     icon: KeyRound,
-    title: 'Your account',
+    title: 'Saved with your account',
     description:
-      'Sign-in uses Firebase Authentication, so your account details are stored with Firebase. The privacy policy explains what else is kept and why.',
+      "Sign-in uses Firebase Authentication. SOHAM's server also saves your messages, and facts it picks up from them such as your name or interests, to give later answers context. The privacy policy explains what is kept and how to ask for deletion.",
   },
 ];
 

@@ -26,56 +26,56 @@ const coreFeatures = [
   {
     icon: Brain,
     title: 'Context-Aware Conversations',
-    desc: 'SOHAM remembers everything said in the current session. Ask follow-up questions naturally — no need to repeat context.',
+    desc: 'SOHAM sees the earlier messages of the chat you are in, so you can ask follow-up questions without repeating yourself.',
   },
   {
     icon: Zap,
     title: 'Smart Auto-Routing',
-    desc: 'Automatically selects the best AI model and capability for each message — web search, image generation, PDF analysis, or direct chat.',
+    desc: 'On Auto, SOHAM picks a model for each message and decides whether it needs a web search or image generation first.',
   },
   {
     icon: Mic,
     title: 'Voice Input',
-    desc: 'Speak your message using Groq Whisper V3 Turbo for fast, accurate speech-to-text transcription.',
+    desc: 'Talk instead of typing. Voice chat uses your browser\'s speech recognition and sends what you say.',
   },
   {
     icon: Volume2,
-    title: 'Text-to-Speech',
-    desc: 'Have responses read aloud using Groq Orpheus TTS with 6 natural-sounding voices.',
+    title: 'Read Aloud',
+    desc: 'Turn on speech output and replies are read aloud with your browser\'s built-in voices.',
   },
   {
     icon: Share2,
-    title: 'Message Sharing & Export',
-    desc: 'Share individual messages or export the full conversation as text or markdown.',
+    title: 'Sharing & Export',
+    desc: 'Copy or share a reply as text, Markdown or HTML, or download a whole chat as a JSON file.',
   },
   {
     icon: Globe,
     title: 'Live Web Search',
-    desc: 'DuckDuckGo search is auto-triggered for time-sensitive queries, or use /search explicitly.',
+    desc: 'SOHAM searches the web for time-sensitive questions, or whenever you start a message with /search.',
   },
 ];
 
 const interfaceItems = [
   { label: 'Message Input',        desc: 'Type your message here. Supports multi-line input with Shift+Enter.' },
-  { label: 'Voice Button (🎤)',     desc: 'Hold to record, release to transcribe. Powered by Groq Whisper V3 Turbo.' },
-  { label: 'Model Selector',       desc: 'Click to switch models mid-conversation, or choose Auto.' },
-  { label: 'Settings (⚙️)',         desc: 'Adjust tone, technical level, TTS voice, and theme.' },
-  { label: 'Clear Conversation',   desc: 'Wipe the current session from memory. Irreversible.' },
-  { label: 'Export / Share',       desc: 'Export the conversation or share a specific message.' },
+  { label: 'Voice Button (🎤)',     desc: 'Turns voice chat on or off. While it is on, SOHAM listens, sends what you say and listens again after each reply.' },
+  { label: 'Model Selection',      desc: 'In Settings (AI tab), switch models at any time or choose Auto.' },
+  { label: 'Settings (⚙️)',         desc: 'Adjust model, tone, technical level, speech output, voice preset, theme and font weight.' },
+  { label: 'Clear (sidebar)',      desc: 'Deletes every chat stored in this browser. It can\'t be undone.' },
+  { label: 'Export / Share',       desc: 'Download a chat as JSON from the sidebar, or share a single reply.' },
 ];
 
 const voiceInputSteps = [
   { title: 'Allow microphone access', body: 'When prompted by your browser, click "Allow" to grant microphone permission.' },
-  { title: 'Click the microphone button', body: 'The mic button is in the message input area. Click it to start recording.' },
-  { title: 'Speak your message', body: 'Speak clearly. SOHAM uses Groq Whisper V3 Turbo for fast, accurate transcription.' },
-  { title: 'Review and send', body: 'Your speech is transcribed into the input field. Edit if needed, then press Enter to send.' },
+  { title: 'Click the microphone button', body: 'The mic button is in the message box. A short tone plays when SOHAM starts listening.' },
+  { title: 'Speak your message', body: 'Speak clearly in English. Your browser turns your speech into text, and the message is sent as soon as you stop speaking.' },
+  { title: 'Keep talking or stop', body: 'After each reply SOHAM listens again. Click the mic button again to end voice chat.' },
 ];
 
 const ttsSteps = [
-  { title: 'Open Settings', body: 'Click the ⚙️ icon in the header to open the settings panel.' },
-  { title: 'Enable Text-to-Speech', body: 'Toggle the TTS switch to on. The toggle turns blue when active.' },
-  { title: 'Choose a voice', body: 'Select from 6 Orpheus voices: troy, diana, hannah, autumn, austin, or daniel.' },
-  { title: 'Send a message', body: 'SOHAM will automatically read its next response aloud using your chosen voice.' },
+  { title: 'Open Settings', body: 'Click the ⚙️ icon in the chat header, or Settings in the sidebar or bottom bar.' },
+  { title: 'Enable speech output', body: 'On the Voice tab, turn on "Enable speech output". You can also switch it on in Quick Settings.' },
+  { title: 'Pick a voice preset (optional)', body: 'A preset is used only if your browser has a voice with that name. Otherwise your browser\'s default voice is used.' },
+  { title: 'Send a message', body: 'SOHAM reads each new reply aloud with your browser\'s speech synthesis.' },
 ];
 
 const conversationTips = [
@@ -160,8 +160,8 @@ export default function ChatPage() {
             <Mic className="h-5 w-5 text-blue-500" />
           </div>
           <div>
-            <h2 className="text-2xl font-bold">Voice Input Setup</h2>
-            <p className="text-sm text-muted-foreground">Powered by Groq Whisper V3 Turbo (STT)</p>
+            <h2 className="text-2xl font-bold">Voice Chat</h2>
+            <p className="text-sm text-muted-foreground">Uses your browser&apos;s speech recognition</p>
           </div>
         </div>
         <Card>
@@ -182,8 +182,10 @@ export default function ChatPage() {
             <div className="rounded-lg bg-blue-50 dark:bg-blue-950/20 p-4 flex gap-3">
               <CheckCircle className="h-4 w-4 text-blue-500 mt-0.5 shrink-0" />
               <p className="text-sm text-blue-700 dark:text-blue-300">
-                Whisper V3 Turbo supports multiple languages and handles accents well. Works best
-                in a quiet environment.
+                Voice chat works in browsers with speech recognition, such as Chrome, Edge and Safari,
+                and listens for English. Some browsers send the audio to their maker for processing;
+                Chrome, for example, uses Google&apos;s servers. The separate Record audio button needs
+                server-side transcription, which is currently switched off, so use the mic button.
               </p>
             </div>
           </CardContent>
@@ -197,8 +199,8 @@ export default function ChatPage() {
             <Volume2 className="h-5 w-5 text-orange-500" />
           </div>
           <div>
-            <h2 className="text-2xl font-bold">Text-to-Speech Setup</h2>
-            <p className="text-sm text-muted-foreground">Powered by Groq Orpheus TTS — 6 voices</p>
+            <h2 className="text-2xl font-bold">Read-Aloud Setup</h2>
+            <p className="text-sm text-muted-foreground">Uses your browser&apos;s built-in voices</p>
           </div>
         </div>
         <Card>
@@ -216,14 +218,10 @@ export default function ChatPage() {
                 </li>
               ))}
             </ol>
-            <div className="grid gap-2 sm:grid-cols-3">
-              {['troy', 'diana', 'hannah', 'autumn', 'austin', 'daniel'].map((voice) => (
-                <div key={voice} className="flex items-center gap-2 rounded-lg border px-3 py-2">
-                  <Volume2 className="h-3.5 w-3.5 text-orange-500 shrink-0" />
-                  <span className="text-sm capitalize font-medium">{voice}</span>
-                </div>
-              ))}
-            </div>
+            <p className="text-xs text-muted-foreground">
+              Voice presets: Troy, Diana, Hannah, Autumn, Austin and Daniel. How a reply sounds depends on
+              the voices installed in your browser and device.
+            </p>
           </CardContent>
         </Card>
       </div>
@@ -260,17 +258,22 @@ export default function ChatPage() {
                 <History className="h-4 w-4 text-primary" />
                 Conversation Memory
               </CardTitle>
-              <CardDescription>Within-session context retention</CardDescription>
+              <CardDescription>What SOHAM remembers, and where</CardDescription>
             </CardHeader>
             <CardContent className="space-y-2 text-sm text-muted-foreground">
               <p>
-                SOHAM maintains full conversation history within a session. You can reference
-                anything said earlier: &quot;go back to the code you wrote in step 2&quot; or
-                &quot;now apply that to the second example&quot;.
+                Each message is sent with the earlier messages of the same chat, so you can refer back:
+                &quot;go back to the code you wrote in step 2&quot; or &quot;now apply that to the second
+                example&quot;.
               </p>
               <p>
-                History is stored in your browser&apos;s memory and cleared when you close the tab
-                or click &quot;Clear conversation&quot;.
+                Your chats are saved in this browser until you delete them. When you are signed in,
+                SOHAM&apos;s server also keeps your messages, the replies and facts from your chats, and
+                can use them as context in new conversations. See{' '}
+                <Link href="/documentation/security" className="text-primary hover:underline">
+                  Security &amp; Privacy
+                </Link>
+                .
               </p>
             </CardContent>
           </Card>
@@ -306,8 +309,8 @@ export default function ChatPage() {
         </div>
         <div className="grid gap-3 sm:grid-cols-2">
           {[
-            { title: 'Touch-optimised layout',       desc: 'Larger tap targets, swipe gestures, and a bottom-anchored input bar for thumb-friendly typing.' },
-            { title: 'Bottom sheet model selector',  desc: 'Tap the model name to open a full-screen bottom sheet with every available model listed.' },
+            { title: 'Touch-friendly layout',        desc: 'Larger tap targets, a bottom navigation bar and a message box you can reach with your thumb.' },
+            { title: 'Bottom sheet model selector',  desc: 'In Settings, the model list opens as a bottom sheet with every available model.' },
             { title: 'Voice priority',               desc: 'The microphone button is prominently placed for quick voice input — ideal when typing is inconvenient.' },
             { title: 'PWA full-screen mode',         desc: 'Install as a PWA for a native app feel with no browser chrome. See the Installation guide.' },
           ].map(({ title, desc }) => (

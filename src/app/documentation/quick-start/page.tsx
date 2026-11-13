@@ -71,7 +71,8 @@ export default function QuickStartPage() {
 
         <StepCard step={2} title="Configure Your Preferences" icon={Settings}>
           <p className="text-sm text-muted-foreground mb-3">
-            Click the settings icon (⚙️) in the header to customize your experience:
+            Click the gear icon (⚙️) in the chat header, or Settings in the sidebar (or the bottom bar on
+            mobile), to customize your experience:
           </p>
           <div className="grid gap-3 md:grid-cols-2">
             {[
@@ -89,7 +90,7 @@ export default function QuickStartPage() {
               },
               {
                 title: 'Voice (TTS)',
-                desc: 'Enable speech output and pick a voice: troy, diana, hannah, autumn, austin, or daniel.',
+                desc: 'Turn on speech output to hear replies read aloud with your browser\'s built-in voices.',
               },
             ].map((s) => (
               <div key={s.title} className="bg-muted/50 p-3 rounded-lg">
@@ -102,7 +103,7 @@ export default function QuickStartPage() {
 
         <StepCard step={3} title="Try Slash Commands" icon={Sparkles}>
           <p className="text-sm text-muted-foreground mb-3">
-            Slash commands route your query to a specialized pipeline for better results:
+            Slash commands tell SOHAM exactly what kind of answer you want:
           </p>
           <div className="space-y-3">
             {[
@@ -113,7 +114,7 @@ export default function QuickStartPage() {
               },
               {
                 cmd: '/search',
-                desc: 'Real-time web search with source links',
+                desc: 'Looks up current information on the web',
                 ex: '/search latest Next.js 15 features',
               },
               {
@@ -144,14 +145,15 @@ export default function QuickStartPage() {
         <StepCard step={4} title="Explore AI Services" icon={Image}>
           <p className="text-sm text-muted-foreground mb-3">
             Beyond chat, SOHAM has dedicated tools at{' '}
-            <code className="bg-muted px-2 py-0.5 rounded text-xs">/ai-services</code>:
+            <code className="bg-muted px-2 py-0.5 rounded text-xs">/ai-services</code>, and more built into
+            the chat:
           </p>
           <div className="grid gap-3 md:grid-cols-2">
             {[
               {icon: FileText, title: 'PDF Analyzer', desc: 'Upload PDFs up to 5 MB and ask questions'},
               {icon: Calculator, title: 'Visual Math', desc: 'Upload equation photos for step-by-step solutions'},
-              {icon: Image, title: 'Image Generation', desc: 'Generate images with HuggingFace FLUX.1'},
-              {icon: Search, title: 'Web Search', desc: 'Dedicated search with DuckDuckGo + AI synthesis'},
+              {icon: Image, title: 'Image Generation', desc: 'In chat: ask for an image and SOHAM creates it with FLUX'},
+              {icon: Search, title: 'Web Search', desc: 'In chat: current questions are looked up on the web first'},
             ].map((f) => (
               <div key={f.title} className="flex items-center gap-3 p-3 bg-muted/50 rounded-lg">
                 <f.icon className="h-5 w-5 text-primary shrink-0" />
@@ -225,7 +227,7 @@ export default function QuickStartPage() {
             },
             {
               title: 'Voice Features',
-              desc: 'Set up Groq Whisper STT and Orpheus TTS',
+              desc: 'Turn on voice chat and read-aloud',
               href: '/documentation/chat',
               icon: Mic,
             },
