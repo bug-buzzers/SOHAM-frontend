@@ -279,6 +279,32 @@ html {
   display: none;
 }
 
+/* Maths in replies (KaTeX). A long display formula scrolls sideways inside
+   its own box instead of widening the message on phones. */
+.katex-display {
+  margin: 0.75em 0;
+  padding: 0.25em 0.125em;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+.katex-display::-webkit-scrollbar {
+  height: 4px;
+}
+
+.katex-display::-webkit-scrollbar-thumb {
+  background: hsl(var(--muted-foreground) / 0.3);
+  border-radius: 4px;
+}
+
+/* A formula KaTeX can't read shows its source as plain code-style text. */
+.katex-error {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.9em;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
 /* ==========================================================================
    Landing page motion
    ========================================================================== */

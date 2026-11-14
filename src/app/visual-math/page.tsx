@@ -11,6 +11,7 @@ import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { PageHeader } from '@/components/page-header';
 import { solveEquationFromImage } from '@/app/actions';
 import { ProtectedRoute } from '@/hooks/use-auth';
+import { MathMarkdown } from '@/components/math-markdown';
 
 type SolutionState = {
   recognizedEquation: string;
@@ -164,8 +165,8 @@ export default function VisualMathPage() {
                   </div>
                   <div>
                     <h3 className="mb-2 font-semibold">Step-by-step Solution:</h3>
-                    <div className="rounded-md bg-muted p-4 text-sm leading-7 whitespace-pre-wrap break-words">
-                        {solution.solutionSteps}
+                    <div className="prose prose-sm dark:prose-invert max-w-none rounded-md bg-muted p-4 leading-7 break-words">
+                        <MathMarkdown breaks>{solution.solutionSteps}</MathMarkdown>
                     </div>
                   </div>
                 </div>

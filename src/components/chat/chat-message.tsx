@@ -1,6 +1,6 @@
 'use client';
 
-import {useState, useEffect, useRef} from 'react';
+import {memo, useState, useEffect, useRef} from 'react';
 import {User, Copy, Check, RefreshCw, Volume2, VolumeX, Download, ZoomIn, X, Maximize2} from 'lucide-react';
 import {cn} from '@/lib/utils';
 import {Avatar, AvatarFallback, AvatarImage} from '@/components/ui/avatar';
@@ -12,7 +12,9 @@ import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import remarkBreaks from 'remark-breaks';
 import rehypeRaw from 'rehype-raw';
-import {remarkLooseBold, restoreHashComments, sanitizeAIContent} from '@/lib/chat-markdown';
+import {normalizeMath, remarkLooseBold, restoreHashComments, sanitizeAIContent} from '@/lib/chat-markdown';
+import {rehypeMath, remarkMathPlugin} from '@/lib/markdown-math';
+import {mathComponents} from '@/components/math-markdown';
 import {MessageAttribution} from './message-attribution';
 import {MessageShare} from './message-share';
 import {Button} from '@/components/ui/button';
@@ -247,7 +249,20 @@ function GeneratedImage({ src: rawSrc, alt }: { src: string; alt?: string }) {
   );
 }
 
-export function ChatMessage({message, settings, onRegenerate, isStreaming = false}: ChatMessageProps) {
+/**
+ * "5 minutes ago", kept current. Messages are memoised (see ChatMessage), so
+ * this refreshes itself instead of waiting for the message to render again.
+ */
+function RelativeTime({date}: {date: string}) {
+  const [, setTick] = useState(0);
+  useEffect(() => {
+    const timer = setInterval(() => setTick((tick) => tick + 1), 60_000);
+    return () => clearInterval(timer);
+  }, []);
+  return <>{formatDistanceToNow(new Date(date), {addSuffix: true})}</>;
+}
+
+function ChatMessageView({message, settings, onRegenerate, isStreaming = false}: ChatMessageProps) {
   const {user} = useAuth();
   const [isMounted, setIsMounted] = useState(false);
   const [copied, setCopied] = useState(false);
@@ -356,10 +371,6 @@ export function ChatMessage({message, settings, onRegenerate, isStreaming = fals
     return null;
   }
   
-  const displayTimestamp = message.createdAt
-  ? formatDistanceToNow(new Date(message.createdAt), {addSuffix: true})
-  : '';
-
   const renderMarkdownCode = ({inline, className, children, ...props}: any) => {
     const match = /language-(\w+)/.exec(className || '');
     const language = match?.[1]?.toLowerCase();
@@ -516,9 +527,10 @@ export function ChatMessage({message, settings, onRegenerate, isStreaming = fals
               ],
             )}>
               <ReactMarkdown
-                remarkPlugins={[remarkGfm, [remarkLooseBold, {streaming: isStreaming}], remarkBreaks]}
-                rehypePlugins={[rehypeRaw]}
+                remarkPlugins={[remarkGfm, remarkMathPlugin, [remarkLooseBold, {streaming: isStreaming}], remarkBreaks]}
+                rehypePlugins={[rehypeRaw, rehypeMath]}
                 components={{
+                  ...mathComponents,
                   a: ({node, ...props}) => (
                     <a
                       {...props}
@@ -640,7 +652,7 @@ export function ChatMessage({message, settings, onRegenerate, isStreaming = fals
                   ),
                 }}
               >
-                {sanitizeAIContent(message.content)}
+                {normalizeMath(sanitizeAIContent(message.content), {streaming: isStreaming})}
               </ReactMarkdown>
 
               {shouldRenderAttachedImage && (
@@ -666,9 +678,9 @@ export function ChatMessage({message, settings, onRegenerate, isStreaming = fals
             'flex flex-wrap items-center gap-1 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-150',
             !isAssistant && 'flex-row-reverse'
           )}>
-            {displayTimestamp && (
+            {message.createdAt && (
               <span className="text-[11px] text-muted-foreground px-1.5 select-none">
-                {displayTimestamp}
+                <RelativeTime date={message.createdAt} />
               </span>
             )}
 
@@ -718,3 +730,10 @@ export function ChatMessage({message, settings, onRegenerate, isStreaming = fals
     </TooltipProvider>
   );
 }
+
+/**
+ * Memoised: while a reply streams in, only the message that changes renders
+ * again, instead of every earlier reply being parsed and drawn on each token.
+ * Messages are replaced, not mutated, when they change (use-chat-history.ts).
+ */
+export const ChatMessage = memo(ChatMessageView);

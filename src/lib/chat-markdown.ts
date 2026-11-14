@@ -1,6 +1,9 @@
 /**
  * Markdown clean-up for AI replies.
  *
+ * Maths: normalizeMath() at the bottom rewrites the ways models write LaTeX
+ * into the one form the renderer reads (see markdown-math.ts).
+ *
  * The backend asks models to use **bold** for key terms. Two things made those
  * asterisks show up as literal "**" in the chat:
  *
@@ -22,16 +25,20 @@ const FENCE_CLOSE = /^\s*(`{3,}|~{3,})\s*$/;
 /**
  * Applies `transform` only to the parts of `text` outside fenced code blocks
  * (``` or ~~~). Code passes through untouched. An unclosed fence runs to the
- * end, as it does when the Markdown is rendered.
+ * end, as it does when the Markdown is rendered. `atEnd` tells the transform
+ * that its part is the end of the text.
  */
-export function mapOutsideCodeFences(text: string, transform: (prose: string) => string): string {
+export function mapOutsideCodeFences(
+  text: string,
+  transform: (prose: string, atEnd: boolean) => string,
+): string {
   const parts: string[] = [];
   let prose: string[] = [];
   let fence: string | null = null; // the opening fence, e.g. "```"
 
-  const flushProse = () => {
+  const flushProse = (atEnd: boolean) => {
     if (prose.length > 0) {
-      parts.push(transform(prose.join('\n')));
+      parts.push(transform(prose.join('\n'), atEnd));
       prose = [];
     }
   };
@@ -46,14 +53,14 @@ export function mapOutsideCodeFences(text: string, transform: (prose: string) =>
     const open = FENCE_OPEN.exec(line);
     // A backtick fence can't have backticks after it: "```x```" is inline code.
     if (open && !(open[1][0] === '`' && open[2].includes('`'))) {
-      flushProse();
+      flushProse(false);
       parts.push(line);
       fence = open[1];
       continue;
     }
     prose.push(line);
   }
-  flushProse();
+  flushProse(true);
   return parts.join('\n');
 }
 
@@ -412,4 +419,319 @@ function mergeText(nodes: MdNode[]): MdNode[] {
     }
   }
   return out;
+}
+
+// ── Maths ─────────────────────────────────────────────────────────────────────
+//
+// Models write maths four ways: \( … \) and \[ … \] (gpt-oss and other
+// OpenAI-style models), $ … $ and $$ … $$ (Gemini), and some double every
+// backslash. The renderer (remark-math, see markdown-math.ts) only reads $$,
+// with single-dollar maths switched off so prices like "$5 and $10" stay text.
+// Markdown also reads "\[" and "\(" as escaped brackets, which is why replies
+// showed raw LaTeX. normalizeMath() rewrites every form into $$ first.
+
+/** Longest formula looked for; also caps what is held back while streaming. */
+const MAX_DISPLAY_MATH = 4000;
+const MAX_INLINE_MATH = 1000;
+
+/** LaTeX environments that work as a display formula without $$ around them. */
+const MATH_ENVIRONMENTS = new Set([
+  'equation', 'equation*', 'align', 'align*', 'aligned', 'alignat', 'alignat*', 'alignedat',
+  'gather', 'gather*', 'gathered', 'multline', 'multline*', 'split', 'cases', 'dcases', 'rcases',
+  'matrix', 'pmatrix', 'bmatrix', 'Bmatrix', 'vmatrix', 'Vmatrix', 'smallmatrix', 'array', 'darray', 'CD',
+]);
+
+/** Indentation, ">" quote markers and a list marker at the start of a line. */
+const LINE_PREFIX = /^([ \t]*(?:>[ \t]?)*[ \t]*)((?:[-*+]|\d{1,9}[.)])[ \t]+)?/;
+const ONLY_LINE_PREFIX = /^[ \t]*(?:>[ \t]?)*[ \t]*(?:(?:[-*+]|\d{1,9}[.)])[ \t]+)?$/;
+
+/** Something only maths would contain. Keeps "\[1\]" and "\[optional\]" as brackets. */
+const LOOKS_LIKE_MATH = /\\[A-Za-z]+|[\^_=+\-*/<>{}|]|\d[A-Za-z]|[A-Za-z]\d/;
+
+export interface MathOptions {
+  /**
+   * The reply is still arriving: hold back a formula until its closing
+   * delimiter is in, so half a formula never shows up as raw LaTeX.
+   */
+  streaming?: boolean;
+}
+
+/**
+ * Rewrites maths into the $$ form remark-math reads:
+ *
+ *   \[ … \], $$ … $$ or a bare \begin{aligned} … on lines of their own
+ *       → a display formula: $$ fences on their own lines
+ *   \( … \), $ … $, and \[ … \] or $$ … $$ inside a sentence
+ *       → inline $$ … $$
+ *
+ * Doubled backslashes (\\( … \\) with \\frac inside) are undone. Code, inline
+ * code and escaped \$ are left alone. A single $ only counts as maths by
+ * Pandoc's rules: no space just inside the dollars and no digit right after
+ * the closing one, so "$20,000 and $30,000" stays text.
+ */
+export function normalizeMath(markdown: string, options: MathOptions = {}): string {
+  const streaming = options.streaming === true;
+  return mapOutsideCodeFences(markdown, (prose, atEnd) => convertMath(prose, streaming && atEnd));
+}
+
+function convertMath(text: string, streamingTail: boolean): string {
+  let out = '';
+  let i = 0;
+
+  const lineStart = (pos: number) => text.lastIndexOf('\n', pos - 1) + 1;
+  const lineEnd = (pos: number) => {
+    const end = text.indexOf('\n', pos);
+    return end === -1 ? text.length : end;
+  };
+  /** Only list or quote markers come before `pos` on its line. */
+  const startsLine = (pos: number) => ONLY_LINE_PREFIX.test(text.slice(lineStart(pos), pos));
+  /** Only spaces come after `pos` on its line. */
+  const endsLine = (pos: number) => text.slice(pos, lineEnd(pos)).trim() === '';
+
+  /**
+   * Writes `content`, found between `start` and `end`, as a display formula
+   * and returns where to carry on. Inside a list item or quote the fences
+   * keep its indentation, so the formula stays inside it.
+   */
+  const block = (start: number, end: number, content: string): number => {
+    const prefix = LINE_PREFIX.exec(text.slice(lineStart(start))) as RegExpExecArray;
+    const indent = prefix[1] + ' '.repeat(prefix[2]?.length ?? 0);
+    const quoted = prefix[1].includes('>');
+    const lines = content
+      .split('\n')
+      .map((line) => (quoted ? line.replace(/^[ \t]*(?:>[ \t]?)+/, '') : line).trim())
+      .filter((line) => line !== '');
+    if (!startsLine(start)) out = out.replace(/[ \t]+$/, '') + '\n' + indent;
+    out += '$$\n' + lines.map((line) => indent + line + '\n').join('') + indent + '$$';
+    if (endsLine(end)) return end;
+    // Text after the formula goes on a line of its own
+    out += '\n' + indent;
+    let next = end;
+    while (text[next] === ' ' || text[next] === '\t') next++;
+    return next;
+  };
+
+  /** While streaming, an unclosed formula at the end is held back until it closes. */
+  const holdBack = (start: number, display: boolean, allowBlankLines: boolean): boolean => {
+    if (!streamingTail || text.length - start > (display ? MAX_DISPLAY_MATH : MAX_INLINE_MATH)) return false;
+    return allowBlankLines || !/\n[ \t]*\n/.test(text.slice(start));
+  };
+
+  while (i < text.length) {
+    const c = text[i];
+
+    if (c === '`') {
+      const end = inlineCodeEnd(text, i);
+      out += text.slice(i, end);
+      i = end;
+      continue;
+    }
+
+    if (c === '\\') {
+      let run = 1;
+      while (text[i + run] === '\\') run++;
+      const next = text[i + run];
+
+      // \[ … \] and \( … \), or \\[ … \\] and \\( … \\) with every backslash doubled
+      if ((run === 1 || run === 2) && (next === '[' || next === '(')) {
+        const display = next === '[';
+        const doubled = run === 2;
+        const from = i + run + 1;
+        const alone = display && startsLine(i) && endsLine(from);
+        const close = findBackslashClose(
+          text, from, display ? ']' : ')', doubled, display ? MAX_DISPLAY_MATH : MAX_INLINE_MATH, alone,
+        );
+        if (close) {
+          let content = text.slice(from, close.start);
+          if (doubled) content = content.replace(/\\\\/g, '\\');
+          if (content.trim()) {
+            if (display && (content.includes('\n') || (startsLine(i) && endsLine(close.end)))) {
+              i = block(i, close.end, content);
+              continue;
+            }
+            if (!display || LOOKS_LIKE_MATH.test(content)) {
+              out += inlineMath(content);
+              i = close.end;
+              continue;
+            }
+          }
+        } else if (holdBack(i, display, alone)) {
+          return out;
+        }
+        out += text.slice(i, from); // not maths: leave it as written
+        i = from;
+        continue;
+      }
+
+      // A bare \begin{aligned} … \end{aligned} on lines of its own
+      if (run === 1 && next === 'b' && startsLine(i)) {
+        const env = /^\\begin\{([A-Za-z]+\*?)\}/.exec(text.slice(i, i + 40));
+        if (env && MATH_ENVIRONMENTS.has(env[1])) {
+          const endTag = `\\end{${env[1]}}`;
+          const at = text.indexOf(endTag, i + env[0].length);
+          if (at !== -1 && at - i <= MAX_DISPLAY_MATH && endsLine(at + endTag.length)) {
+            i = block(i, at + endTag.length, text.slice(i, at + endTag.length));
+            continue;
+          }
+          if (at === -1 && holdBack(i, true, true)) return out;
+        }
+      }
+
+      // Any other escape: keep the backslash with the character it escapes,
+      // so "\$" stays a dollar sign and "\`" doesn't start inline code.
+      const take = run % 2 === 1 && next !== undefined && next !== '\n' ? run + 1 : run;
+      // While streaming, a "\" at the very end may be the start of "\(" or "\["
+      if (!(streamingTail && next === undefined)) out += text.slice(i, i + take);
+      i += take;
+      continue;
+    }
+
+    if (c === '$') {
+      let run = 1;
+      while (text[i + run] === '$') run++;
+
+      if (run === 2) {
+        const from = i + 2;
+        const alone = startsLine(i) && endsLine(from);
+        const close = findDollarClose(text, from, alone);
+        const content = close === -1 ? '' : text.slice(from, close);
+        if (content.trim()) {
+          if (content.includes('\n') || (startsLine(i) && endsLine(close + 2))) {
+            i = block(i, close + 2, content);
+          } else {
+            out += inlineMath(content);
+            i = close + 2;
+          }
+          continue;
+        }
+        if (close === -1 && holdBack(i, true, alone)) return out;
+      }
+
+      if (run === 1 && !/\d/.test(text[i - 1] ?? '')) {
+        const close = findSingleDollarClose(text, i);
+        if (close !== -1) {
+          out += inlineMath(text.slice(i + 1, close));
+          i = close + 1;
+          continue;
+        }
+        // While streaming, "$x = \frac{1" at the end is a formula still arriving;
+        // a price like "$5 to" has no LaTeX in it and shows straight away.
+        const rest = streamingTail && text.length - i <= MAX_INLINE_MATH ? text.slice(i + 1) : '';
+        if (
+          rest &&
+          !/[\n$`]/.test(rest) &&
+          /^[^\s,.;:!?)]/.test(rest) &&
+          /\\[A-Za-z]|[\^_{}]/.test(rest)
+        ) {
+          return out;
+        }
+      }
+
+      // Plain dollar signs. Two or more are escaped, or the parser would
+      // read "$$" at the start of a line as the start of a formula. While
+      // streaming, dollars at the very end may be the start of one.
+      if (!(streamingTail && i + run === text.length)) out += run === 1 ? '$' : '\\$'.repeat(run);
+      i += run;
+      continue;
+    }
+
+    out += c;
+    i++;
+  }
+
+  return out;
+}
+
+/** Inline maths in the one form remark-math reads with single dollars off. */
+function inlineMath(content: string): string {
+  return `$$${content.replace(/[ \t]*\n[ \t]*/g, ' ').trim()}$$`;
+}
+
+/** Whether the line after the line break at `newline` is empty. */
+function isBlankLineAfter(text: string, newline: number): boolean {
+  let k = newline + 1;
+  while (text[k] === ' ' || text[k] === '\t') k++;
+  return k < text.length && text[k] === '\n';
+}
+
+/** End of the inline code span starting at `start`, or just past its backticks if it never closes. */
+function inlineCodeEnd(text: string, start: number): number {
+  let ticks = 0;
+  while (text[start + ticks] === '`') ticks++;
+  const limit = Math.min(text.length, start + 20000);
+  for (let j = start + ticks; j < limit; j++) {
+    if (text[j] === '\n' && isBlankLineAfter(text, j)) break;
+    if (text[j] !== '`') continue;
+    let run = 1;
+    while (text[j + run] === '`') run++;
+    if (run === ticks) return j + run;
+    j += run - 1;
+  }
+  return start + ticks;
+}
+
+/**
+ * Finds the "\]" or "\)" that closes a formula (or "\\]" / "\\)" when every
+ * backslash is doubled). A row break "\\" right before it is part of the formula.
+ */
+function findBackslashClose(
+  text: string,
+  from: number,
+  bracket: ']' | ')',
+  doubled: boolean,
+  max: number,
+  allowBlankLines: boolean,
+): {start: number; end: number} | null {
+  const limit = Math.min(text.length, from + max);
+  for (let j = from; j < limit; j++) {
+    const c = text[j];
+    if (c === '\n' && !allowBlankLines && isBlankLineAfter(text, j)) return null;
+    if (c !== '\\') continue;
+    let run = 1;
+    while (text[j + run] === '\\') run++;
+    if (text[j + run] === bracket && (doubled ? run % 4 === 2 : run % 2 === 1)) {
+      return {start: j + run - (doubled ? 2 : 1), end: j + run + 1};
+    }
+    j += run - 1;
+  }
+  return null;
+}
+
+/** Finds the "$$" that closes a formula opened just before `from`, or -1. */
+function findDollarClose(text: string, from: number, allowBlankLines: boolean): number {
+  const limit = Math.min(text.length, from + MAX_DISPLAY_MATH);
+  for (let j = from; j < limit; j++) {
+    const c = text[j];
+    if (c === '\n' && !allowBlankLines && isBlankLineAfter(text, j)) return -1;
+    if (c === '\\') {
+      j++; // an escaped character such as \$
+      continue;
+    }
+    if (c !== '$') continue;
+    let run = 1;
+    while (text[j + run] === '$') run++;
+    if (run === 2) return j;
+    j += run - 1;
+  }
+  return -1;
+}
+
+/**
+ * Pandoc's rule for $ … $ on one line: text right after the opening $, no
+ * space before the closing $ and no digit after it. Returns the closing $, or -1.
+ */
+function findSingleDollarClose(text: string, open: number): number {
+  const first = text[open + 1];
+  if (first === undefined || /[\s,.;:!?)]/.test(first)) return -1;
+  const limit = Math.min(text.length, open + 1 + MAX_INLINE_MATH);
+  for (let j = open + 1; j < limit; j++) {
+    const c = text[j];
+    if (c === '\n' || c === '`') return -1;
+    if (c === '\\') {
+      j++;
+      continue;
+    }
+    if (c === '$') return /\s/.test(text[j - 1]) || /[\d$]/.test(text[j + 1] ?? '') ? -1 : j;
+  }
+  return -1;
 }
