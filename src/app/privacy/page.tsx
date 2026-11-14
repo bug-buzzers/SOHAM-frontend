@@ -260,7 +260,7 @@ export default function PrivacyPage() {
             </div>
 
             <div>
-              <Subheading>Community board, contact form and emails</Subheading>
+              <Subheading>Community board and emails to us</Subheading>
               <Bullets>
                 <li>
                   <strong>Community posts are public.</strong> A post includes the name you enter (or
@@ -268,12 +268,9 @@ export default function PrivacyPage() {
                   and your user ID. Reports you send about posts are saved too.
                 </li>
                 <li>
-                  <strong>Contact form:</strong> your name, email address, subject and message are sent to us by
-                  email through EmailJS.
-                </li>
-                <li>
-                  <strong>Welcome email:</strong> when you create an account, we send a welcome email through
-                  EmailJS, which receives your email address and display name.
+                  <strong>Emails you send us:</strong> if you email us, for example from the Contact page, we
+                  receive your email address and what you write. SOHAM doesn&apos;t email you itself; the only
+                  emails you may get are account emails from Firebase, such as a password reset link.
                 </li>
               </Bullets>
             </div>
@@ -354,7 +351,7 @@ export default function PrivacyPage() {
               <li>personalise replies with your settings and the memory described in Section 3;</li>
               <li>keep SOHAM available and secure, for example with rate limits, and find and fix errors;</li>
               <li>understand how the site is used, in aggregate, through Google Analytics;</li>
-              <li>send the welcome email and reply when you contact us;</li>
+              <li>reply when you contact us;</li>
               <li>meet legal obligations and enforce our Terms of Service.</li>
             </Bullets>
             <p>
@@ -393,7 +390,8 @@ export default function PrivacyPage() {
               <Subheading>Hosting, accounts and storage</Subheading>
               <Bullets>
                 <li>
-                  <strong>Firebase Authentication (Google):</strong> sign-in and account records.{' '}
+                  <strong>Firebase Authentication (Google):</strong> sign-in, account records and account emails
+                  such as password reset links.{' '}
                   <ExternalLink href="https://firebase.google.com/support/privacy">Firebase privacy</ExternalLink>
                 </li>
                 <li>
@@ -450,12 +448,8 @@ export default function PrivacyPage() {
             </div>
 
             <div>
-              <Subheading>Email and analytics</Subheading>
+              <Subheading>Analytics</Subheading>
               <Bullets>
-                <li>
-                  <strong>EmailJS:</strong> welcome emails and the contact form.{' '}
-                  <ExternalLink href="https://www.emailjs.com/legal/privacy-policy/">EmailJS privacy</ExternalLink>
-                </li>
                 <li>
                   <strong>Google Analytics:</strong> usage statistics.{' '}
                   <ExternalLink href="https://policies.google.com/technologies/partner-sites">
@@ -505,8 +499,8 @@ export default function PrivacyPage() {
                 record when you do.
               </li>
               <li>
-                <strong>Emails:</strong> contact messages and welcome emails stay in our inbox and in EmailJS for as
-                long as we need them.
+                <strong>Emails you send us:</strong> stay in our inbox for as long as we need them to answer
+                you.
               </li>
               <li>
                 <strong>Logs and analytics:</strong> kept by our hosting providers and Google Analytics for their
@@ -597,8 +591,7 @@ export default function PrivacyPage() {
               <Bullets>
                 <li>to create your SOHAM account and sign you in;</li>
                 <li>to show your name and photo in the app;</li>
-                <li>to fill in the author name on community posts, which you can change before posting;</li>
-                <li>to send the welcome email.</li>
+                <li>to fill in the author name on community posts, which you can change before posting.</li>
               </Bullets>
               <p className="mt-2">
                 We don&apos;t use Google user data for advertising, we don&apos;t sell it, and we don&apos;t send it to
@@ -610,7 +603,6 @@ export default function PrivacyPage() {
               <Subheading>Who receives it</Subheading>
               <Bullets>
                 <li>Firebase (Google), which handles sign-in;</li>
-                <li>EmailJS, which receives your email address and name to send the welcome email;</li>
                 <li>everyone who reads the community board, if you publish a post (your photo and the name you choose);</li>
                 <li>authorities, only if the law requires it.</li>
               </Bullets>
@@ -689,7 +681,7 @@ export default function PrivacyPage() {
             </div>
             <div className="flex flex-wrap gap-2 pt-2">
               <Link href="/contact">
-                <Button variant="outline" size="sm">Contact Form</Button>
+                <Button variant="outline" size="sm">Contact page</Button>
               </Link>
               <Link href="/terms">
                 <Button variant="outline" size="sm">Terms of Service</Button>

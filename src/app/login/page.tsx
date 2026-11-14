@@ -29,7 +29,6 @@ import {
 import Image from 'next/image';
 import Link from 'next/link';
 import {useToast} from '@/hooks/use-toast';
-import {sendWelcomeEmail} from '@/lib/email';
 import {Suspense} from 'react';
 import {SohamLoader} from '@/components/soham-loader';
 
@@ -144,19 +143,7 @@ function LoginPageInner() {
     const auth = getAuth(app);
     try {
       // First, try popup authentication
-      const result = await signInWithPopup(auth, googleProvider);
-      
-      // Check if this is a new user
-      const isNewUser = result.user.metadata.creationTime === result.user.metadata.lastSignInTime;
-      if (isNewUser && result.user.email && result.user.displayName) {
-        const emailResult = await sendWelcomeEmail(result.user.email, result.user.displayName);
-        if (emailResult.success) {
-          toast({
-            title: 'Welcome to SOHAM! 🎉',
-            description: 'A welcome email has been sent to your inbox.',
-          });
-        }
-      }
+      await signInWithPopup(auth, googleProvider);
     } catch (error: unknown) {
       const err = error as { code?: string; message?: string };
       
@@ -189,7 +176,6 @@ function LoginPageInner() {
     const auth = getAuth(app);
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-      // Welcome email will be sent after user sets their display name
       toast({
         title: 'Account Created! 🎉',
         description: 'Please enter your name to complete registration.',
@@ -204,7 +190,6 @@ function LoginPageInner() {
     const auth = getAuth(app);
     try {
       await signInWithEmailAndPassword(auth, email, password);
-      // Welcome email is sent on sign up, not sign in
     } catch (error: unknown) {
       handleAuthError(error);
     }
@@ -234,18 +219,6 @@ function LoginPageInner() {
     setError(null);
     try {
       await updateProfile(currentUser, {displayName: newUserName.trim()});
-
-      // Send welcome email to new user
-      if (currentUser.email) {
-        const emailResult = await sendWelcomeEmail(currentUser.email, newUserName.trim());
-        if (emailResult.success) {
-          toast({
-            title: 'Welcome to SOHAM! 🎉',
-            description: 'A welcome email has been sent to your inbox.',
-          });
-        }
-      }
-
       setIsNamePromptOpen(false);
     } catch (_error) {
       setError('Could not save your name. Please try again.');
@@ -269,27 +242,15 @@ function LoginPageInner() {
     const handleRedirectResult = async () => {
       const auth = getAuth(app);
       try {
-        const result = await getRedirectResult(auth);
-        if (result) {
-          // Check if this is a new user
-          const isNewUser = result.user.metadata.creationTime === result.user.metadata.lastSignInTime;
-          if (isNewUser && result.user.email && result.user.displayName) {
-            const emailResult = await sendWelcomeEmail(result.user.email, result.user.displayName);
-            if (emailResult.success) {
-              toast({
-                title: 'Welcome to SOHAM! 🎉',
-                description: 'A welcome email has been sent to your inbox.',
-              });
-            }
-          }
-        }
+        // Completes a Google sign-in that fell back to a redirect
+        await getRedirectResult(auth);
       } catch (error: unknown) {
         handleAuthError(error);
       }
     };
 
     handleRedirectResult();
-  }, [toast]);
+  }, []);
 
   if (loading) {
     return <SohamLoader variant="overlay" label="Authenticating…" />;

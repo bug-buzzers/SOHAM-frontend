@@ -10,7 +10,6 @@
  */
 
 import { serverClient } from "@/lib/server-client";
-import { sendWelcomeEmail } from "@/ai/flows/send-welcome-email";
 import { enhancedImageSolver } from "@/ai/flows/enhanced-image-solver";
 import type {
   AnalyzePdfInput,
@@ -159,19 +158,6 @@ export async function generateImage(input: {
       model: data.model ?? "unknown",
       generationTime: data.generationTime ?? 0,
     };
-  } catch (error) {
-    return handleError(error);
-  }
-}
-
-// ─── Welcome email ────────────────────────────────────────────────────────────
-
-export async function triggerWelcomeEmail(input: {
-  email: string;
-  displayName: string;
-}): Promise<void | { error: string }> {
-  try {
-    await sendWelcomeEmail(input);
   } catch (error) {
     return handleError(error);
   }

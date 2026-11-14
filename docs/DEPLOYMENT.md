@@ -51,9 +51,6 @@ NEXT_PUBLIC_FIREBASE_APP_ID=your_app_id
 ```
 HUGGINGFACE_API_KEY=your_huggingface_token
 OPENROUTER_API_KEY=your_openrouter_key
-NEXT_PUBLIC_EMAILJS_SERVICE_ID=your_emailjs_service
-NEXT_PUBLIC_EMAILJS_TEMPLATE_ID=your_emailjs_template
-NEXT_PUBLIC_EMAILJS_PUBLIC_KEY=your_emailjs_public_key
 ```
 
 ### Step 4: Deploy
