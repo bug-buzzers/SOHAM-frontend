@@ -77,22 +77,6 @@ export const env = {
     measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID || '',
   },
 
-  // Email services
-  email: {
-    // EmailJS (client-side)
-    emailjs: {
-      serviceId: process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID || '',
-      templateId: process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID || '',
-      welcomeTemplateId: process.env.NEXT_PUBLIC_EMAILJS_WELCOME_TEMPLATE_ID || '',
-      userId: process.env.NEXT_PUBLIC_EMAILJS_USER_ID || '',
-    },
-    // Resend (server-side)
-    resend: {
-      apiKey: process.env.RESEND_API_KEY || '',
-      fromEmail: process.env.RESEND_FROM_EMAIL || 'noreply@codeex-ai.com',
-    },
-  },
-
   // Optional services
   optional: {
     elevenlabs: process.env.NEXT_PUBLIC_ELEVENLABS_API_KEY || '',

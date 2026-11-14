@@ -11,6 +11,7 @@ import { PageHeader } from '@/components/page-header';
 import { analyzeDocumentFromPdf } from '@/app/actions';
 import { Label } from '@/components/ui/label';
 import ReactMarkdown from 'react-markdown';
+import {remarkLooseBold} from '@/lib/chat-markdown';
 import remarkGfm from 'remark-gfm';
 import { ProtectedRoute } from '@/hooks/use-auth';
 
@@ -168,7 +169,7 @@ export default function PdfAnalyzerPage() {
               )}
               {analysis && (
                 <div className="prose prose-sm dark:prose-invert max-w-none space-y-6 rounded-md bg-muted p-4">
-                  <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                  <ReactMarkdown remarkPlugins={[remarkGfm, remarkLooseBold]}>
                     {analysis}
                   </ReactMarkdown>
                 </div>

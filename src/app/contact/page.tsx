@@ -3,7 +3,6 @@ import Link from 'next/link';
 import { pageSEO, structuredData } from '@/lib/seo-config';
 import { DEVELOPER_INFO } from '@/lib/developer-info';
 import { PageHeader } from '@/components/page-header';
-import { ContactForm } from './contact-form';
 import {
   Mail,
   Github,
@@ -153,7 +152,7 @@ const faqHighlights = [
   { q: 'How do I install SOHAM on my phone?', a: 'Android: Chrome → menu → "Add to Home screen". iOS: Safari → share → "Add to Home Screen". Works as a full PWA.' },
   { q: 'Which AI model should I use?', a: 'Start with Auto mode, which chooses a model for each request and tries another if one fails. To pick one yourself, Gemini 3.6 Flash is a good all-rounder and Gemini 3.5 Flash-Lite is quick.' },
   { q: 'Does SOHAM store my conversations?', a: 'Yes. Your chat list is saved in your browser, and SOHAM\'s server also saves your messages, and facts it picks up from them, linked to your account. Each message is sent to an AI provider to generate the reply. See the Privacy Policy for details.' },
-  { q: 'How do I report a bug or request a feature?', a: 'Use the contact form below or email us directly. Include as much detail as possible for bug reports.' },
+  { q: 'How do I report a bug or request a feature?', a: `Email ${DEVELOPER_INFO.contact.email} or use the bug and feature links above. Include as much detail as possible for bug reports.` },
   { q: 'Can I use SOHAM for commercial projects?', a: 'The Terms of Service explain how SOHAM may be used. If you are planning commercial use, please contact us first.' },
 ];
 
@@ -275,39 +274,27 @@ export default function ContactPage() {
           </div>
         </section>
 
-        {/* ── Support Topics + Contact Form ── */}
-        <section className="grid gap-8 lg:grid-cols-[1fr_1.2fr]">
-          {/* Support topics */}
-          <div className="space-y-4">
-            <h2 className="text-2xl font-bold">What can we help with?</h2>
-            <div className="space-y-3">
-              {supportTopics.map((topic) => (
-                <Link key={topic.title} href={topic.link} className="group block">
-                  <div className="flex items-start gap-4 rounded-2xl border bg-card p-4 transition-all hover:border-primary/40 hover:bg-card/80">
-                    <div className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-primary/10">
-                      <topic.icon className="h-4 w-4 text-primary" />
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <p className="font-semibold text-sm">{topic.title}</p>
-                      <p className="text-xs text-muted-foreground mt-0.5 leading-relaxed">{topic.description}</p>
-                      <span className="mt-2 inline-flex items-center gap-1 text-xs font-medium text-primary group-hover:underline">
-                        {topic.linkText}
-                        <ArrowRight className="h-3 w-3" />
-                      </span>
-                    </div>
+        {/* ── Support Topics ── */}
+        <section className="space-y-4">
+          <h2 className="text-2xl font-bold">What can we help with?</h2>
+          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            {supportTopics.map((topic) => (
+              <Link key={topic.title} href={topic.link} className="group block">
+                <div className="flex h-full items-start gap-4 rounded-2xl border bg-card p-4 transition-all hover:border-primary/40 hover:bg-card/80">
+                  <div className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-primary/10">
+                    <topic.icon className="h-4 w-4 text-primary" />
                   </div>
-                </Link>
-              ))}
-            </div>
-          </div>
-
-          {/* Contact form */}
-          <div className="space-y-4">
-            <h2 className="text-2xl font-bold">Send a Message</h2>
-            <p className="text-muted-foreground text-sm">
-              Fill out the form and we&apos;ll get back to you as soon as possible.
-            </p>
-            <ContactForm />
+                  <div className="flex-1 min-w-0">
+                    <p className="font-semibold text-sm">{topic.title}</p>
+                    <p className="text-xs text-muted-foreground mt-0.5 leading-relaxed">{topic.description}</p>
+                    <span className="mt-2 inline-flex items-center gap-1 text-xs font-medium text-primary group-hover:underline">
+                      {topic.linkText}
+                      <ArrowRight className="h-3 w-3" />
+                    </span>
+                  </div>
+                </div>
+              </Link>
+            ))}
           </div>
         </section>
 

@@ -33,7 +33,6 @@ root/
     ├── FEATURES.md
     ├── DEPLOYMENT.md
     ├── ANDROID.md
-    ├── emailjs-setup.md
     ├── PWA_README.md ✅ Quick start guide
     ├── PWA_FINAL_SUMMARY.md ✅ Executive summary
     ├── PWA_VERIFICATION_REPORT.md ✅ Technical details
@@ -98,7 +97,6 @@ Complete PWA implementation documentation available in `/docs/`:
 - **[Features](./docs/FEATURES.md)** - Detailed feature documentation
 - **[Deployment Guide](./docs/DEPLOYMENT.md)** - Production deployment
 - **[Android App](./docs/ANDROID.md)** - Android-specific setup
-- **[Email Setup](./docs/emailjs-setup.md)** - EmailJS configuration
 
 ### PWA Documentation
 [8 comprehensive PWA guides with direct links]
@@ -177,7 +175,6 @@ All documentation is now accessible from the main README.md with clear categorie
 - **[Features](./docs/FEATURES.md)** - Feature documentation
 - **[Deployment](./docs/DEPLOYMENT.md)** - Deployment guide
 - **[Android](./docs/ANDROID.md)** - Android setup
-- **[Email Setup](./docs/emailjs-setup.md)** - EmailJS config
 
 ---
 
@@ -242,7 +239,6 @@ When users open the main README.md, they see:
 - FEATURES.md - Features
 - DEPLOYMENT.md - Deployment
 - ANDROID.md - Android
-- emailjs-setup.md - Email setup
 - blueprint.md - Architecture
 - DEPLOYMENT.md - Deploy info
 

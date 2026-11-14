@@ -125,23 +125,6 @@ export function validateFirebaseConfig(): { valid: boolean; message?: string } {
 }
 
 /**
- * Validate EmailJS configuration (optional)
- */
-export function validateEmailJSConfig(): { valid: boolean; message?: string } {
-  const serviceId = process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID;
-  const userId = process.env.NEXT_PUBLIC_EMAILJS_USER_ID;
-  
-  if (!serviceId || !userId) {
-    return {
-      valid: false,
-      message: 'EmailJS not configured (optional). Emails will not be sent.',
-    };
-  }
-  
-  return { valid: true };
-}
-
-/**
  * Run all startup validations
  */
 export function validateStartup(): ValidationResult {
@@ -178,14 +161,6 @@ export function validateStartup(): ValidationResult {
     errors.push(`❌ ${firebaseValidation.message}`);
   } else {
     console.log('✅ Firebase configuration valid');
-  }
-  
-  // Optional: EmailJS
-  const emailValidation = validateEmailJSConfig();
-  if (!emailValidation.valid) {
-    warnings.push(`⚠️  ${emailValidation.message}`);
-  } else {
-    console.log('✅ EmailJS configured');
   }
   
   // Log results

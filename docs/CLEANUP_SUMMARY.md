@@ -32,7 +32,6 @@ docs/
 ├── CLEANUP_SUMMARY.md   # This file
 ├── DEPLOYMENT.md        # Deployment guide
 ├── DOCUMENTATION_REORGANIZATION.md
-├── emailjs-setup.md     # EmailJS setup guide
 ├── FEATURES.md          # Feature documentation
 ├── MODEL_SELECTION_DEBUG.md
 ├── MODEL_SELECTION_TEST_GUIDE.md

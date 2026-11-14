@@ -296,11 +296,11 @@ const sections = [
       },
       {
         q: 'How can I report a bug?',
-        a: 'Use the contact form at /contact, email us directly, or open a GitHub issue. Include: what you were doing, what happened, what you expected, your browser and OS, and any error messages.',
+        a: `Email ${CONTACT_EMAIL} or open a GitHub issue. Include: what you were doing, what happened, what you expected, your browser and OS, and any error messages.`,
       },
       {
         q: 'Can I suggest new AI models to add?',
-        a: 'Absolutely. Use the contact form or GitHub issues to suggest models. We evaluate new models based on quality, availability, cost, and user demand.',
+        a: `Absolutely. Email ${CONTACT_EMAIL} or open a GitHub issue to suggest models. We evaluate new models based on quality, availability, cost, and user demand.`,
       },
     ],
   },
@@ -482,7 +482,7 @@ export default function FAQPage() {
           <CardHeader>
             <CardTitle>Still Need Help?</CardTitle>
             <CardDescription>
-              Can&apos;t find the answer? Send a message or browse the docs.
+              Can&apos;t find the answer? Contact us or browse the docs.
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -492,7 +492,7 @@ export default function FAQPage() {
                   <MessageSquare className="h-4 w-4 text-primary" />
                   Contact Support
                 </h4>
-                <p className="text-xs text-muted-foreground">Send a detailed message about your issue.</p>
+                <p className="text-xs text-muted-foreground">Email us the details of your issue.</p>
                 <Link href="/contact">
                   <Button variant="outline" size="sm" className="gap-2">
                     Contact Us

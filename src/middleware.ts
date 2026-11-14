@@ -15,6 +15,29 @@ const ALLOWED_ORIGINS = [
   process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : undefined,
 ].filter(Boolean) as string[];
 
+// ── Vercel Toolbar ───────────────────────────────────────────────────────────
+// Vercel injects its toolbar (comments and feedback, loaded from
+// https://vercel.live/_next-live/feedback/feedback.js) into preview
+// deployments, and into production ones too unless it's switched off in the
+// project settings. Without these sources the CSP below blocks it. They're the
+// ones Vercel lists under "Using a Content Security Policy":
+// https://vercel.com/docs/vercel-toolbar/managing-toolbar
+// Only added when running on Vercel; local and self-hosted builds never load it.
+const ON_VERCEL = Boolean(process.env.VERCEL || process.env.VERCEL_ENV);
+const VERCEL_TOOLBAR_SOURCES: Record<string, string | undefined> = {
+  'script-src': 'https://vercel.live',
+  'style-src': 'https://vercel.live',
+  'font-src': 'https://vercel.live https://assets.vercel.com',
+  'img-src': 'https://vercel.live https://vercel.com',
+  'connect-src': 'https://vercel.live wss://ws-us3.pusher.com',
+  'frame-src': 'https://vercel.live',
+};
+
+function withVercelToolbar(directive: string): string {
+  const extra = VERCEL_TOOLBAR_SOURCES[directive.split(' ')[0]];
+  return ON_VERCEL && extra ? `${directive} ${extra}` : directive;
+}
+
 // ── Security headers applied to every response ───────────────────────────────
 const SECURITY_HEADERS: Record<string, string> = {
   // Prevent clickjacking
@@ -36,17 +59,17 @@ const SECURITY_HEADERS: Record<string, string> = {
     "default-src 'self'",
     // Scripts: self + Vercel analytics + Google Analytics + Firebase/Google APIs
     // apis.google.com is required for Firebase Auth Google Sign-In (loads api.js)
-    "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com https://va.vercel-scripts.com https://apis.google.com https://accounts.google.com",
+    withVercelToolbar("script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com https://va.vercel-scripts.com https://apis.google.com https://accounts.google.com"),
     // Styles: self + inline (needed for Tailwind) + Google Fonts
-    "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://accounts.google.com",
+    withVercelToolbar("style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://accounts.google.com"),
     // Fonts
-    "font-src 'self' https://fonts.gstatic.com",
+    withVercelToolbar("font-src 'self' https://fonts.gstatic.com"),
     // Images: self + data URIs + Supabase storage + Firebase + external CDNs
-    "img-src 'self' data: blob: https://*.supabase.co https://*.googleapis.com https://*.googleusercontent.com https://soham-ai.vercel.app https://lh3.googleusercontent.com",
+    withVercelToolbar("img-src 'self' data: blob: https://*.supabase.co https://*.googleapis.com https://*.googleusercontent.com https://soham-ai.vercel.app https://lh3.googleusercontent.com"),
     // Media (audio/video)
     "media-src 'self' blob: data:",
     // API connections — includes Firebase Auth endpoints
-    [
+    withVercelToolbar([
       "connect-src 'self'",
       'https://*.supabase.co',
       'https://soham-backend-dwpp.onrender.com',
@@ -62,11 +85,11 @@ const SECURITY_HEADERS: Record<string, string> = {
       'https://accounts.google.com',
       'https://apis.google.com',
       'wss://*.supabase.co',
-    ].join(' '),
+    ].join(' ')),
     // Workers (for PWA service worker)
     "worker-src 'self' blob:",
     // Frames — Firebase Auth uses iframes for Google Sign-In
-    "frame-src https://accounts.google.com https://*.firebaseapp.com",
+    withVercelToolbar("frame-src https://accounts.google.com https://*.firebaseapp.com"),
     // Object/embed
     "object-src 'none'",
     // Base URI

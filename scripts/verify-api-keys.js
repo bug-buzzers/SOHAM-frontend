@@ -248,25 +248,6 @@ async function testElevenLabsAPI() {
 }
 
 /**
- * Test Resend API Key
- */
-async function testResendAPI() {
-  const key = process.env.RESEND_API_KEY;
-  if (!key) {
-    results.skipped.push('Resend API (RESEND_API_KEY not set)');
-    return;
-  }
-
-  try {
-    // Resend API - marking as passed if key is present
-    // EmailJS is primary email service, Resend is optional
-    results.passed.push('Resend API (RESEND_API_KEY) ✓ (Key present, optional service)');
-  } catch (error) {
-    results.failed.push(`Resend API (RESEND_API_KEY) - Error: ${error.message}`);
-  }
-}
-
-/**
  * Check Firebase Configuration
  */
 function checkFirebaseConfig() {
@@ -285,25 +266,6 @@ function checkFirebaseConfig() {
     results.passed.push('Firebase Configuration ✓');
   } else {
     results.failed.push(`Firebase Configuration - Missing: ${missing.join(', ')}`);
-  }
-}
-
-/**
- * Check EmailJS Configuration
- */
-function checkEmailJSConfig() {
-  const requiredKeys = [
-    'NEXT_PUBLIC_EMAILJS_SERVICE_ID',
-    'NEXT_PUBLIC_EMAILJS_TEMPLATE_ID',
-    'NEXT_PUBLIC_EMAILJS_USER_ID',
-  ];
-
-  const missing = requiredKeys.filter(key => !process.env[key]);
-  
-  if (missing.length === 0) {
-    results.passed.push('EmailJS Configuration ✓');
-  } else {
-    results.skipped.push(`EmailJS Configuration - Missing: ${missing.join(', ')}`);
   }
 }
 
@@ -327,12 +289,10 @@ async function main() {
     testHuggingFaceAPI(),
     testOpenRouterAPI(),
     testElevenLabsAPI(),
-    testResendAPI(),
   ]);
 
   // Check configurations
   checkFirebaseConfig();
-  checkEmailJSConfig();
 
   // Print results
   log('\n╔════════════════════════════════════════════════════════════╗', 'cyan');

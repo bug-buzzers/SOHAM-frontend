@@ -10,7 +10,6 @@ import './flows/solve-image-equation';
 import './flows/analyze-pdf';
 import './flows/web-search';
 import './flows/summarize-information';
-import './flows/send-welcome-email';
 import './flows/text-to-speech';
 import './flows/solve-quizzes';
 

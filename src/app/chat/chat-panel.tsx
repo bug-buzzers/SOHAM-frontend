@@ -10,6 +10,7 @@ import Link from 'next/link';
 import {useAuth} from '@/hooks/use-auth';
 import {hybridTTS} from '@/lib/hybrid-tts';
 import {VoiceFilter} from '@/lib/voice-filter';
+import {cleanResponseHeaders} from '@/lib/chat-markdown';
 
 /** Client-side image request check — mirrors the server intent detector for UI feedback only */
 function looksLikeImageRequest(msg: string): boolean {
@@ -45,13 +46,6 @@ interface ChatPanelProps {
   initialDraft?: string | null;
   /** Called once `initialDraft` has been put in the message box. */
   onInitialDraftUsed?: () => void;
-}
-
-function cleanResponseHeaders(text: string): string {
-  return text
-    .replace(/^#{1,6}\s+(.+)$/gm, '**$1**')
-    .replace(/\n{3,}/g, '\n\n')
-    .trim();
 }
 
 // ── SSE event types ────────────────────────────────────────────────────────────
