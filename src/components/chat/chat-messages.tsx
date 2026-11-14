@@ -57,6 +57,7 @@ export function ChatMessages({
               key={message.id} 
               message={message}
               settings={settings}
+              isStreaming={Boolean(isLoading) && index === messages.length - 1 && message.role === 'assistant'}
               onRegenerate={
                 message.role === 'assistant' && index === messages.length - 1 && onRegenerateMessage
                   ? () => onRegenerateMessage(message.id)

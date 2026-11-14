@@ -12,6 +12,7 @@ import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import remarkBreaks from 'remark-breaks';
 import rehypeRaw from 'rehype-raw';
+import {remarkLooseBold, restoreHashComments, sanitizeAIContent} from '@/lib/chat-markdown';
 import {MessageAttribution} from './message-attribution';
 import {MessageShare} from './message-share';
 import {Button} from '@/components/ui/button';
@@ -25,6 +26,8 @@ interface ChatMessageProps {
   message: Message;
   settings: Settings;
   onRegenerate?: () => void;
+  /** The reply is still streaming in. */
+  isStreaming?: boolean;
 }
 
 // ─── Sanitize image URLs to allow only http/https/blob/data:image URIs ──────
@@ -244,19 +247,7 @@ function GeneratedImage({ src: rawSrc, alt }: { src: string; alt?: string }) {
   );
 }
 
-// ─── Strip AI artefacts (loading placeholders, stray ### markers) ─────────────
-function sanitizeAIContent(content: string): string {
-  return content
-    // Remove lines that are ONLY a heading marker + "loading" variants
-    .replace(/^#{1,6}\s*(loading|please wait|generating|thinking|processing)\.{0,3}\s*$/gim, '')
-    // Remove bare "###" / "##" / "#" lines with nothing after them
-    .replace(/^#{1,6}\s*$/gm, '')
-    // Collapse 3+ consecutive blank lines down to 2
-    .replace(/\n{3,}/g, '\n\n')
-    .trim();
-}
-
-export function ChatMessage({message, settings, onRegenerate}: ChatMessageProps) {
+export function ChatMessage({message, settings, onRegenerate, isStreaming = false}: ChatMessageProps) {
   const {user} = useAuth();
   const [isMounted, setIsMounted] = useState(false);
   const [copied, setCopied] = useState(false);
@@ -371,9 +362,9 @@ export function ChatMessage({message, settings, onRegenerate}: ChatMessageProps)
 
   const renderMarkdownCode = ({inline, className, children, ...props}: any) => {
     const match = /language-(\w+)/.exec(className || '');
-    const codeString = String(children).replace(/\n$/, '');
-    const codeIndex = `${message.id}-${codeString.substring(0, 20)}`;
     const language = match?.[1]?.toLowerCase();
+    const codeString = restoreHashComments(String(children).replace(/\n$/, ''), language);
+    const codeIndex = `${message.id}-${codeString.substring(0, 20)}`;
 
     if (!inline && language === 'mermaid') {
       return (
@@ -525,7 +516,7 @@ export function ChatMessage({message, settings, onRegenerate}: ChatMessageProps)
               ],
             )}>
               <ReactMarkdown
-                remarkPlugins={[remarkGfm, remarkBreaks]}
+                remarkPlugins={[remarkGfm, [remarkLooseBold, {streaming: isStreaming}], remarkBreaks]}
                 rehypePlugins={[rehypeRaw]}
                 components={{
                   a: ({node, ...props}) => (
