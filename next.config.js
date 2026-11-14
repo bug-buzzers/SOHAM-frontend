@@ -1,7 +1,8 @@
 const withPWA = require('@ducanh2912/next-pwa').default({
   dest: 'public',
-  cacheOnFrontEndNav: true,
-  aggressiveFrontEndNavCaching: true,
+  // cacheOnFrontEndNav / aggressiveFrontEndNavCaching are left off: they save pages
+  // and scripts into caches ("pages", "next-static-js-assets", …) that nothing below
+  // reads, so they only re-downloaded every page in the background.
   reloadOnOnline: true,
   swcMinify: true,
   disable: process.env.NODE_ENV === 'development',
@@ -11,11 +12,10 @@ const withPWA = require('@ducanh2912/next-pwa').default({
     disableDevLogs: true,
     skipWaiting: true,
     clientsClaim: true,
-    // Precache the app shell pages for instant offline load
-    additionalManifestEntries: [
-      { url: '/chat', revision: null },
-      { url: '/login', revision: null },
-    ],
+    // Don't precache HTML pages. They used to be listed here with `revision: null`,
+    // which tells Workbox the URL never changes, so the cached /chat and /login were
+    // never refreshed. After a deployment those frozen pages asked for scripts and
+    // styles that no longer exist (404, "MIME type text/plain") and stayed broken.
     runtimeCaching: [
       // ── Never cache API calls — always fresh ──────────────────────────────
       {
@@ -97,14 +97,20 @@ const withPWA = require('@ducanh2912/next-pwa').default({
           cacheableResponse: { statuses: [0, 200] },
         },
       },
-      // ── App pages — network first, fall back to cache ─────────────────────
+      // ── Page data for client-side navigation — build-specific, never cache ─
+      {
+        urlPattern: /[?&]_rsc=/i,
+        handler: 'NetworkOnly',
+      },
+      // ── App pages — network first, cache only when offline ─────────────────
+      // No networkTimeoutSeconds: on a slow connection a timeout would serve a
+      // page saved from an older deployment, whose scripts may be gone.
       {
         urlPattern: /^https:\/\/soham-ai\.vercel\.app\/(?!api\/).*/i,
         handler: 'NetworkFirst',
         options: {
           cacheName: 'app-pages',
           expiration: { maxEntries: 32, maxAgeSeconds: 24 * 60 * 60 },
-          networkTimeoutSeconds: 5,
           cacheableResponse: { statuses: [0, 200] },
         },
       },
