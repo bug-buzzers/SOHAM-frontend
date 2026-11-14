@@ -26,8 +26,8 @@ export function InstallPWAButton(props: ButtonProps) {
     if (isStandalone) return;
 
     const handler = (e: Event) => {
-      // Must preventDefault to suppress the browser's default mini-infobar
-      e.preventDefault();
+      // Keep the event for the click handler's prompt(). No preventDefault():
+      // see the note in hooks/use-pwa-install.ts.
       deferredPrompt.current = e as BeforeInstallPromptEvent;
       setVisible(true);
     };

@@ -86,7 +86,11 @@ export function usePWAInstall() {
     };
 
     const handleBeforeInstallPrompt = (event: Event) => {
-      event.preventDefault();
+      // Keep the event so "Install app" can call prompt() from a click later.
+      // No preventDefault(): prompt() works without it, and calling it makes
+      // Chrome log "Banner not shown: beforeinstallpromptevent.preventDefault()
+      // called…" on every page load. The only thing it would add is hiding
+      // Chrome's own install badge on Android.
       setDeferredPrompt(event as BeforeInstallPromptEvent);
       setIsInstallable(true);
     };
